@@ -1,24 +1,24 @@
 
---local level1 = {
---  " R    G ",
---  "RrrrmrmG",
---  " mrrrrrR",
---  "BbbbmrrR",
---  " mbbbrm ",
---  "Ggggmbm ",
---  "Bmgggbb ",
---  " B  G B "
---}
 local level1 = {
-  " B    G ",
-  " brrmrg ",
-  " brrrrm ",
-  " bbbmrr ",
+  " R    G ",
+  "RrrrmrmG",
+  " mrrrrrR",
+  "BbbbmrrR",
   " mbbbrm ",
-  " gggmbb ",
+  "Ggggmbm ",
   "Bmgggbb ",
-  " B    B "
+  " B  G B "
 }
+--local level1 = {
+--  " B    G ",
+--  " brrmrg ",
+--  " brrrrm ",
+--  " bbbmrr ",
+--  " mbbbrm ",
+--  " gggmbb ",
+--  "Bmgggbb ",
+--  " B    B "
+--}
 
 
 -- Grid:
@@ -30,7 +30,16 @@ local filterOffset = 80
 local filterGridSize = filterOffset*2
 local pivotGridSize = filterGridSize*2 
 local cardinals = {up=0,right=90,down=180,left=270}
-
+local columns
+local rows
+local topRow
+local topRowY
+local bottomRow
+local bottomRowY
+local leftColumn
+local leftColumnX
+local rightColumn
+local rightColumnX
 local pivots = {}
 local lasers = {}
 
@@ -38,44 +47,58 @@ function nearestInt(n)
   return math.floor(0.5 + n)
 end
 
+-- Get the Y coordinate of the given row
+-- The first row is numbered 1, in lua tradition
+function rowY(n)
+  if n == topRow then return topRowY end
+  if n == bottomRow then return bottomRowY end
+  return nearestInt(((rows / 2) - n) * filterGridSize + filterOffset)
+end
+-- Get the X coordinate of the given column
+-- Note that the left and right columns have the emitters and the
+-- middle columns have the filters.
+-- The first column is number 1, in lua tradition
+function columnX(n)
+  if n == leftColumn then return leftColumnX end
+  if n == rightColumn then return rightColumnX end 
+  return nearestInt((n - (columns / 2)) * filterGridSize - filterOffset)
+end
+
 -- Filters are ordered clockwise starting at top-left; so TL, TR, BR, BL
-function addPivot(x,y,a,b,c,d)
+function addPivot(row,column,a,b,c,d)
+  local x = columnX(column) + filterOffset
+  local y = rowY(row) - filterOffset
   local pivot = director:createSprite(x,y,"images/Pivot.png")
   pivot.xAnchor = 0.5
   pivot.yAnchor = 0.5
   local filters = {}
   pivot.filters = filters
-  function filterX(n)
-    if n == 0 or n == 3 then 
-      return -filterOffset
-    else
-      return filterOffset
-    end
+  local function filterRow(n)
+    return row + math.floor(n/2) -- row + {0,0,1,1}[n]
   end
-  function filterY(n)
-    if n == 2 or n == 3 then 
-      return -filterOffset
-    else
-      return filterOffset 
-    end
+  local function filterColumn(n)
+    return column + math.floor(((n+1)%4)/2) -- column + {0,1,1,0}[n]
   end
-  function addFilter(col)
+  local function filterX(n)
+    return columnX(filterColumn(n))-x
+  end
+  local function filterY(n)
+    return rowY(filterRow(n))-y
+  end
+  local function addFilter(col)
     local n = # filters
     local fx = filterX(n) 
     local fy = filterY(n)
     local filter = director:createSprite(fx+pivot.w/2,fy+pivot.h/2,"images/filter_"..col..".png")
-    filter.sceneX = x+fx
-    filter.sceneY = y+fy
-    if col == "mirror" then
-      -- Rotate appropriately ...
-      filter.rotation = (n+1) * 90
-    end 
+    filter.row = filterRow(n)
+    filter.column = filterColumn(n)
+    filter.rotation = (n+1) * 90
     filter.sceneOrientation = filter.rotation 
     filter.xAnchor = 0.5
     filter.yAnchor = 0.5
     filter.filterType = col
     pivot:addChild(filter)
-    --print("filter "..n..": "..col.." at "..filter.sceneX..","..filter.sceneY)
+    --print("filter", n, filter.x, filter.y, filter.row, filter.column, filter.rotation, filter.filterType)
     table.insert(filters,filter)
     n = n + 1
   end
@@ -83,20 +106,18 @@ function addPivot(x,y,a,b,c,d)
     addFilter(v)
   end
   
-  function onTouch(event)
+  local function onTouch(event)
     if event.phase == "began" then
       local rot = (pivot.rotation + 90) % 360
       pivot.rotation = rot
-      for n,filter in ipairs(filters) do
-        local t = math.rad(rot + (90*(n-2)))
-        local sinT = math.sin(t)
-        local cosT = math.cos(t)
-        local fx = nearestInt(filterOffset * cosT + filterOffset * sinT)
-        local fy = nearestInt(filterOffset * cosT - filterOffset * sinT)
-        filter.sceneX = x + fx
-        filter.sceneY = y + fy
+      local nrotation = (rot / 90)
+      for index,filter in ipairs(filters) do
+        local n = index-1
+        local rotatedN = (n + nrotation) % 4 
+        filter.row = filterRow(rotatedN)
+        filter.column = filterColumn(rotatedN)
         filter.sceneOrientation = rot + filter.rotation
-        print("Filter rotation ", n, rot, filter.sceneOrientation, fx, fy, cosT, sinT, filter.filterType)
+        --print("Filter rotated", n, rot, rotatedN, filter.sceneOrientation, filter.row, filter.column, filter.filterType)
       end
       updateLasers()
     end
@@ -104,17 +125,13 @@ function addPivot(x,y,a,b,c,d)
   pivot:addEventListener("touch", onTouch)
   --print("Added one pivot at "..x..","..y)
   table.insert(pivots,pivot)
-  return pivot;
+  return pivot
 end
 
-function findFilter(x,y)
-  --print("Looking for filter at ", x, y)
+function findFilter(row,column)
   for n,pivot in ipairs(pivots) do
     for nn,filter in ipairs(pivot.filters) do
-      local fx = filter.sceneX
-      local fy = filter.sceneY
-      --print("Found filter at ", fx, fy, x, y, (x==fx), (y==fy))
-      if x == fx and y == fy then
+      if column == filter.column and row == filter.row then
         return filter
       end 
     end
@@ -122,22 +139,23 @@ function findFilter(x,y)
   return nil
 end
 
-function addLaser(x,y,col,angle)
-  local laser = director:createSprite(x,y,"images/laser_"..col..".png")
+function addLaser(row,column,laserColor,angle)
+  local laser = director:createSprite(columnX(column),rowY(row), "images/laser_"..laserColor..".png")
   laser.xAnchor = 0.5
   laser.yAnchor = 0.5
-  laser.laserColor = col
-  laser.laserAngle = angle-180
-  laser.sceneX = x
-  laser.sceneY = y
-  if angle then laser.rotation = (angle + 90) % 360 end
+  laser.laserColor = laserColor
+  laser.laserAngle = angle
+  laser.row = row
+  laser.column = column
+  laser.rotation = (angle + 270) % 360
   table.insert(lasers,laser)
+  --print("Add laser", row, column, laser.x, laser.y, laserColor, angle)
   return laser
 end
 
-function findLaser(x,y)
+function findLaser(row,column)
   for n,laser in ipairs(lasers) do
-    if x == laser.sceneX and y == laser.sceneY then
+    if row == laser.row and column == laser.column then
       return laser
     end
   end
@@ -148,30 +166,30 @@ end
 -- 1. Path of the laser as a list of x,y points
 -- 2. Filters that were passed through / mirrors hit, if any
 -- 3. Sensor that was hit, if any
-function traceLaser(startX,startY,startAngle,startCol)
-  local x = startX
-  local y = startY
+function traceLaser(startRow,startColumn,startAngle,startColor)
+  local row = startRow
+  local column = startColumn
   local angle = startAngle
-  local col = startCol
+  local color = startColor
   local events = {}
   local stopped = false
   local sensor = nil
-  --print("Starting laser trace at "..startX..","..startY.." angle "..startAngle.." color "..col)
+  local trace = function(s) return nil end -- print
+  trace("Starting laser trace", startRow, startColumn, startAngle, color)
   repeat
-    local prevX = x
-    local prevY = y
+    local prevRow = row
+    local prevColumn = column
     local prevAngle = angle
     local filter = nil
     local turned = false
     repeat
-      x = nearestInt(x + math.sin(math.rad(angle)) * filterGridSize)
-      y = nearestInt(y + math.cos(math.rad(angle)) * filterGridSize)
-      if x > director.displayWidth or x < -director.displayWidth or
-         y > director.displayHeight or y < -director.displayHeight then
-         --print("Laser went offscreen at "..x..","..y.." in screen size "..director.displayWidth.."x"..director.displayHeight)
-         stopped = true
+      row = nearestInt(row - math.cos(math.rad(angle)))
+      column = nearestInt(column + math.sin(math.rad(angle)))
+      if row > bottomRow or row < topRow or column > rightColumn or column < leftColumn then
+        trace("Stopping at edge", row, column)
+        stopped = true
       else
-        filter = findFilter(x, y)
+        filter = findFilter(row, column)
         if filter then
           if filter.filterType == "mirror" then
             -- Normal is \
@@ -185,34 +203,42 @@ function traceLaser(startX,startY,startAngle,startCol)
             -- ^ + \ == < == -90
             -- v + \ == > == -90
             local normal = (filter.sceneOrientation % 180) == 0 
-            local vertical = prevX == x
+            local vertical = (angle % 180) == 0
             if normal ~= vertical then
               angle = angle + 90
             else
               angle = angle - 90
             end
             turned = true
-            print("Hit mirror at ", x, y, filter.sceneOrientation, "old angle", prevAngle, "new angle", angle, col, normal, vertical)
+            trace("Hit mirror at ", row, column, filter.sceneOrientation, "old angle", prevAngle, "new angle", angle, col, normal, vertical)
           elseif filter.filterType == "clear" then
+            trace("Clear filter", row, column)
             -- Pass through
-          elseif filter.filterType ~= col then
-            --print("Hit wrong color filter at ", x, y, filter.filterType)
+          elseif filter.filterType ~= color then
+            trace("Hit wrong color ", row, column, filter.filterType)
             stopped = true
           else
-            --print("Hit same color filter at ", x, y, filter.filterType)
+            trace("Hit same color ", row, column, filter.filterType)
           end
         else
-          local laser = findLaser(x,y)
+          local laser = findLaser(row,column)
           if laser then
             stopped = true
-            if laser.laserColor == col then
+            if laser.laserColor == color then
               sensor = laser
+              trace("Found right color", row, column)
+            else 
+              trace("Found wrong color", row, column)
             end
+          else
+            trace("Empty space .... ", row, column)
           end
         end
       end
     until stopped or turned
-    table.insert(events, {filter=filter,x=x,y=y,prevX=prevX,prevY=prevY,color=startCol})
+    table.insert(events, {filter=filter,row=row,column=column,
+                          prevRow=prevRow,prevColumn=prevColumn,
+                          color=color})
   until stopped or (# events >= 100)
   return {events=events,sensor=sensor}
 end
@@ -308,15 +334,17 @@ function drawLaser(x,y,endX,endY,col)
   return line
 end
 
-function fireLaser(x,y,angle,col)
-  local trace = traceLaser(x,y,angle,col)
+function fireLaser(x,y,row,column,angle,color)
+  local trace = traceLaser(row,column,angle,color)
   --print("Trace returned", #trace.events, "events")
   local fullRoute = createContainer(0,0)
   --if trace.sensor then print("Trace hit a sensor") end
   for n,event in ipairs(trace.events) do
     if n <= 20 then
       --print("draw laser", event.prevX, event.prevY, event.x, event.y, event.color)
-      local part = drawLaser(event.prevX, event.prevY, event.x, event.y, event.color)
+      local part = drawLaser(columnX(event.prevColumn), rowY(event.prevRow), 
+                             columnX(event.column),     rowY(event.row),
+                             event.color)
       fullRoute:addChild(part)
     end
   end
@@ -326,61 +354,71 @@ function fireLaser(x,y,angle,col)
 end
 
 
-local gameScene = director:getCurrentScene()
-gameScene:scale(0.5,0.5)
-gameScene.x = director.displayCenterX/2
-gameScene.y = director.displayCenterY/2
-gameScene.xAnchor = 0.5
-gameScene.yAnchor = 0.5
+
+function setupScene()
+  local gameScene = director:getCurrentScene()
+  local bgSprite = director:createSprite(0,0,"images/bg.jpg")
+  bgSprite.zOrder = -999
+  local bgScale = math.min(director.displayWidth / bgSprite.w, director.displayHeight / bgSprite.h)
+  bgSprite:scale(bgScale)
+  local frameSprite = director:createSprite(0,0,"images/frame.png")
+  frameSprite:scale(bgScale)
+  frameSprite.zOrder = 999
+end
 
 local colorLetterToWord = {
   r="red",g="green",b="blue",m="mirror"
 }
 
 function setupLevel(level)
-  local rows = #level
+  local levelNode = createContainer(0,0)
+  
+  rows = #level
+  columns = #(level[1])
   if rows <= 2 then
     print("Need more than 2 rows to have an actual level.  Something is wrong with this level spec")
     return false
   end
-  -- Get the Y coordinate of the given row
-  -- The first row is numbered 1, in lua tradition
-  function rowY(n)
-    return nearestInt(((rows / 2) - n) * filterGridSize + filterOffset)
-  end
-  local topRow = 1
-  local topRowY = rowY(1)
-  local bottomRow = rows
-  local bottomRowY = rowY(rows)
-  local columns = #(level[1])
-  -- Get the X coordinate of the given column
-  -- Note that the left and right columns have the emitters and the
-  -- middle columns have the filters.
-  -- The first column is number 1, in lua tradition
-  function columnX(n)
-    return nearestInt((n - (columns / 2)) * filterGridSize - filterOffset)
-  end
-  local leftColumn = 1
-  local leftColumnX = columnX(1)
-  local rightColumn = columns
-  local rightColumnX = columnX(columns)
   for n = 2, #level do
     if #(level[n]) ~= columns then
       print("Columns in row "..n.." aren't the same number as the first row", n, columns, level[n])
     end
   end
   
+  local targetWidth  = 680
+  local targetHeight = 580
+  local fullWidth = (columns-1) * filterGridSize
+  local fullHeight = (rows-1) * filterGridSize
+  local scale = math.min(targetWidth/fullWidth,targetHeight/fullHeight)
+  levelNode:scale(scale)
+  levelNode.x = director.displayWidth / 2
+  levelNode.y = director.displayHeight / 2
+  local scene = director:getCurrentScene()
+  scene.levelNode = levelNode
+
+  topRow = 1
+  topRowY = 540
+  bottomRow = rows
+  bottomRowY = -540
+  
+
+  leftColumn = 1
+  leftColumnX = -640
+  rightColumn = columns
+  rightColumnX = 640
+  
+  --print("Level", scale, rows, columns, topRowY, bottomRowY, leftColumnX, rightColumnX)
   
   -- Add all the lasers
   local topLaserSpec = string.lower(level[1])
   for n=2, #topLaserSpec - 1 do
     local ch = topLaserSpec:sub(n,n)
     if ch ~= " " then
-      local col = colorLetterToWord[ch]
-      if col == "mirror" or not col then 
+      local color = colorLetterToWord[ch]
+      if color == "mirror" or not color then 
         print("Error: Unexpected color char", ch, "in", topLaserSpec, n)
       else
-        addLaser(columnX(n), topRowY, col, 0)
+        levelNode:addChild(addLaser(topRow, n, color, 180))
       end
     end
   end
@@ -389,20 +427,20 @@ function setupLevel(level)
     local leftLaserCh = rowSpec:sub(1,1)
     local laserY = rowY(row)
     if leftLaserCh ~= " " then
-      local col = colorLetterToWord[leftLaserCh]
-      if col == "mirror" or not col then 
-        print("Error: Unexpected color char", ch, "in", rowSpec, row)
+      local color = colorLetterToWord[leftLaserCh]
+      if color == "mirror" or not color then 
+        print("Error: Unexpected color char", leftLaserCh, "in", rowSpec, row)
       else
-        addLaser(leftColumnX, laserY, col, -90)
+        levelNode:addChild(addLaser(row, leftColumn, color, 90))
       end
     end
     local rightLaserCh = rowSpec:sub(-1)
     if rightLaserCh ~= " " then
-      local col = colorLetterToWord[rightLaserCh]
-      if col == "mirror" or not col then 
-        print("Error: Unexpected color char", ch, "in", rowSpec, row)
+      local color = colorLetterToWord[rightLaserCh]
+      if color == "mirror" or not color then 
+        print("Error: Unexpected color char", rightLaserCh, "in", rowSpec, row)
       else
-        addLaser(rightColumnX, laserY, col, 90)
+        levelNode:addChild(addLaser(row, rightColumn, color, -90))
       end
     end
   end
@@ -414,7 +452,7 @@ function setupLevel(level)
       if col == "mirror" or not col then 
         print("Error: Unexpected color char", ch, "in", bottomLaserSpec, n)
       else
-        addLaser(columnX(n), bottomRowY, col, 180)
+        levelNode:addChild(addLaser(bottomRow, n, col, 0))
       end
     end
   end
@@ -438,17 +476,16 @@ function setupLevel(level)
       local br = filterColorAt(row+1,column+1)
       local bl = filterColorAt(row+1,column)
       --print("adding pivot", row, column, row+1, column+1, pivotX, pivotY)
-      addPivot(pivotX,pivotY,tl,tr,br,bl)
+      levelNode:addChild(addPivot(row,column,tl,tr,br,bl))
     end
   end
 end
 
-setupLevel(level1)
 
 local laserBeams = {}
 function clearLasers()
   for n,beam in ipairs(laserBeams) do
-    print("Removing beam", beam)
+    --print("Removing beam", beam)
     beam = beam:removeFromParent()
     -- beam:destroy()
   end
@@ -457,10 +494,17 @@ end
 function updateLasers()
   clearLasers()
   for n,laser in ipairs(lasers) do
-    local beam = fireLaser(laser.x, laser.y, laser.laserAngle, laser.laserColor)
-    print("Created beam", beam)
+    local beam = fireLaser(laser.x, laser.y, laser.row, laser.column, laser.laserAngle, laser.laserColor)
+    laser.parent:addChild(beam)
+    --print("Created beam", beam)
     table.insert(laserBeams, beam)
   end
 end
 
-system:addTimer(updateLasers, 0.1, 1, 0.1)
+function startGame()
+  setupScene()
+  setupLevel(level1)
+  updateLasers()
+end
+
+system:addTimer(startGame, 0.1, 1, 0.1)
