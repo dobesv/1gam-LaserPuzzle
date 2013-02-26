@@ -2,169 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c5d85165-c778-44d4-887b-bbda88f46e73" name="Default" comment="">
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\app.icf" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\common.icf" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\development.icf" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\fonts\Default.fnt" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\fonts\Default_0.png" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\main.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QAnimation.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QAtlas.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QAudio.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QBilling.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QBrowser.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QCircle.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QColor.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QCompass.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QConfig.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QCrypto.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QDebug.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QDevice.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QDirector.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QDraw.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QEvent.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QFacebook.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QFont.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QJoint.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QLabel.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QLines.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QLocation.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QLsqlite3.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QLuasocket.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QNUI.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QNode.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QParticles.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QPhysics.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QRectangle.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QScene.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QSprite.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QSystem.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QTiledMap.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QTimer.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QTween.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QVector.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\QVideo.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\Qjson.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\class.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\config.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\dbg.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\json\json.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\lua_socket\ftp.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\lua_socket\http.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\lua_socket\initls.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\lua_socket\ltn12.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\lua_socket\mime.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\lua_socket\smtp.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\lua_socket\socket.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\lua_socket\tp.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\lua_socket\url.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\openquick.lua" afterPath="" />
-      <change type="DELETED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\quicklua\quick.lua" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/playcraft.xml" afterPath="$PROJECT_DIR$/.idea/libraries/playcraft.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server.js" afterPath="$PROJECT_DIR$/server/server.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\Beam_blue.png" afterPath="$PROJECT_DIR$/images/Beam_blue.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\Beam_green.png" afterPath="$PROJECT_DIR$/images/Beam_green.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\Beam_red.png" afterPath="$PROJECT_DIR$/images/Beam_red.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\Pivot.png" afterPath="$PROJECT_DIR$/images/Pivot.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\beam_blue_end.png" afterPath="$PROJECT_DIR$/images/beam_blue_end.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\beam_blue_mid.png" afterPath="$PROJECT_DIR$/images/beam_blue_mid.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\beam_green_end.png" afterPath="$PROJECT_DIR$/images/beam_green_end.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\beam_green_mid.png" afterPath="$PROJECT_DIR$/images/beam_green_mid.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\beam_red_end.png" afterPath="$PROJECT_DIR$/images/beam_red_end.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\beam_red_mid.png" afterPath="$PROJECT_DIR$/images/beam_red_mid.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\bg.jpg" afterPath="$PROJECT_DIR$/images/bg.jpg" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\empty.png" afterPath="$PROJECT_DIR$/images/empty.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\filter_blue.png" afterPath="$PROJECT_DIR$/images/filter_blue.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\filter_clear.png" afterPath="$PROJECT_DIR$/images/filter_clear.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\filter_green.png" afterPath="$PROJECT_DIR$/images/filter_green.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\filter_mirror.png" afterPath="$PROJECT_DIR$/images/filter_mirror.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\filter_red.png" afterPath="$PROJECT_DIR$/images/filter_red.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\frame.png" afterPath="$PROJECT_DIR$/images/frame.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\laser_blue.png" afterPath="$PROJECT_DIR$/images/laser_blue.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\laser_green.png" afterPath="$PROJECT_DIR$/images/laser_green.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\laser_off.png" afterPath="$PROJECT_DIR$/images/laser_off.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\images\laser_red.png" afterPath="$PROJECT_DIR$/images/laser_red.png" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\index.html" afterPath="$PROJECT_DIR$/index.html" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\js\lazerpuzzle.js" afterPath="$PROJECT_DIR$/js/lazerpuzzle.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\dist\playcraft-0.5.6.min.js" afterPath="$PROJECT_DIR$/playcraftjs/dist/playcraft-0.5.6.min.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\boot.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/boot.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\color.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/color.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\activator.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/activator.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\alpha.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/alpha.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\circle.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/circle.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\clip.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/clip.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\component.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/component.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\expiry.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/expiry.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\fade.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/fade.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\input.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/input.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\joint.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/joint.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\layout.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/layout.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\originshifter.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/originshifter.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\overlay.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/overlay.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\particleemitter.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/particleemitter.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\physics.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/physics.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\poly.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/poly.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\rect.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/rect.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\scale.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/scale.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\spatial.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/spatial.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\spin.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/spin.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\sprite.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/sprite.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\components\text.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/components/text.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\dataresource.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/dataresource.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\debug.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/debug.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\device.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/device.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\entity.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/entity.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\entitylayer.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/entitylayer.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\es\entitymanager.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/es/entitymanager.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\es\systemmanager.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/es/systemmanager.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\base64.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/base64.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\box2dweb.2.1a-pc.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/box2dweb.2.1a-pc.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\gamecore.js\.gitignore" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/gamecore.js/.gitignore" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\gamecore.js\README.md" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/gamecore.js/README.md" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\gamecore.js\gamecore.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/gamecore.js/gamecore.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\gamecore.js\gamecore.min.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/gamecore.js/gamecore.min.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\gamecore.js\grunt.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/gamecore.js/grunt.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\gamecore.js\licence.txt" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/gamecore.js/licence.txt" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\gamecore.js\src\base.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/gamecore.js/src/base.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\gamecore.js\src\class.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/gamecore.js/src/class.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\gamecore.js\src\device.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/gamecore.js/src/device.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\gamecore.js\src\gamecore.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/gamecore.js/src/gamecore.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\gamecore.js\src\hashlist.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/gamecore.js/src/hashlist.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\gamecore.js\src\jhashtable.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/gamecore.js/src/jhashtable.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\gamecore.js\src\linkedlist.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/gamecore.js/src/linkedlist.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\gamecore.js\src\perf.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/gamecore.js/src/perf.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\gamecore.js\src\pooled.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/gamecore.js/src/pooled.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\ext\gamecore.js\src\stacktrace.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/ext/gamecore.js/src/stacktrace.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\game.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/game.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\hashmap.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/hashmap.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\hextilelayer.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/hextilelayer.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\image.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/image.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\input.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/input.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\isotilelayer.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/isotilelayer.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\layer.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/layer.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\loader.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/loader.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\math.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/math.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\packed.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/packed.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\playcraft.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/playcraft.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\scene.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/scene.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\sound.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/sound.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\sprite.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/sprite.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\spritesheet.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/spritesheet.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\systems\activation.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/systems/activation.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\systems\effects.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/systems/effects.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\systems\entitysystem.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/systems/entitysystem.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\systems\expiry.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/systems/expiry.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\systems\input.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/systems/input.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\systems\layout.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/systems/layout.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\systems\particles.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/systems/particles.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\systems\physics.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/systems/physics.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\systems\render.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/systems/render.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\systems\system.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/systems/system.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\tilelayer.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/tilelayer.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\tilemap.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/tilemap.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\tileset.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/tileset.js" />
-      <change type="MOVED" beforePath="E:\projects\games\1gam\1gam-LaserPuzzle\resources\playcraftjs\lib\tools.js" afterPath="$PROJECT_DIR$/playcraftjs/lib/tools.js" />
     </list>
     <ignored path="1gam-LaserPuzzle.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -472,7 +310,11 @@
       <created>1361863368390</created>
       <updated>1361863368390</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Remove old lua stuff, move files to the root of the repo so we can see the game in github pages, hopefully.">
+      <created>1361863619241</created>
+      <updated>1361863619241</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -535,7 +377,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add playcraft to the repo.  Now the sensors light up when they get the right color laser coming to them." />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove old lua stuff, move files to the root of the repo so we can see the game in github pages, hopefully." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -551,6 +393,7 @@
     <MESSAGE value="Working on a javascript version of this laser puzzle game using playcraft.js." />
     <MESSAGE value="Now clicking the pivots rotates them.  Lasers are drawing in the right directions." />
     <MESSAGE value="Add playcraft to the repo.  Now the sensors light up when they get the right color laser coming to them." />
+    <MESSAGE value="Remove old lua stuff, move files to the root of the repo so we can see the game in github pages, hopefully." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
