@@ -7,4 +7,5 @@ it out as my "one game a month" project for February 2013.  Art is thanks to [Gl
 How to play: rotate the pieces until the lasers reach the sensors.  When all the sensors are
 activated, you win!
 
- 
+For development you probably want to put a copy of playcraftjs/lib as playcraftjs/lib.
+

@@ -166,3 +166,4 @@ iwtrace.txt
 crashlog-*.txt
 
 .idea
+playcraftjs/lib
