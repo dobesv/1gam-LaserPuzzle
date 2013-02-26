@@ -77,10 +77,10 @@ LaserLayer = pc.Layer.extend('LaserLayer',
                         if(typeof(sensor) === 'undefined') {
                             // Off the bottom, extend laser to the edge of the visible area
                             switch(dir) {
-                                case 'down': y = pc.device.canvasHeight; break;
+                                case 'down': y = grid.screenBottomY; break;
                                 case 'up': y = 0; break;
                                 case 'left': x = 0; break;
-                                case 'right': x = pc.device.canvasWidth; break;
+                                case 'right': x = grid.screenRightX; break;
                             }
                         } else if("sensorColor" in sensor && sensor.sensorColor == color) {
                             sensor.lit = true;
@@ -149,6 +149,8 @@ GameScene = pc.Scene.extend('GameScene',
             targetHeight:0,
             fullWidth:0,
             fullHeight:0,
+            screenBottomY:768,
+            screenRightX:1024,
             scale:1,
 
             lookupRowColumn:[], // Indexed by strings "<row>,<column>" to laser or filter
@@ -325,7 +327,7 @@ GameScene = pc.Scene.extend('GameScene',
                 setupSensor(row, columns-1, colorLetterToWord[colChar], 270);
             };
 
-            var setupFilter = function(row, column, color) {
+            var setupFilter = function(row, column, color, pivot) {
                 var filterImage = pc.device.loader.get('filter_'+color).resource;
                 var top = (row%2) == 1;
                 var left = (column%2) == 1;
@@ -346,8 +348,7 @@ GameScene = pc.Scene.extend('GameScene',
                 filter.filterColor = color;
                 filter.row = row;
                 filter.column = column;
-                filter.onTop = top;
-                filter.onLeft = left;
+                filter.pivot = pivot;
                 if(color == 'mirror') {
                     filter.reflection = {
                         down:(top == left)?'left':'right',
@@ -383,6 +384,21 @@ GameScene = pc.Scene.extend('GameScene',
                 setupFilter(row+1, column,   bl);
                 pivot.row = row;
                 pivot.column = column;
+                pivot.handleClick = function() {
+                    console.log("Rotate pivot", row, column, tl, tr, br, bl);
+                    // Remove old filters and add new ones, rotated.
+                    grid.filters = grid.filters.filter(function(f) {
+                        if((f.column == column || f.column == column+1)
+                            && (f.row == row || f.row == row+1)) {
+                            f.remove();
+                            return false;
+                        }
+                        return true;
+                    });
+                    grid.pivots = grid.pivots.filter(function(p) { return !(p.row == row && p.column == column); });
+                    pivot.remove();
+                    setupPivot(row, column, tr, br, bl, tl);
+                }
                 grid.pivots.push(pivot);
             };
             var bottomRow = grid.bottomRow;
@@ -412,6 +428,35 @@ GameScene = pc.Scene.extend('GameScene',
 
         },
 
+        onAction:function(actionName) {
+            console.log('Action', actionName, pc.device.input.mousePos.x, pc.device.input.mousePos.y);
+            var self = this;
+            function whatIsUnderTheMouse() {
+                var x = pc.device.input.mousePos.x;
+                var y = pc.device.input.mousePos.y;
+                var foundPivot = null;
+                var grid = self.grid;
+                self.grid.pivots.forEach(function(pivot) {
+                    var leftX = grid.columnX(pivot.column);
+                    var rightX = grid.columnX(pivot.column+1);
+                    var topY = grid.rowY(pivot.row);
+                    var bottomY = grid.rowY(pivot.row+1);
+                    if(x >= leftX && x <= rightX && y >= topY && y <= bottomY) {
+                        foundPivot = pivot;
+                    }
+                });
+                return foundPivot;
+            }
+            if(actionName == 'press') {
+                this.pressed = whatIsUnderTheMouse();
+            } else if(actionName == 'release') {
+                var onWhat = whatIsUnderTheMouse();
+                if(onWhat === this.pressed) {
+                    onWhat.handleClick();
+                }
+            }
+        },
+
         init:function ()
         {
             this._super();
@@ -428,6 +473,11 @@ GameScene = pc.Scene.extend('GameScene',
 
             this.frameLayer = this.fgbg('frame');
             this.frameLayer.setZIndex(10)
+
+            pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
+            pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
+            pc.device.input.bindAction(this, 'press', 'TOUCH');
+            pc.device.input.bindAction(this, 'release', 'TOUCH_END');
         }
 
 
@@ -488,6 +538,7 @@ TheGame = pc.Game.extend('TheGame',
             // we're ready; make the magic happen
             this.gameScene = new GameScene();
             this.addScene(this.gameScene);
+
         }
     });
 
