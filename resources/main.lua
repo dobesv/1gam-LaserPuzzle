@@ -49,7 +49,7 @@ end
 
 -- Get the Y coordinate of the given row
 -- The first row is numbered 1, in lua tradition
-function rowY(n)
+local function rowY(n)
   if n == topRow then return topRowY end
   if n == bottomRow then return bottomRowY end
   return nearestInt(((rows / 2) - n) * filterGridSize + filterOffset)
@@ -58,14 +58,14 @@ end
 -- Note that the left and right columns have the emitters and the
 -- middle columns have the filters.
 -- The first column is number 1, in lua tradition
-function columnX(n)
+local function columnX(n)
   if n == leftColumn then return leftColumnX end
   if n == rightColumn then return rightColumnX end 
   return nearestInt((n - (columns / 2)) * filterGridSize - filterOffset)
 end
 
 -- Filters are ordered clockwise starting at top-left; so TL, TR, BR, BL
-function addPivot(row,column,a,b,c,d)
+local function addPivot(row,column,a,b,c,d)
   local x = columnX(column) + filterOffset
   local y = rowY(row) - filterOffset
   local pivot = director:createSprite(x,y,"images/Pivot.png")
@@ -128,7 +128,7 @@ function addPivot(row,column,a,b,c,d)
   return pivot
 end
 
-function findFilter(row,column)
+local function findFilter(row,column)
   for n,pivot in ipairs(pivots) do
     for nn,filter in ipairs(pivot.filters) do
       if column == filter.column and row == filter.row then
@@ -139,7 +139,7 @@ function findFilter(row,column)
   return nil
 end
 
-function addLaser(row,column,laserColor,angle)
+local function addLaser(row,column,laserColor,angle)
   local laser = director:createSprite(columnX(column),rowY(row), "images/laser_"..laserColor..".png")
   laser.xAnchor = 0.5
   laser.yAnchor = 0.5
@@ -153,7 +153,7 @@ function addLaser(row,column,laserColor,angle)
   return laser
 end
 
-function findLaser(row,column)
+local function findLaser(row,column)
   for n,laser in ipairs(lasers) do
     if row == laser.row and column == laser.column then
       return laser
@@ -166,7 +166,7 @@ end
 -- 1. Path of the laser as a list of x,y points
 -- 2. Filters that were passed through / mirrors hit, if any
 -- 3. Sensor that was hit, if any
-function traceLaser(startRow,startColumn,startAngle,startColor)
+local function traceLaser(startRow,startColumn,startAngle,startColor)
   local row = startRow
   local column = startColumn
   local angle = startAngle
