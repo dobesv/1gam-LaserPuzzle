@@ -131,7 +131,7 @@ pc.Image = pc.Base.extend('pc.Image',
         /**
          * Draw the image onto a context
          * @param {Context} ctx Context to draw the sprite image on
-         * @param {Number} sx Source position in the image (or destination x if only 3 params)
+         * @param {Number} sx Source position in the image (or detination x if only 3 params)
          * @param {Number} sy Source position in the image (or destination y if only 3 params)
          * @param {Number} x x-position destination x position to draw the image at
          * @param {Number} y y-position destination y position to draw the image at
