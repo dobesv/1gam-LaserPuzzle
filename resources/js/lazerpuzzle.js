@@ -57,6 +57,7 @@ LaserLayer = pc.Layer.extend('LaserLayer',
                 var y=startY;
                 var x=startX;
                 var ctx = pc.device.ctx;
+                var litSensor = null;
                 ctx.beginPath();
                 ctx.strokeStyle = color;
                 ctx.lineWidth = "4"; //+(20 * grid.scale);
@@ -112,7 +113,16 @@ LaserLayer = pc.Layer.extend('LaserLayer',
                 }
             };
             this.grid.lasers.forEach(drawLaser);
+
+            this.grid.sensors.forEach(function(sensor) {
+                var sprite = sensor.getComponent('sprite');
+                var img = sensor.lit ? 'laser_'+sensor.sensorColor : 'laser_off';
+                if(sprite.sprite.spriteSheet.image.name != img) {
+                    sprite.sprite.spriteSheet.image = pc.device.loader.get(img).resource;
+                }
+            });
             //console.log("drawing", lineCount, "lines from", grid.lasers.length, "lasers");
+
         },
 
         process:function() {
@@ -161,7 +171,7 @@ GameScene = pc.Scene.extend('GameScene',
             {
                 if(n == this.topRow) return this.topRowY;
                 if(n == this.bottomRow) return this.bottomRowY;
-                return Math.round(this.topRowY + (n * filterGridSize) * this.scale);
+                return Math.round(this.topRowY + this.padTop + (n * filterGridSize) * this.scale);
             },
             // Get the X coordinate of the given column
             // Note that the left and right columns have the emitters and the
@@ -170,7 +180,7 @@ GameScene = pc.Scene.extend('GameScene',
             columnX: function columnX(n) {
                 if(n == this.leftColumn) return this.leftColumnX;
                 if(n == this.rightColumn) return this.rightColumnX;
-                return Math.round(this.leftColumnX + (n * filterGridSize) * this.scale);
+                return Math.round(this.leftColumnX + this.padLeft + (n * filterGridSize) * this.scale);
             },
 
             setDimensions: function(rows,columns) {
@@ -184,12 +194,14 @@ GameScene = pc.Scene.extend('GameScene',
                 this.rightColumnX = 705;
                 this.targetWidth = this.rightColumnX - this.leftColumnX;
                 this.targetHeight = this.bottomRowY - this.topRowY;
-                this.fullWidth = columns * filterGridSize;
-                this.fullHeight = rows * filterGridSize;
+                this.fullWidth = (columns-1) * filterGridSize;
+                this.fullHeight = (rows-1) * filterGridSize;
                 var scale = this.scale = Math.min(this.targetWidth / this.fullWidth, this.targetHeight / this.fullHeight);
                 this.columnWidth = filterGridSize * scale
+                this.padTop = Math.floor(this.targetHeight - this.fullHeight*scale)/2;
+                this.padLeft = Math.floor(this.targetWidth - this.fullWidth*scale)/2;
 
-                console.log("Grid is "+rows+" rows "+columns+" columns; rect ("+this.leftColumnX+","+this.topRowY+") to ("+this.rightColumnX+","+this.bottomRowY+") and scale is "+this.scale);
+                console.log("Grid is "+rows+" rows "+columns+" columns; rect ("+this.leftColumnX+","+this.topRowY+") to ("+this.rightColumnX+","+this.bottomRowY+") and scale is "+this.scale+" padding is "+this.padLeft+","+this.padTop);
             },
 
             lookup: function (row,column) {
@@ -385,7 +397,7 @@ GameScene = pc.Scene.extend('GameScene',
                 pivot.row = row;
                 pivot.column = column;
                 pivot.handleClick = function() {
-                    console.log("Rotate pivot", row, column, tl, tr, br, bl);
+                    //console.log("Rotate pivot", row, column, tl, tr, br, bl);
                     // Remove old filters and add new ones, rotated.
                     grid.filters = grid.filters.filter(function(f) {
                         if((f.column == column || f.column == column+1)
@@ -397,7 +409,7 @@ GameScene = pc.Scene.extend('GameScene',
                     });
                     grid.pivots = grid.pivots.filter(function(p) { return !(p.row == row && p.column == column); });
                     pivot.remove();
-                    setupPivot(row, column, tr, br, bl, tl);
+                    setupPivot(row, column, bl, tl, tr, br);
                 }
                 grid.pivots.push(pivot);
             };
@@ -418,7 +430,7 @@ GameScene = pc.Scene.extend('GameScene',
                             var tr = colorLetterToWord[rowSpec[column+1]];
                             var br = colorLetterToWord[nextRowSpec[column+1]];
                             var bl = colorLetterToWord[nextRowSpec[column]];
-                            console.log("pivot", row, column, tl, tr, br, bl);
+                            //console.log("pivot", row, column, tl, tr, br, bl);
                             setupPivot(row, column, tl, tr, br, bl);
                         }
                     }
@@ -429,7 +441,7 @@ GameScene = pc.Scene.extend('GameScene',
         },
 
         onAction:function(actionName) {
-            console.log('Action', actionName, pc.device.input.mousePos.x, pc.device.input.mousePos.y);
+            //console.log('Action', actionName, pc.device.input.mousePos.x, pc.device.input.mousePos.y);
             var self = this;
             function whatIsUnderTheMouse() {
                 var x = pc.device.input.mousePos.x;
@@ -450,6 +462,8 @@ GameScene = pc.Scene.extend('GameScene',
             if(actionName == 'press') {
                 this.pressed = whatIsUnderTheMouse();
             } else if(actionName == 'release') {
+                if(!this.pressed)
+                    return;
                 var onWhat = whatIsUnderTheMouse();
                 if(onWhat === this.pressed) {
                     onWhat.handleClick();
