@@ -16,7 +16,7 @@ app.configure(function()
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(app.router);
-    app.use(express.static('../resources/'));
+    app.use(express.static('../'));
 
     // if you want to make your own projects appear using different directories, add a static line here, e.g.
     //app.use(express.static('/myprojects/mygame/'));
@@ -42,7 +42,7 @@ app.configure('production', function()
 // Routes
 app.get('/', function(req, res)
 {
-    app.set('views', '../resources/');
+    app.set('views', '../');
     res.render('index.html');
 });
 
