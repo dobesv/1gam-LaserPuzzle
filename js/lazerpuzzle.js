@@ -58,8 +58,10 @@ var scrambleLevel = function scrambleLevel(level) {
 var filterOffset=80;
 var filterGridSize = filterOffset*2;
 
-var playSound = function(id) {
-    pc.device.loader.get(id).resource.play(false);
+var playSound = function(id, volume) {
+    var sound = pc.device.loader.get(id).resource;
+    sound.setVolume(volume || 1);
+    sound.play(false);
 };
 
 ImageLayer = pc.Layer.extend('ImageLayer',
@@ -590,6 +592,7 @@ GameScene = pc.Scene.extend('GameScene',
                     });
                     grid.pivots = grid.pivots.filter(function(p) { return !(p.row == row && p.column == column); });
                     pivot.remove();
+                    playSound('pivot_sound', 0.5);
                     setupPivot(row, column, bl, tl, tr, br);
                 };
                 grid.pivots.push(pivot);
@@ -755,6 +758,8 @@ TheGame = pc.Game.extend('TheGame',
             loadSound('door_open_sound');
             loadSound('applause');
             loadSound('level_complete');
+            loadSound('beep');
+            loadSound('pivot_sound', 5);
 
             // fire up the loader (with a callback once done)
             pc.device.loader.start(this.onLoading.bind(this), this.onLoaded.bind(this));
@@ -795,6 +800,7 @@ TheGame = pc.Game.extend('TheGame',
                 this.levelStarted = true;
                 this.gameScene.startLevel();
                 this.playDoorSound();
+                playSound('beep');
             }
         },
 
@@ -803,6 +809,7 @@ TheGame = pc.Game.extend('TheGame',
                 this.levelStarted = true;
                 this.gameScene.startLevel();
                 this.playDoorSound();
+                playSound('beep');
             }
         },
 
