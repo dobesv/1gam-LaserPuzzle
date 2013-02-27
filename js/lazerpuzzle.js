@@ -1,6 +1,15 @@
 
-
+var shuffled=0;
+var shuffles=[]
 levels = [
+[ " R GB   ",
+  " rmgmbbb",
+  " rrmgggg",
+  " rrgbrg ",
+  " mrrrrrr",
+  "        "],
+
+
 [ " RrgrbRGB ",
   "RmmrmrmrrG",
   " mmrrrrbbR",
@@ -19,10 +28,138 @@ levels = [
     //  " B    B " ]
 ];
 
+var scrambleLevel = function scrambleLevel(level) {
+    for(var row=1; row<level.length-1; row+=2) {
+        var rowSpec1 = level[row];
+        var rowSpec2 = level[row+1];
+        var newRowSpec1 = ""+rowSpec1[0];
+        var newRowSpec2 = ""+rowSpec2[0];
+
+        for(var column=1; column<rowSpec1.length-1; column+=2) {
+            var pivotSpec = rowSpec1[column]+
+                            rowSpec1[column+1]+
+                            rowSpec2[column+1]+
+                            rowSpec2[column];
+            var turns = Math.floor(Math.random()*4);
+            newRowSpec1 += pivotSpec[turns] + pivotSpec[(turns+1)%4];
+            newRowSpec2 += pivotSpec[(turns+3)%4] + pivotSpec[(turns+2)%4];
+        }
+        newRowSpec1 += rowSpec1[rowSpec1.length-1];
+        newRowSpec2 += rowSpec2[rowSpec2.length-1];
+        level[row] = newRowSpec1;
+        level[row+1] = newRowSpec2;
+    }
+};
+
+levels.forEach(scrambleLevel);
+
+
 var filterOffset=80;
 var filterGridSize = filterOffset*2;
-var pivotGridSize = filterGridSize*2;
-var cardinals = {up:0,right:90,down:180,left:270};
+
+ImageLayer = pc.Layer.extend('ImageLayer',
+    {},
+    {
+        image: null,
+
+        init:function(resourceName, name, zIndex) {
+            this._super(name, zIndex);
+            this.image = pc.device.loader.get(resourceName).resource;
+            //console.log("ImageLayer.init", resourceName, name, zIndex, this.image);
+        },
+
+        draw:function() {
+            this.image.draw(pc.device.ctx, 0, 0);
+        }
+    }
+);
+
+MenuLayer = pc.Layer.extend('MenuLayer',
+    {},
+    {
+        startButton: null,
+        nextLevelButton: null,
+
+        init:function(game, name, zIndex) {
+            this._super(name, zIndex);
+            this.startButton = pc.device.loader.get("but_start").resource;
+            this.startButton.x = 780;
+            this.startButton.y = 250;
+            this.startButton.handleClick = function() {
+                game.startGame();
+            }
+            this.nextLevelButton = pc.device.loader.get("but_nextlevel").resource;
+            this.nextLevelButton.x = 780;
+            this.nextLevelButton.y = 250;
+            this.nextLevelButton.handleClick = function() {
+                game.nextLevel();
+            }
+            this.game = game;
+            pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
+            pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
+            pc.device.input.bindAction(this, 'press', 'TOUCH');
+            pc.device.input.bindAction(this, 'release', 'TOUCH_END');
+        },
+        drawButton:function(but) {
+            but.draw(pc.device.ctx,but.x,but.y);
+        },
+        draw:function() {
+            var ctx = pc.device.ctx;
+            if(this.game.levelStarted) {
+                // No menu to draw, really - maybe a restart button?  A status indicator?
+            } else {
+                if(this.game.level > 0) {
+                    // Draw "next level" button
+                    this.drawButton(this.nextLevelButton);
+                } else {
+                    // Draw "start game" button
+                    //console.log("Drawing start game button ...", this.startButton);
+                    this.drawButton(this.startButton);
+                }
+            }
+        },
+        onAction:function(actionName) {
+            //console.log('Action', actionName, pc.device.input.mousePos.x, pc.device.input.mousePos.y);
+            var self = this;
+            var game = this.game;
+            var onImage = function(image) {
+                var x = pc.device.input.mousePos.x - image.x;
+                var y = pc.device.input.mousePos.y - image.y;
+                return (x >= 0 && x < image.width &&
+                        y >= 0 && y < image.height);
+
+
+            };
+            var whatIsUnderTheMouse = function whatIsUnderTheMouse() {
+                if(game.levelStarted) {
+
+                } else {
+                    if(game.level > 0) {
+                        if(onImage(self.nextLevelButton)) {
+                            return self.nextLevelButton;
+                        }
+                    } else {
+                        // Did we press on the start button?
+                        if(onImage(self.startButton)) {
+                            return self.startButton;
+                        }
+
+                    }
+                }
+            };
+            if(actionName == 'press') {
+                this.pressed = whatIsUnderTheMouse();
+            } else if(actionName == 'release') {
+                if(!this.pressed)
+                    return;
+                var onWhat = whatIsUnderTheMouse();
+                if(onWhat === this.pressed) {
+                    onWhat.handleClick();
+                }
+            }
+        }
+    }
+);
 
 LaserLayer = pc.Layer.extend('LaserLayer',
     {},
@@ -37,7 +174,6 @@ LaserLayer = pc.Layer.extend('LaserLayer',
 
         draw:function() {
             var lineCount = 0;
-            var layer = this;
             var grid = this.grid;
             grid.sensors.forEach(function resetFlag(sensor) {
                 sensor.lit = false;
@@ -45,19 +181,12 @@ LaserLayer = pc.Layer.extend('LaserLayer',
             grid.filters.forEach(function resetFlag(filter) {
                 filter.lit = false;
             });
-            var fireLaserLeft;
-            var fireLaserRight;
-            var fireLaserUp;
-            var fireLaserDown;
             var fireLaser = function(startRow, startColumn, dir, color) {
                 var row = startRow;
                 var column = startColumn;
                 var startX = grid.columnX(column);
                 var startY = grid.rowY(row);
-                var y=startY;
-                var x=startX;
                 var ctx = pc.device.ctx;
-                var litSensor = null;
                 ctx.beginPath();
                 ctx.strokeStyle = color;
                 ctx.lineWidth = "4"; //+(20 * grid.scale);
@@ -69,8 +198,8 @@ LaserLayer = pc.Layer.extend('LaserLayer',
                         case 'left': column--; break;
                         case 'right': column++; break;
                     }
-                    y = grid.rowY(row);
-                    x = grid.columnX(column);
+                    var y = grid.rowY(row);
+                    var x = grid.columnX(column);
 
                     if(row == grid.bottomRow || column == grid.rightColumn ||
                         row == grid.topRow || column == grid.leftColumn) {
@@ -93,7 +222,7 @@ LaserLayer = pc.Layer.extend('LaserLayer',
                     ctx.lineTo(x,y);
 
                     var filter = grid.lookup(row, column);
-                    if(filter.filterColor != 'clear' && filter.filterColor != color) {
+                    if(filter && filter.filterColor != 'clear' && filter.filterColor != color) {
                         if(filter.filterColor == 'mirror') {
                             dir = filter.reflection[dir];
                         } else {
@@ -107,9 +236,9 @@ LaserLayer = pc.Layer.extend('LaserLayer',
             var drawLaser = function(laser) {
                 var laserColor = laser.laserColor;
                 if(laser.column == grid.leftColumn) {
-                    fireLaser(laser.row, laser.column, 'right', laser.laserColor);
+                    fireLaser(laser.row, laser.column, 'right', laserColor);
                 } else if(laser.row == grid.topRow) {
-                    fireLaser(laser.row, laser.column, 'down', laser.laserColor);
+                    fireLaser(laser.row, laser.column, 'down', laserColor);
                 }
             };
             this.grid.lasers.forEach(drawLaser);
@@ -123,11 +252,8 @@ LaserLayer = pc.Layer.extend('LaserLayer',
             });
             //console.log("drawing", lineCount, "lines from", grid.lasers.length, "lasers");
 
-        },
-
-        process:function() {
-
         }
+
     });
 
 GameScene = pc.Scene.extend('GameScene',
@@ -135,11 +261,7 @@ GameScene = pc.Scene.extend('GameScene',
 
     },
     {
-        backgroundLayer:null,
         gridLayer:null,
-        frameLayer:null,
-
-        backgroundResource:null,
         grid: {
             columns:0,
             rows:0,
@@ -162,8 +284,9 @@ GameScene = pc.Scene.extend('GameScene',
             screenBottomY:768,
             screenRightX:1024,
             scale:1,
+            solved:false,
 
-            lookupRowColumn:[], // Indexed by strings "<row>,<column>" to laser or filter
+            lookupRowColumn:{}, // Indexed by strings "<row>,<column>" to laser or filter
 
             // Get the Y coordinate of the given row
             // The first row is numbered 1, in lua tradition
@@ -189,7 +312,7 @@ GameScene = pc.Scene.extend('GameScene',
                 this.leftColumn = 0;
                 this.rightColumn = columns-1;
                 this.topRowY = 150;
-                this.bottomRowY = 625
+                this.bottomRowY = 625;
                 this.leftColumnX = 75;
                 this.rightColumnX = 705;
                 this.targetWidth = this.rightColumnX - this.leftColumnX;
@@ -197,7 +320,7 @@ GameScene = pc.Scene.extend('GameScene',
                 this.fullWidth = (columns-1) * filterGridSize;
                 this.fullHeight = (rows-1) * filterGridSize;
                 var scale = this.scale = Math.min(this.targetWidth / this.fullWidth, this.targetHeight / this.fullHeight);
-                this.columnWidth = filterGridSize * scale
+                this.columnWidth = filterGridSize * scale;
                 this.padTop = Math.floor(this.targetHeight - this.fullHeight*scale)/2;
                 this.padLeft = Math.floor(this.targetWidth - this.fullWidth*scale)/2;
 
@@ -211,41 +334,47 @@ GameScene = pc.Scene.extend('GameScene',
             update: function(row,column,ent) {
                 this.lookupRowColumn[row+","+column] = ent;
                 return ent;
+            },
+
+            clear: function() {
+                var removeIt = function(x) {x.remove();};
+                this.pivots.forEach(removeIt);
+                this.pivots = [];
+                this.lasers.forEach(removeIt);
+                this.lasers = [];
+                this.filters.forEach(removeIt);
+                this.filters = [];
+                this.sensors.forEach(removeIt);
+                this.sensors = [];
+                this.lookupRowColumn = {};
+                this.setDimensions(1,1);
             }
         },
 
 
-        fgbg: function(name)
-        {
-            var layer = this.addLayer(new pc.EntityLayer(name+" layer", 1, 1));
-            layer.addSystem(new pc.systems.Render());
-            var ent = pc.Entity.create(layer);
-            var sheet = new pc.SpriteSheet({ image:pc.device.loader.get(name).resource });
-            ent.addComponent(pc.components.Sprite.create({ spriteSheet: sheet }));
-            ent.addComponent(pc.components.Spatial.create({ x:0, y:0 }));
-            return layer;
+        clearGrid: function() {
+            this.grid.clear();
         },
-
         setupGrid: function(level) {
             var rows = level.length;
             var columns = level[0].length;
+            var scene = this;
             var grid = this.grid;
             grid.setDimensions(rows,columns);
 
             if(rows <= 2) {
                 alert("Need more than 2 rows for a real level.  Something must be wrong.");
-                return false;
+                return;
             }
             level.forEach(function(rowSpec, n) {
                 if(rowSpec.length != columns) {
-                    alert("Row "+(n+1)+" ("+rowSpec+") isn't the same width as the first row.");
-                    return false;
+                    console.log("Row "+(n+1)+" ("+rowSpec+") isn't the same width as the first row.");
                 }
             });
 
 
-            var layer = this.gridLayer = this.addLayer(new pc.EntityLayer("puzzle pieces"));
-            layer.addSystem(new pc.systems.Render());
+            var layer = this.gridLayer;
+
             console.log("screen", layer.screenX(0), layer.screenY(0));
             var scene = this;
 
@@ -371,7 +500,7 @@ GameScene = pc.Scene.extend('GameScene',
                 }
                 grid.update(row, column, filter);
                 grid.filters.push(filter);
-            }
+            };
             var setupPivot = function(row, column, tl, tr, br, bl) {
                 if(!(tl && tr && br && bl))
                     return; // Bad color somewhere
@@ -410,7 +539,7 @@ GameScene = pc.Scene.extend('GameScene',
                     grid.pivots = grid.pivots.filter(function(p) { return !(p.row == row && p.column == column); });
                     pivot.remove();
                     setupPivot(row, column, bl, tl, tr, br);
-                }
+                };
                 grid.pivots.push(pivot);
             };
             var bottomRow = grid.bottomRow;
@@ -441,9 +570,12 @@ GameScene = pc.Scene.extend('GameScene',
         },
 
         onAction:function(actionName) {
+            if(this.game.levelStarted == false)
+                return;
+
             //console.log('Action', actionName, pc.device.input.mousePos.x, pc.device.input.mousePos.y);
             var self = this;
-            function whatIsUnderTheMouse() {
+            var whatIsUnderTheMouse = function whatIsUnderTheMouse() {
                 var x = pc.device.input.mousePos.x;
                 var y = pc.device.input.mousePos.y;
                 var foundPivot = null;
@@ -471,28 +603,49 @@ GameScene = pc.Scene.extend('GameScene',
             }
         },
 
-        init:function ()
+        init:function (game)
         {
             this._super();
 
-            this.backgroundLayer = this.fgbg('bg');
-            this.backgroundLayer.setZIndex(1)
-            this.setupGrid(levels[0]);
-            this.gridLayer.setZIndex(5);
+            this.game = game;
+            this.addLayer(new ImageLayer('bg', 'bg layer', 0));
 
-            this.laserLayer = new LaserLayer('Laser layer', 3);
+            this.gridLayer = this.addLayer(new pc.EntityLayer("puzzle pieces"));
+            this.gridLayer.setZIndex(5);
+            this.gridLayer.addSystem(new pc.systems.Render());
+
+            this.laserLayer = new LaserLayer('Laser layer', 2);
             this.addLayer(this.laserLayer);
             this.laserLayer.grid = this.grid;
-            this.laserLayer.setZIndex(2);
 
-            this.frameLayer = this.fgbg('frame');
-            this.frameLayer.setZIndex(10)
+            this.addLayer(new MenuLayer(game, 'Menu Layer', 11));
+
+            this.addLayer(new ImageLayer('frame', 'frame layer', 10));
 
             pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
             pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
             pc.device.input.bindAction(this, 'press', 'TOUCH');
             pc.device.input.bindAction(this, 'release', 'TOUCH_END');
+        },
+
+        startLevel:function() {
+            this.clearGrid();
+            var level = this.game.level;
+            var levelSpec = levels[level % levels.length];
+            scrambleLevel(levelSpec);
+            this.setupGrid(levelSpec);
+        },
+        process:function() {
+            this._super();
+            var numSensorsLit = 0;
+            this.grid.sensors.forEach(function(sensor) {
+                if(sensor.lit == true) {
+                    numSensorsLit ++;
+                }
+            });
+            this.solved = (numSensorsLit > 0) && numSensorsLit == this.grid.sensors.length;
         }
+
 
 
     });
@@ -500,6 +653,8 @@ TheGame = pc.Game.extend('TheGame',
     {},
     {
         gameScene:null,
+        level:0,
+        levelStarted:false,
 
         onReady:function ()
         {
@@ -512,12 +667,14 @@ TheGame = pc.Game.extend('TheGame',
             // load up resources
             pc.device.loader.add(new pc.Image('bg', 'images/bg.jpg'));
             pc.device.loader.add(new pc.Image('frame', 'images/frame.png'));
-            pc.device.loader.add(new pc.Image('beam_blue_end', 'images/Beam_blue_end.png'));
-            pc.device.loader.add(new pc.Image('beam_blue_mid', 'images/Beam_blue_mid.png'));
-            pc.device.loader.add(new pc.Image('beam_green_end', 'images/Beam_green_end.png'));
-            pc.device.loader.add(new pc.Image('beam_green_mid', 'images/Beam_green_mid.png'));
-            pc.device.loader.add(new pc.Image('beam_red_end', 'images/Beam_red_end.png'));
-            pc.device.loader.add(new pc.Image('beam_red_mid', 'images/Beam_red_mid.png'));
+            //pc.device.loader.add(new pc.Image('beam_blue_end', 'images/Beam_blue_end.png'));
+            //pc.device.loader.add(new pc.Image('beam_blue_mid', 'images/Beam_blue_mid.png'));
+            //pc.device.loader.add(new pc.Image('beam_green_end', 'images/Beam_green_end.png'));
+            //pc.device.loader.add(new pc.Image('beam_green_mid', 'images/Beam_green_mid.png'));
+            //pc.device.loader.add(new pc.Image('beam_red_end', 'images/Beam_red_end.png'));
+            //pc.device.loader.add(new pc.Image('beam_red_mid', 'images/Beam_red_mid.png'));
+            pc.device.loader.add(new pc.Image('but_start', 'images/but_start.png'));
+            pc.device.loader.add(new pc.Image('but_nextlevel', 'images/but_nextlevel.png'));
             pc.device.loader.add(new pc.Image('filter_blue', 'images/filter_blue.png'));
             pc.device.loader.add(new pc.Image('filter_green', 'images/filter_green.png'));
             pc.device.loader.add(new pc.Image('filter_red', 'images/filter_red.png'));
@@ -549,11 +706,43 @@ TheGame = pc.Game.extend('TheGame',
 
         onLoaded:function ()
         {
-            // we're ready; make the magic happen
-            this.gameScene = new GameScene();
-            this.addScene(this.gameScene);
+            // Erase loading screen
+            var ctx = pc.device.ctx;
+            ctx.clearRect(0, 0, pc.device.canvasWidth, pc.device.canvasHeight);
 
+            // we're ready; make the magic happen
+            this.gameScene = new GameScene(this);
+            this.addScene(this.gameScene);
+            window.theGame = this;
+        },
+
+        startGame:function() {
+            console.log("start game!");
+            this.levelStarted = true;
+            this.gameScene.startLevel();
+        },
+
+        nextLevel:function() {
+            console.log("next level please!");
+            this.levelStarted = true;
+            this.gameScene.startLevel();
+        },
+
+        process:function() {
+            if(this._super()) {
+                if(this.levelStarted) {
+                    if(this.gameScene.solved) {
+                        this.levelStarted = false;
+                        this.level ++;
+                        console.log("Mission accomplished!", this.level, this.levelStarted);
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
         }
+
     });
 
 
