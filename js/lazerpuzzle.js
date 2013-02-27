@@ -1,6 +1,4 @@
 
-var shuffled=0;
-var shuffles=[]
 levels = [
 [ " g BR   ",
   " gmbmrrr",
@@ -57,11 +55,12 @@ var scrambleLevel = function scrambleLevel(level) {
     }
 };
 
-levels.forEach(scrambleLevel);
-
-
 var filterOffset=80;
 var filterGridSize = filterOffset*2;
+
+var playSound = function(id) {
+    pc.device.loader.get(id).resource.play(false);
+};
 
 ImageLayer = pc.Layer.extend('ImageLayer',
     {},
@@ -85,6 +84,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
     {
         startButton: null,
         nextLevelButton: null,
+        youWinImage: null,
 
         init:function(game, name, zIndex) {
             this._super(name, zIndex);
@@ -93,13 +93,16 @@ MenuLayer = pc.Layer.extend('MenuLayer',
             this.startButton.y = 250;
             this.startButton.handleClick = function() {
                 game.startGame();
-            }
+            };
             this.nextLevelButton = pc.device.loader.get("but_nextlevel").resource;
             this.nextLevelButton.x = 780;
             this.nextLevelButton.y = 250;
             this.nextLevelButton.handleClick = function() {
                 game.nextLevel();
-            }
+            };
+            this.youWinImage = pc.device.loader.get("you_win").resource;
+            this.youWinImage.x = 780;
+            this.youWinImage.y = 200;
             this.game = game;
             pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
             pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
@@ -110,13 +113,14 @@ MenuLayer = pc.Layer.extend('MenuLayer',
             but.draw(pc.device.ctx,but.x,but.y);
         },
         draw:function() {
-            var ctx = pc.device.ctx;
-            if(this.game.levelStarted) {
+            if(this.game.complete) {
+                console.log("Complete", this.youWinImage.x, this.youWinImage.y);
+                // You win!
+                this.drawButton(this.youWinImage);
+            } else if(this.game.levelStarted) {
                 // No menu to draw, really - maybe a restart button?  A status indicator?
             } else {
-                if(this.game.level >= levels.length) {
-                    // You win!
-                } else if(this.game.level > 0) {
+                if(this.game.level > 0) {
                     // Draw "next level" button
                     this.drawButton(this.nextLevelButton);
                 } else {
@@ -138,7 +142,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
 
 
             };
-            var whatIsUnderTheMouse = function whatIsUnderTheMouse() {
+            var whatIsUnderTheMouse = function() {
                 if(game.levelStarted) {
 
                 } else {
@@ -156,6 +160,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
 
                     }
                 }
+                return null;
             };
             if(actionName == 'press') {
                 this.pressed = whatIsUnderTheMouse();
@@ -188,13 +193,15 @@ DoorLayer = pc.Layer.extend('DoorLayer',
             this.bottomDoorImage = pc.device.loader.get("door_bottom").resource;
         },
         draw:function() {
-            this.topDoorImage.draw(pc.device.ctx, doorLeftX, doorMidPointY-this.gap-this.topDoorImage.height);
-            this.bottomDoorImage.draw(pc.device.ctx, doorLeftX, doorMidPointY+this.gap-(doorOverlap/2));
+            var ctx = pc.device.ctx;
+            this.topDoorImage.draw(ctx, doorLeftX, doorMidPointY-this.gap-this.topDoorImage.height);
+            this.bottomDoorImage.draw(ctx, doorLeftX, doorMidPointY+this.gap-(doorOverlap/2));
+            // Clear anything drawn outside the
+            ctx.clearRect(0, 768, pc.device.canvasWidth, pc.device.canvasHeight);
         },
         process:function() {
             var wantToOpen = this.game.levelStarted;
             var maxGap = pc.device.canvasHeight/2;
-            var currentlyOpen = this.gap >= maxGap;
             var elapsed = pc.device.elapsed;
 
             // Let's slide at
@@ -701,6 +708,7 @@ TheGame = pc.Game.extend('TheGame',
         gameScene:null,
         level:0,
         levelStarted:false,
+        complete:false,
 
         onReady:function ()
         {
@@ -715,7 +723,10 @@ TheGame = pc.Game.extend('TheGame',
                 var id = name.replace(/\....$/, "");
                 pc.device.loader.add(new pc.Image(id, path));
             };
-
+            var loadSound = function(id, maxPlaying) {
+                var path = 'sounds/'+id;
+                pc.device.loader.add(new pc.Sound(id, path, ['ogg','mp3'], maxPlaying || 1));
+            };
             // load up resources
             loadImage('bg.jpg');
             loadImage('frame.png');
@@ -739,6 +750,11 @@ TheGame = pc.Game.extend('TheGame',
             loadImage('door_top.png');
             loadImage('door_bottom.png');
             loadImage('pivot.png');
+            loadImage('you_win.png');
+
+            loadSound('door_open_sound');
+            loadSound('applause');
+            loadSound('level_complete');
 
             // fire up the loader (with a callback once done)
             pc.device.loader.start(this.onLoading.bind(this), this.onLoaded.bind(this));
@@ -770,16 +786,24 @@ TheGame = pc.Game.extend('TheGame',
             window.theGame = this;
         },
 
+        playDoorSound:function() {
+            playSound('door_open_sound');
+        },
+
         startGame:function() {
-            console.log("start game!");
-            this.levelStarted = true;
-            this.gameScene.startLevel();
+            if(!this.levelStarted) {
+                this.levelStarted = true;
+                this.gameScene.startLevel();
+                this.playDoorSound();
+            }
         },
 
         nextLevel:function() {
-            console.log("next level please!");
-            this.levelStarted = true;
-            this.gameScene.startLevel();
+            if(!this.levelStarted) {
+                this.levelStarted = true;
+                this.gameScene.startLevel();
+                this.playDoorSound();
+            }
         },
 
         process:function() {
@@ -788,6 +812,12 @@ TheGame = pc.Game.extend('TheGame',
                     if(this.gameScene.solved) {
                         this.levelStarted = false;
                         this.level ++;
+                        playSound('level_complete');
+                        if(this.level == levels.length) {
+                            this.complete = true;
+                            playSound('applause');
+                        }
+                        this.playDoorSound();
                         console.log("Mission accomplished!", this.level, this.levelStarted);
                     }
                 }

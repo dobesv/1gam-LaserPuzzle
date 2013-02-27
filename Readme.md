@@ -13,3 +13,13 @@ get some development goodies and better debugging (but slower startup time and p
 game performance).
 
 
+## Sound Credits
+
+- Door noise from http://www.trekcore.com/audio/
+- Applause from http://www.soundjay.com/applause-sounds-1.html
+- Level complete from http://noproblo.dayjo.org/ZeldaSounds/
+
+
+
+
+
