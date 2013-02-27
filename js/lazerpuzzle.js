@@ -64,6 +64,9 @@ var playSound = function(id, volume) {
     sound.play(false);
 };
 
+var getImage = function(id) {
+    return pc.device.loader.get(id).resource;
+}
 ImageLayer = pc.Layer.extend('ImageLayer',
     {},
     {
@@ -80,6 +83,14 @@ ImageLayer = pc.Layer.extend('ImageLayer',
         }
     }
 );
+var onImage = function(image) {
+    var x = pc.device.input.mousePos.x - image.x;
+    var y = pc.device.input.mousePos.y - image.y;
+    return (x >= 0 && x < image.width &&
+        y >= 0 && y < image.height);
+
+
+};
 
 MenuLayer = pc.Layer.extend('MenuLayer',
     {},
@@ -90,21 +101,30 @@ MenuLayer = pc.Layer.extend('MenuLayer',
 
         init:function(game, name, zIndex) {
             this._super(name, zIndex);
-            this.startButton = pc.device.loader.get("but_start").resource;
-            this.startButton.x = 780;
-            this.startButton.y = 250;
+            function button(id, x, y) {
+                var up = getImage(id)
+                return { up: up,
+                         down:getImage(id+"_hit"),
+                         hover:getImage(id+"_rollover"),
+                         width: up.width,
+                         height: up.height,
+                         x:x,
+                         y:y };
+
+            }
+            this.startButton = button("but_start", 780, 250);
             this.startButton.handleClick = function() {
                 game.startGame();
             };
-            this.nextLevelButton = pc.device.loader.get("but_nextlevel").resource;
-            this.nextLevelButton.x = 780;
-            this.nextLevelButton.y = 250;
+            this.nextLevelButton = button("but_nextlevel", 780, 250);
             this.nextLevelButton.handleClick = function() {
                 game.nextLevel();
             };
+
             this.youWinImage = pc.device.loader.get("you_win").resource;
             this.youWinImage.x = 780;
             this.youWinImage.y = 200;
+
             this.game = game;
             pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
             pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
@@ -112,13 +132,21 @@ MenuLayer = pc.Layer.extend('MenuLayer',
             pc.device.input.bindAction(this, 'release', 'TOUCH_END');
         },
         drawButton:function(but) {
-            but.draw(pc.device.ctx,but.x,but.y);
+            var toDraw = but.up;
+            if(this.pressed == but) {
+                toDraw = but.down;
+            } else if(onImage(but)) {
+                toDraw = but.hover;
+            }
+            toDraw.draw(pc.device.ctx,but.x,but.y);
+        },
+        drawIcon:function(ico) {
+            ico.draw(pc.device.ctx,ico.x,ico.y);
         },
         draw:function() {
             if(this.game.complete) {
-                console.log("Complete", this.youWinImage.x, this.youWinImage.y);
                 // You win!
-                this.drawButton(this.youWinImage);
+                this.drawIcon(this.youWinImage);
             } else if(this.game.levelStarted) {
                 // No menu to draw, really - maybe a restart button?  A status indicator?
             } else {
@@ -127,23 +155,13 @@ MenuLayer = pc.Layer.extend('MenuLayer',
                     this.drawButton(this.nextLevelButton);
                 } else {
                     // Draw "start game" button
-                    //console.log("Drawing start game button ...", this.startButton);
                     this.drawButton(this.startButton);
                 }
             }
         },
         onAction:function(actionName) {
-            //console.log('Action', actionName, pc.device.input.mousePos.x, pc.device.input.mousePos.y);
             var self = this;
             var game = this.game;
-            var onImage = function(image) {
-                var x = pc.device.input.mousePos.x - image.x;
-                var y = pc.device.input.mousePos.y - image.y;
-                return (x >= 0 && x < image.width &&
-                        y >= 0 && y < image.height);
-
-
-            };
             var whatIsUnderTheMouse = function() {
                 if(game.levelStarted) {
 
@@ -209,10 +227,8 @@ DoorLayer = pc.Layer.extend('DoorLayer',
             // Let's slide at
             if(wantToOpen) {
                 this.gap = Math.min(maxGap, this.gap + elapsed*0.5);
-                //if(this.gap < maxGap) console.log("Closing", this.gap);
             } else {
                 this.gap = Math.max(0, this.gap - elapsed*0.5);
-                //if(this.gap > 0) console.log("Opening", this.gap);
             }
         }
     });
@@ -305,7 +321,6 @@ LaserLayer = pc.Layer.extend('LaserLayer',
                     sprite.sprite.spriteSheet.image = pc.device.loader.get(img).resource;
                 }
             });
-            //console.log("drawing", lineCount, "lines from", grid.lasers.length, "lasers");
 
         }
 
@@ -379,7 +394,6 @@ GameScene = pc.Scene.extend('GameScene',
                 this.padTop = Math.floor(this.targetHeight - this.fullHeight*scale)/2;
                 this.padLeft = Math.floor(this.targetWidth - this.fullWidth*scale)/2;
 
-                console.log("Grid is "+rows+" rows "+columns+" columns; rect ("+this.leftColumnX+","+this.topRowY+") to ("+this.rightColumnX+","+this.bottomRowY+") and scale is "+this.scale+" padding is "+this.padLeft+","+this.padTop);
             },
 
             lookup: function (row,column) {
@@ -430,8 +444,6 @@ GameScene = pc.Scene.extend('GameScene',
 
             var layer = this.gridLayer;
 
-            console.log("screen", layer.screenX(0), layer.screenY(0));
-
             var setupLaser = function(row,column,laserColor,angle) {
                 if(! laserColor)
                 {
@@ -454,7 +466,6 @@ GameScene = pc.Scene.extend('GameScene',
                     h: laserImage.height,
                     dir:(angle+270)%360
                 }));
-                //console.log("Laser at", grid.columnX(column), grid.rowY(row), grid.columnX(column)-(laserImage.width*0.5*grid.scale), grid.rowY(row)-(laserImage.height*0.5*grid.scale));
                 laser.laserColor = laserColor;
                 laser.row = row;
                 laser.column = column;
@@ -482,7 +493,6 @@ GameScene = pc.Scene.extend('GameScene',
                     y: grid.rowY(row)-(laserImage.height*0.5),
                     dir:(angle+270)%360
                 }));
-                //console.log("Sensor at", grid.columnX(column), grid.rowY(row), grid.scale, grid.columnX(column)-(laserImage.width*0.5*grid.scale), grid.rowY(row)-(laserImage.height*0.5*grid.scale));
                 sensor.sensorColor = laserColor;
                 sensor.row = row;
                 sensor.column = column;
@@ -539,7 +549,6 @@ GameScene = pc.Scene.extend('GameScene',
                     y: grid.rowY(row)-(filterImage.height/2),
                     dir: top?(left?90:180):(left?0:270)
                 }));
-                //console.log("filter at", grid.columnX(column), grid.rowY(row), grid.scale, grid.columnX(column)-(filterImage.width/2*grid.scale), grid.rowY(row)-(filterImage.height/2*grid.scale));
                 filter.filterColor = color;
                 filter.row = row;
                 filter.column = column;
@@ -580,7 +589,6 @@ GameScene = pc.Scene.extend('GameScene',
                 pivot.row = row;
                 pivot.column = column;
                 pivot.handleClick = function() {
-                    //console.log("Rotate pivot", row, column, tl, tr, br, bl);
                     // Remove old filters and add new ones, rotated.
                     grid.filters = grid.filters.filter(function(f) {
                         if((f.column == column || f.column == column+1)
@@ -614,7 +622,6 @@ GameScene = pc.Scene.extend('GameScene',
                             var tr = colorLetterToWord[rowSpec[column+1]];
                             var br = colorLetterToWord[nextRowSpec[column+1]];
                             var bl = colorLetterToWord[nextRowSpec[column]];
-                            //console.log("pivot", row, column, tl, tr, br, bl);
                             setupPivot(row, column, tl, tr, br, bl);
                         }
                     }
@@ -628,7 +635,6 @@ GameScene = pc.Scene.extend('GameScene',
             if(this.game.levelStarted == false)
                 return;
 
-            //console.log('Action', actionName, pc.device.input.mousePos.x, pc.device.input.mousePos.y);
             var self = this;
             var whatIsUnderTheMouse = function whatIsUnderTheMouse() {
                 var x = pc.device.input.mousePos.x;
@@ -734,7 +740,11 @@ TheGame = pc.Game.extend('TheGame',
             loadImage('bg.jpg');
             loadImage('frame.png');
             loadImage('but_start.png');
+            loadImage('but_start_rollover.png');
+            loadImage('but_start_hit.png');
             loadImage('but_nextlevel.png');
+            loadImage('but_nextlevel_rollover.png');
+            loadImage('but_nextlevel_hit.png');
             loadImage('filter_blue.png');
             loadImage('filter_green.png');
             loadImage('filter_red.png');
@@ -825,7 +835,6 @@ TheGame = pc.Game.extend('TheGame',
                             playSound('applause');
                         }
                         this.playDoorSound();
-                        console.log("Mission accomplished!", this.level, this.levelStarted);
                     }
                 }
                 return true;
