@@ -2,30 +2,36 @@
 var shuffled=0;
 var shuffles=[]
 levels = [
-[ " R GB   ",
-  " rmgmbbb",
-  " rrmgggg",
-  " rrgbrg ",
-  " mrrrrrr",
+[ " g BR   ",
+  " gmbmrrr",
+  " grmbbbb",
+  " grggbr ",
+  " mgggggg",
   "        "],
+//[ " R GB   ",
+//  " rmgmbbb",
+//  " rrmgggg",
+//  " rrgbrg ",
+//  " mrrrrrr",
+//  "        "],
 
 
-[ " RrgrbRGB ",
-  "RmmrmrmrrG",
-  " mmrrrrbbR",
-  "BbbbmrrrrR",
-  " mbbbrmmm ",
-  "Ggggmbmbb ",
-  "BmgggbbbbB",
-  " B  G B B "]
-// [ " B    G ",
-    //  " brrmrg ",
-    //  " brrrrm ",
-    //  " bbbmrr ",
-    //  " mbbbrm ",
-    //  " gggmbb ",
-    //  "Bmgggbb ",
-    //  " B    B " ]
+//[ " RrgrbRGB ",
+//  "RmmrmrmrrG",
+//  " mmrrrrbbR",
+//  "BbbbmrrrrR",
+//  " mbbbrmmm ",
+//  "Ggggmbmbb ",
+//  "BmgggbbbbB",
+//  " B  G B B "]
+ [ " BR  G  ",
+   " brrmgr ",
+   " brrrmgg",
+   " bmrrrm ",
+   " mbbbmr ",
+   " gggmbr ",
+   "Bbbmgbr ",
+   "   B BR " ]
 ];
 
 var scrambleLevel = function scrambleLevel(level) {
@@ -108,7 +114,9 @@ MenuLayer = pc.Layer.extend('MenuLayer',
             if(this.game.levelStarted) {
                 // No menu to draw, really - maybe a restart button?  A status indicator?
             } else {
-                if(this.game.level > 0) {
+                if(this.game.level >= levels.length) {
+                    // You win!
+                } else if(this.game.level > 0) {
                     // Draw "next level" button
                     this.drawButton(this.nextLevelButton);
                 } else {
@@ -134,7 +142,9 @@ MenuLayer = pc.Layer.extend('MenuLayer',
                 if(game.levelStarted) {
 
                 } else {
-                    if(game.level > 0) {
+                    if(game.level >= levels.length) {
+                        // Show "you won!"
+                    } else if(game.level > 0) {
                         if(onImage(self.nextLevelButton)) {
                             return self.nextLevelButton;
                         }
@@ -161,6 +171,42 @@ MenuLayer = pc.Layer.extend('MenuLayer',
     }
 );
 
+var doorOverlap = 75;
+var doorMidPointY = 386;
+var doorLeftX = 48;
+DoorLayer = pc.Layer.extend('DoorLayer',
+    {},
+    {
+        game:null,
+        topDoorImage:null,
+        bottomDoorImage:null,
+        gap:0,
+        init:function(game,name,zIndex) {
+            this._super(name,zIndex);
+            this.game = game;
+            this.topDoorImage = pc.device.loader.get("door_top").resource;
+            this.bottomDoorImage = pc.device.loader.get("door_bottom").resource;
+        },
+        draw:function() {
+            this.topDoorImage.draw(pc.device.ctx, doorLeftX, doorMidPointY-this.gap-this.topDoorImage.height);
+            this.bottomDoorImage.draw(pc.device.ctx, doorLeftX, doorMidPointY+this.gap-(doorOverlap/2));
+        },
+        process:function() {
+            var wantToOpen = this.game.levelStarted;
+            var maxGap = pc.device.canvasHeight/2;
+            var currentlyOpen = this.gap >= maxGap;
+            var elapsed = pc.device.elapsed;
+
+            // Let's slide at
+            if(wantToOpen) {
+                this.gap = Math.min(maxGap, this.gap + elapsed*0.5);
+                //if(this.gap < maxGap) console.log("Closing", this.gap);
+            } else {
+                this.gap = Math.max(0, this.gap - elapsed*0.5);
+                //if(this.gap > 0) console.log("Opening", this.gap);
+            }
+        }
+    });
 LaserLayer = pc.Layer.extend('LaserLayer',
     {},
     {
@@ -245,7 +291,7 @@ LaserLayer = pc.Layer.extend('LaserLayer',
 
             this.grid.sensors.forEach(function(sensor) {
                 var sprite = sensor.getComponent('sprite');
-                var img = sensor.lit ? 'laser_'+sensor.sensorColor : 'laser_off';
+                var img = sensor.lit ? 'sensor_'+sensor.sensorColor : 'sensor_'+sensor.sensorColor+'_off';
                 if(sprite.sprite.spriteSheet.image.name != img) {
                     sprite.sprite.spriteSheet.image = pc.device.loader.get(img).resource;
                 }
@@ -376,7 +422,6 @@ GameScene = pc.Scene.extend('GameScene',
             var layer = this.gridLayer;
 
             console.log("screen", layer.screenX(0), layer.screenY(0));
-            var scene = this;
 
             var setupLaser = function(row,column,laserColor,angle) {
                 if(! laserColor)
@@ -414,7 +459,7 @@ GameScene = pc.Scene.extend('GameScene',
                     scene.warn("Invalid laser color at row "+row+" column "+column);
                     return;
                 }
-                var laserImage = pc.device.loader.get('laser_off').resource;
+                var laserImage = pc.device.loader.get('sensor_'+laserColor+'_off').resource;
                 var laserSheet = new pc.SpriteSheet({
                     image:laserImage,
                     useRotation:true,
@@ -590,7 +635,7 @@ GameScene = pc.Scene.extend('GameScene',
                     }
                 });
                 return foundPivot;
-            }
+            };
             if(actionName == 'press') {
                 this.pressed = whatIsUnderTheMouse();
             } else if(actionName == 'release') {
@@ -620,6 +665,7 @@ GameScene = pc.Scene.extend('GameScene',
 
             this.addLayer(new MenuLayer(game, 'Menu Layer', 11));
 
+            this.addLayer(new DoorLayer(game, 'Door Layer', 9));
             this.addLayer(new ImageLayer('frame', 'frame layer', 10));
 
             pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
@@ -664,27 +710,35 @@ TheGame = pc.Game.extend('TheGame',
             if (pc.device.devMode)
                 pc.device.loader.setDisableCache();
 
+            var loadImage = function(name) {
+                var path = 'images/'+name;
+                var id = name.replace(/\....$/, "");
+                pc.device.loader.add(new pc.Image(id, path));
+            };
+
             // load up resources
-            pc.device.loader.add(new pc.Image('bg', 'images/bg.jpg'));
-            pc.device.loader.add(new pc.Image('frame', 'images/frame.png'));
-            //pc.device.loader.add(new pc.Image('beam_blue_end', 'images/Beam_blue_end.png'));
-            //pc.device.loader.add(new pc.Image('beam_blue_mid', 'images/Beam_blue_mid.png'));
-            //pc.device.loader.add(new pc.Image('beam_green_end', 'images/Beam_green_end.png'));
-            //pc.device.loader.add(new pc.Image('beam_green_mid', 'images/Beam_green_mid.png'));
-            //pc.device.loader.add(new pc.Image('beam_red_end', 'images/Beam_red_end.png'));
-            //pc.device.loader.add(new pc.Image('beam_red_mid', 'images/Beam_red_mid.png'));
-            pc.device.loader.add(new pc.Image('but_start', 'images/but_start.png'));
-            pc.device.loader.add(new pc.Image('but_nextlevel', 'images/but_nextlevel.png'));
-            pc.device.loader.add(new pc.Image('filter_blue', 'images/filter_blue.png'));
-            pc.device.loader.add(new pc.Image('filter_green', 'images/filter_green.png'));
-            pc.device.loader.add(new pc.Image('filter_red', 'images/filter_red.png'));
-            pc.device.loader.add(new pc.Image('filter_mirror', 'images/filter_mirror.png'));
-            pc.device.loader.add(new pc.Image('filter_clear', 'images/filter_clear.png'));
-            pc.device.loader.add(new pc.Image('laser_off', 'images/laser_off.png'));
-            pc.device.loader.add(new pc.Image('laser_red', 'images/laser_red.png'));
-            pc.device.loader.add(new pc.Image('laser_green', 'images/laser_green.png'));
-            pc.device.loader.add(new pc.Image('laser_blue', 'images/laser_blue.png'));
-            pc.device.loader.add(new pc.Image('pivot', 'images/Pivot.png'));
+            loadImage('bg.jpg');
+            loadImage('frame.png');
+            loadImage('but_start.png');
+            loadImage('but_nextlevel.png');
+            loadImage('filter_blue.png');
+            loadImage('filter_green.png');
+            loadImage('filter_red.png');
+            loadImage('filter_mirror.png');
+            loadImage('filter_clear.png');
+            loadImage('laser_off.png');
+            loadImage('laser_red.png');
+            loadImage('laser_green.png');
+            loadImage('laser_blue.png');
+            loadImage('sensor_red.png');
+            loadImage('sensor_green.png');
+            loadImage('sensor_blue.png');
+            loadImage('sensor_red_off.png');
+            loadImage('sensor_green_off.png');
+            loadImage('sensor_blue_off.png');
+            loadImage('door_top.png');
+            loadImage('door_bottom.png');
+            loadImage('pivot.png');
 
             // fire up the loader (with a callback once done)
             pc.device.loader.start(this.onLoading.bind(this), this.onLoaded.bind(this));
