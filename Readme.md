@@ -12,11 +12,16 @@ has files in it, and then use dev.html instead of index.html to run the game.  T
 get some development goodies and better debugging (but slower startup time and possibly slower
 game performance).
 
-## Graphics Credits
+## Credits
 
 All the graphics are original artwork by my partner in crime [Glenn Martin](http://bunyep.com).
 
-## Sound Credits
+Game mechanic by Duncan Shields (thought of the rotating pieces) and team (Dobes Vandermeer,
+Leigh Tingle, and Glenn Martin).
+
+Programming by Dobes Vandermeer.
+
+Sounds:
 
 - Door noise from http://www.trekcore.com/audio/
 - Applause from http://www.soundjay.com/applause-sounds-1.html
