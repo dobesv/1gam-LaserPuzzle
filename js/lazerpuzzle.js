@@ -545,8 +545,8 @@ GameScene = pc.Scene.extend('GameScene',
                 var sensor = pc.Entity.create(layer);
                 sensor.addComponent(pc.components.Sprite.create({ spriteSheet: sensorSheet }));
                 sensor.addComponent(pc.components.Spatial.create({
-                    x: grid.columnX(column)-(sensorImage.width*(vertical?0.5:0.65)),
-                    y: grid.rowY(row)-(sensorImage.height*(vertical?0.65:0.5)),
+                    x: grid.columnX(column)-(sensorImage.width*(vertical?0.5:0.35)),
+                    y: grid.rowY(row)-(sensorImage.height*(vertical?0.35:0.5)),
                     dir:(angle+270)%360
                 }));
                 sensor.sensorColor = sensorColor;
