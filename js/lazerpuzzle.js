@@ -534,7 +534,8 @@ GameScene = pc.Scene.extend('GameScene',
                     scene.warn("Invalid laser color at row "+row+" column "+column);
                     return;
                 }
-                var sensorImage = pc.device.loader.get('sensor_'+sensorColor+'_off').resource;
+                var vertical = (angle%180) == 0;
+                var sensorImage = getImage('sensor_'+sensorColor+'_off');
                 var sensorSheet = new pc.SpriteSheet({
                     image:sensorImage,
                     useRotation:true,
@@ -544,8 +545,8 @@ GameScene = pc.Scene.extend('GameScene',
                 var sensor = pc.Entity.create(layer);
                 sensor.addComponent(pc.components.Sprite.create({ spriteSheet: sensorSheet }));
                 sensor.addComponent(pc.components.Spatial.create({
-                    x: grid.columnX(column)-(sensorImage.width*0.5),
-                    y: grid.rowY(row)-(sensorImage.height*0.5),
+                    x: grid.columnX(column)-(sensorImage.width*(vertical?0.5:0.65)),
+                    y: grid.rowY(row)-(sensorImage.height*(vertical?0.65:0.5)),
                     dir:(angle+270)%360
                 }));
                 sensor.sensorColor = sensorColor;
