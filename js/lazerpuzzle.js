@@ -1,12 +1,20 @@
 
 levels = [
-[ " g BR   ",
+[ " g br   ",
   " gmbmrrr",
   " grmbbbb",
   " grggbr ",
   " mgggggg",
   "        "],
 
+[ " br  g  ",
+  " brrmgr ",
+  " brrrmgG",
+  " bmrrrm ",
+  " mbbbmr ",
+  " gggmbr ",
+  "bbbmgbr ",
+  "   B BR " ],
 [ "    gr  ",
   "bbb m m ",
   " mm  r R",
@@ -15,15 +23,14 @@ levels = [
   "ggggm m ",
   " mgggm R",
   "  G G B "],
-
- [ " BR  G  ",
-   " brrmgr ",
-   " brrrmgg",
-   " bmrrrm ",
-   " mbbbmr ",
-   " gggmbr ",
-   "Bbbmgbr ",
-   "   B BR " ]
+[ "    br    ",
+  "bbbbm mm B",
+  "gggmbr br ",
+  "rrr  rmmr ",
+  " rm  rrrrR",
+  "gg gm  bbB",
+  "rrmgg rbm ",
+  "   ggrr   "]
 ];
 
 var scrambleLevel = function scrambleLevel(level) {
