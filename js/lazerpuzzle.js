@@ -3,7 +3,7 @@ levels = [
 [ " g br   ",
   " gmbmrrr",
   " grmbbbb",
-  " grggbr ",
+  " grbmbr ",
   " mgggggg",
   "        "],
 
@@ -107,6 +107,8 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         startButton: null,
         nextLevelButton: null,
         youWinImage: null,
+        levelCompleteImage: null,
+        levelImages: [],
 
         init:function(game, name, zIndex) {
             this._super(name, zIndex);
@@ -132,7 +134,17 @@ MenuLayer = pc.Layer.extend('MenuLayer',
 
             this.youWinImage = pc.device.loader.get("you_win").resource;
             this.youWinImage.x = 780;
-            this.youWinImage.y = 200;
+            this.youWinImage.y = 185;
+
+            this.levelCompleteImage = getImage("level_complete");
+            this.levelCompleteImage.x = 775;
+            this.levelCompleteImage.y = 175;
+            for(var n=0; n < 6; n++) {
+                var levelImage = getImage("level_"+(n+1));
+                levelImage.x = 800;
+                levelImage.y = 180;
+                this.levelImages.push(levelImage);
+            }
 
             this.game = game;
             pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
@@ -158,9 +170,11 @@ MenuLayer = pc.Layer.extend('MenuLayer',
                 this.drawIcon(this.youWinImage);
             } else if(this.game.levelStarted) {
                 // No menu to draw, really - maybe a restart button?  A status indicator?
+                this.drawIcon(this.levelImages[this.game.level]);
             } else {
                 if(this.game.level > 0) {
                     // Draw "next level" button
+                    this.drawIcon(this.levelCompleteImage);
                     this.drawButton(this.nextLevelButton);
                 } else {
                     // Draw "start game" button
@@ -512,27 +526,27 @@ GameScene = pc.Scene.extend('GameScene',
                 grid.lasers.push(laser);
             };
 
-            var setupSensor = function(row,column,laserColor,angle) {
-                if(! laserColor)
+            var setupSensor = function(row,column,sensorColor,angle) {
+                if(! sensorColor)
                 {
                     scene.warn("Invalid laser color at row "+row+" column "+column);
                     return;
                 }
-                var laserImage = pc.device.loader.get('sensor_'+laserColor+'_off').resource;
-                var laserSheet = new pc.SpriteSheet({
-                    image:laserImage,
+                var sensorImage = pc.device.loader.get('sensor_'+sensorColor+'_off').resource;
+                var sensorSheet = new pc.SpriteSheet({
+                    image:sensorImage,
                     useRotation:true,
                     scaleX:grid.scale,
                     scaleY:grid.scale
                 });
                 var sensor = pc.Entity.create(layer);
-                sensor.addComponent(pc.components.Sprite.create({ spriteSheet: laserSheet }));
+                sensor.addComponent(pc.components.Sprite.create({ spriteSheet: sensorSheet }));
                 sensor.addComponent(pc.components.Spatial.create({
-                    x: grid.columnX(column)-(laserImage.width*0.5),
-                    y: grid.rowY(row)-(laserImage.height*0.5),
+                    x: grid.columnX(column)-(sensorImage.width*0.5),
+                    y: grid.rowY(row)-(sensorImage.height*0.5),
                     dir:(angle+270)%360
                 }));
-                sensor.sensorColor = laserColor;
+                sensor.sensorColor = sensorColor;
                 sensor.row = row;
                 sensor.column = column;
                 grid.update(row, column, sensor);
@@ -807,10 +821,14 @@ TheGame = pc.Game.extend('TheGame',
             loadImage('beam_green_mid.png');
             loadImage('beam_blue_end.png');
             loadImage('beam_blue_mid.png');
+            for(var n=0; n < 6; n++) {
+                loadImage("level_"+(n+1)+".png");
+            }
+            loadImage('level_complete.png');
 
             loadSound('door_open_sound');
             loadSound('applause');
-            loadSound('level_complete');
+            loadSound('level_complete_sound');
             loadSound('beep');
             loadSound('pivot_sound', 5);
 
@@ -877,7 +895,7 @@ TheGame = pc.Game.extend('TheGame',
         onLevelComplete:function() {
             this.levelStarted = false;
             this.level ++;
-            playSound('level_complete');
+            playSound('level_complete_sound');
             if(this.level == levels.length) {
                 this.complete = true;
                 playSound('applause');
