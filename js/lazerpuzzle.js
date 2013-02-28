@@ -258,10 +258,7 @@ LaserLayer = pc.Layer.extend('LaserLayer',
                 var startX = grid.columnX(column);
                 var startY = grid.rowY(row);
                 var ctx = pc.device.ctx;
-                ctx.beginPath();
-                ctx.strokeStyle = color;
-                ctx.lineWidth = "4"; //+(20 * grid.scale);
-                ctx.moveTo(startX, startY);
+                var beamMidImage = getImage("beam_"+color+"_mid");
                 for(;;) {
                     switch(dir) {
                         case 'down': row++; break;
@@ -272,6 +269,24 @@ LaserLayer = pc.Layer.extend('LaserLayer',
                     var y = grid.rowY(row);
                     var x = grid.columnX(column);
 
+                    var drawSegment = function() {
+                        var x1 = Math.min(x,startX);
+                        var y1 = Math.min(y,startY);
+                        var x2 = Math.max(x,startX);
+                        var y2 = Math.max(y,startY)
+                        var height = Math.max(1,y2-y1);
+                        var width = Math.max(1, x2-x1);
+                        var angle = (x1==x2) ? 0 : 90;
+                        beamMidImage.setScale(1,
+                                              Math.max(width,height));
+                        beamMidImage.draw(ctx, 0, 0,
+                            x1+width/2-beamMidImage.width/2,
+                            y1+height/2-beamMidImage.width/2,
+                         beamMidImage.width, beamMidImage.height, angle);
+
+                        startX = x;
+                        startY = y;
+                    }
                     if(row == grid.bottomRow || column == grid.rightColumn ||
                         row == grid.topRow || column == grid.leftColumn) {
                         var sensor = grid.lookup(row, column);
@@ -286,11 +301,12 @@ LaserLayer = pc.Layer.extend('LaserLayer',
                         } else if("sensorColor" in sensor && sensor.sensorColor == color) {
                             sensor.lit = true;
                         }
-                        ctx.lineTo(x,y);
+
+                        drawSegment();
                         break;
                     }
 
-                    ctx.lineTo(x,y);
+                    drawSegment();
 
                     var filter = grid.lookup(row, column);
                     if(filter && filter.filterColor != 'clear' && filter.filterColor != color) {
@@ -300,6 +316,8 @@ LaserLayer = pc.Layer.extend('LaserLayer',
                             break;
                         }
                     }
+
+
                 }
                 lineCount++;
                 ctx.stroke();
@@ -764,6 +782,12 @@ TheGame = pc.Game.extend('TheGame',
             loadImage('door_bottom.png');
             loadImage('pivot.png');
             loadImage('you_win.png');
+            loadImage('beam_red_end.png');
+            loadImage('beam_red_mid.png');
+            loadImage('beam_green_end.png');
+            loadImage('beam_green_mid.png');
+            loadImage('beam_blue_end.png');
+            loadImage('beam_blue_mid.png');
 
             loadSound('door_open_sound');
             loadSound('applause');
