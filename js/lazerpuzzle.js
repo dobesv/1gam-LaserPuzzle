@@ -66,6 +66,7 @@ var scrambleLevel = function scrambleLevel(level) {
 
 var filterOffset=80;
 var filterGridSize = filterOffset*2;
+var globalScale=1;
 
 var playSound = function(id, volume) {
     var sound = pc.device.loader.get(id).resource;
@@ -434,8 +435,8 @@ GameScene = pc.Scene.extend('GameScene',
                 this.bottomRow = rows-1;
                 this.leftColumn = 0;
                 this.rightColumn = columns-1;
-                this.topRowY = 150;
-                this.bottomRowY = 625;
+                this.topRowY = 130;
+                this.bottomRowY = 635;
                 this.leftColumnX = 75;
                 this.rightColumnX = 705;
                 this.targetWidth = this.rightColumnX - this.leftColumnX;
@@ -510,11 +511,12 @@ GameScene = pc.Scene.extend('GameScene',
                     scaleX:grid.scale,
                     scaleY:grid.scale
                 });
+                var vertical = (angle%180) == 0;
                 var laser = pc.Entity.create(layer);
                 laser.addComponent(pc.components.Sprite.create({ spriteSheet: laserSheet }));
                 laser.addComponent(pc.components.Spatial.create({
-                    x: grid.columnX(column)-(laserImage.width*0.5),
-                    y: grid.rowY(row)-(laserImage.height*0.5),
+                    x: grid.columnX(column)-(laserImage.width*(vertical?0.5:0.65)),
+                    y: grid.rowY(row)-(laserImage.height*(vertical?0.65:0.5)),
                     w: laserImage.width,
                     h: laserImage.height,
                     dir:(angle+270)%360
@@ -758,9 +760,6 @@ GameScene = pc.Scene.extend('GameScene',
             });
             this.solved = (numSensorsLit > 0) && numSensorsLit == this.grid.sensors.length;
         }
-
-
-
     });
 TheGame = pc.Game.extend('TheGame',
     {},
