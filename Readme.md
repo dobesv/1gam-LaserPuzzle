@@ -12,6 +12,9 @@ has files in it, and then use dev.html instead of index.html to run the game.  T
 get some development goodies and better debugging (but slower startup time and possibly slower
 game performance).
 
+## Graphics Credits
+
+All the graphics are original artwork by my partner in crime [Glenn Martin](http://bunyep.com).
 
 ## Sound Credits
 
