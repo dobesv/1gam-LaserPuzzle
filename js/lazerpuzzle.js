@@ -23,6 +23,14 @@ levels = [
   "ggggm m ",
   " mgggm R",
   "  G G B "],
+[ "    r   ",
+  "bbb m m ",
+  " bm  b B",
+  "bbb  b B",
+  "bbmr rm ",
+  "rrrrmbm ",
+  "r rmrbb ",
+  "  RRR B "],
 [ "    br    ",
   "bbbbm mm B",
   "gggmbr br ",
@@ -236,22 +244,32 @@ DoorLayer = pc.Layer.extend('DoorLayer',
 LaserLayer = pc.Layer.extend('LaserLayer',
     {},
     {
-        grid: {
-            columns: 0,
-            rows: 0,
-            lasers:[],
-            filters:[],
-            sensors:[]
+        grid: null,
+        beamImage:null,
+        color:null,
+
+        init:function(color,grid,name,zIndex) {
+            this._super(name,zIndex);
+            this.color = color;
+            this.beamImage = getImage("beam_"+color+"_mid");
+            this.beamImage.alpha = 0.75;
+            this.grid = grid;
         },
 
         draw:function() {
             var lineCount = 0;
             var grid = this.grid;
+            var beamImage = this.beamImage;
+            var color = this.color;
             grid.sensors.forEach(function resetFlag(sensor) {
-                sensor.lit = false;
+                if(sensor.sensorColor == color) {
+                    sensor.lit = false;
+                }
             });
             grid.filters.forEach(function resetFlag(filter) {
-                filter.lit = false;
+                if(filter.filterColor == color) {
+                    filter.lit = false;
+                }
             });
             var fireLaser = function(startRow, startColumn, dir, color) {
                 var row = startRow;
@@ -259,7 +277,6 @@ LaserLayer = pc.Layer.extend('LaserLayer',
                 var startX = grid.columnX(column);
                 var startY = grid.rowY(row);
                 var ctx = pc.device.ctx;
-                var beamMidImage = getImage("beam_"+color+"_mid");
                 for(;;) {
                     switch(dir) {
                         case 'down': row++; break;
@@ -278,12 +295,12 @@ LaserLayer = pc.Layer.extend('LaserLayer',
                         var height = Math.max(1,y2-y1);
                         var width = Math.max(1, x2-x1);
                         var angle = (x1==x2) ? 0 : 90;
-                        beamMidImage.setScale(1,
+                        beamImage.setScale(1,
                                               Math.max(width,height));
-                        beamMidImage.draw(ctx, 0, 0,
-                            x1+width/2-beamMidImage.width/2,
-                            y1+height/2-beamMidImage.width/2,
-                         beamMidImage.width, beamMidImage.height, angle);
+                        beamImage.draw(ctx, 0, 0,
+                            x1+width/2-beamImage.width/2,
+                            y1+height/2,
+                         beamImage.width, beamImage.height, angle);
 
                         startX = x;
                         startY = y;
@@ -325,13 +342,16 @@ LaserLayer = pc.Layer.extend('LaserLayer',
             };
             var drawLaser = function(laser) {
                 var laserColor = laser.laserColor;
+                // Only process lasers with a matching color for this layer
+                if(laserColor != this.color)
+                    return;
                 if(laser.column == grid.leftColumn) {
-                    fireLaser(laser.row, laser.column, 'right', laserColor);
+                    fireLaser.call(this, laser.row, laser.column, 'right', laserColor);
                 } else if(laser.row == grid.topRow) {
-                    fireLaser(laser.row, laser.column, 'down', laserColor);
+                    fireLaser.call(this, laser.row, laser.column, 'down', laserColor);
                 }
             };
-            this.grid.lasers.forEach(drawLaser);
+            this.grid.lasers.forEach(drawLaser, this);
 
             this.grid.sensors.forEach(function(sensor) {
                 var sprite = sensor.getComponent('sprite');
@@ -692,9 +712,9 @@ GameScene = pc.Scene.extend('GameScene',
             this.gridLayer.setZIndex(5);
             this.gridLayer.addSystem(new pc.systems.Render());
 
-            this.laserLayer = new LaserLayer('Laser layer', 2);
-            this.addLayer(this.laserLayer);
-            this.laserLayer.grid = this.grid;
+            this.addLayer(new LaserLayer('red', this.grid, 'Red Laser Layer', 2));
+            this.addLayer(new LaserLayer('green', this.grid, 'Green Laser Layer', 2));
+            this.addLayer(new LaserLayer('blue', this.grid, 'Blue Laser Layer', 2));
 
             this.addLayer(new MenuLayer(game, 'Menu Layer', 11));
 
@@ -821,7 +841,15 @@ TheGame = pc.Game.extend('TheGame',
             // we're ready; make the magic happen
             this.gameScene = new GameScene(this);
             this.addScene(this.gameScene);
-            window.theGame = this;
+
+            pc.device.input.bindAction(this, 'cheat', 'F8');
+
+        },
+
+        onAction:function(actionName) {
+            if(actionName == 'cheat') {
+                this.onLevelComplete();
+            }
         },
 
         playDoorSound:function() {
@@ -846,19 +874,20 @@ TheGame = pc.Game.extend('TheGame',
             }
         },
 
+        onLevelComplete:function() {
+            this.levelStarted = false;
+            this.level ++;
+            playSound('level_complete');
+            if(this.level == levels.length) {
+                this.complete = true;
+                playSound('applause');
+            }
+            this.playDoorSound();
+        },
         process:function() {
             if(this._super()) {
-                if(this.levelStarted) {
-                    if(this.gameScene.solved) {
-                        this.levelStarted = false;
-                        this.level ++;
-                        playSound('level_complete');
-                        if(this.level == levels.length) {
-                            this.complete = true;
-                            playSound('applause');
-                        }
-                        this.playDoorSound();
-                    }
+                if(this.levelStarted && this.gameScene.solved) {
+                    this.onLevelComplete();
                 }
                 return true;
             } else {
