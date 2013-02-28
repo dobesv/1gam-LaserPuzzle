@@ -6,6 +6,16 @@ levels = [
   " grggbr ",
   " mgggggg",
   "        "],
+
+[ "    gr  ",
+  "bbb m m ",
+  " mm  r R",
+  " brmbrg ",
+  "rrmg  m ",
+  "ggggm m ",
+  " mgggm R",
+  "  G G B "],
+
 //[ " R GB   ",
 //  " rmgmbbb",
 //  " rrmgggg",
@@ -518,7 +528,7 @@ GameScene = pc.Scene.extend('GameScene',
                 grid.sensors.push(sensor);
             };
 
-            var colorLetterToWord = {r:"red", g:"green", b:"blue", m:"mirror"};
+            var colorLetterToWord = {r:"red", g:"green", b:"blue", m:"mirror", " ":"clear"};
             var setupTopLasers = function(rowSpec) {
                 scene.info('Top lasers: '+rowSpec);
                 var row = grid.topRow;
