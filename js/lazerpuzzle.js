@@ -16,22 +16,6 @@ levels = [
   " mgggm R",
   "  G G B "],
 
-//[ " R GB   ",
-//  " rmgmbbb",
-//  " rrmgggg",
-//  " rrgbrg ",
-//  " mrrrrrr",
-//  "        "],
-
-
-//[ " RrgrbRGB ",
-//  "RmmrmrmrrG",
-//  " mmrrrrbbR",
-//  "BbbbmrrrrR",
-//  " mbbbrmmm ",
-//  "Ggggmbmbb ",
-//  "BmgggbbbbB",
-//  " B  G B B "]
  [ " BR  G  ",
    " brrmgr ",
    " brrrmgg",
@@ -530,7 +514,6 @@ GameScene = pc.Scene.extend('GameScene',
 
             var colorLetterToWord = {r:"red", g:"green", b:"blue", m:"mirror", " ":"clear"};
             var setupTopLasers = function(rowSpec) {
-                scene.info('Top lasers: '+rowSpec);
                 var row = grid.topRow;
                 for(var column=1; column < columns-1; column++) {
                     var colChar = rowSpec[column];
@@ -540,7 +523,6 @@ GameScene = pc.Scene.extend('GameScene',
                 }
             };
             var setupBottomSensors = function(rowSpec) {
-                scene.info('Bottom sensors: '+rowSpec);
                 var row = grid.bottomRow;
                 for(var column=1; column < columns-1; column++) {
                     var colChar = rowSpec[column];
