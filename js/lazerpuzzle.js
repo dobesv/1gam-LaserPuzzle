@@ -659,10 +659,10 @@ GameScene = pc.Scene.extend('GameScene',
                 var foundPivot = null;
                 var grid = self.grid;
                 self.grid.pivots.forEach(function(pivot) {
-                    var leftX = grid.columnX(pivot.column);
-                    var rightX = grid.columnX(pivot.column+1);
-                    var topY = grid.rowY(pivot.row);
-                    var bottomY = grid.rowY(pivot.row+1);
+                    var leftX = grid.columnX(pivot.column)-filterOffset/2;
+                    var rightX = grid.columnX(pivot.column+1)+filterOffset/2;
+                    var topY = grid.rowY(pivot.row)-filterOffset/2;
+                    var bottomY = grid.rowY(pivot.row+1)+filterOffset/2;
                     if(x >= leftX && x <= rightX && y >= topY && y <= bottomY) {
                         foundPivot = pivot;
                     }
