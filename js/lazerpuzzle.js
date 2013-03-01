@@ -247,7 +247,7 @@ DoorLayer = pc.Layer.extend('DoorLayer',
             var ctx = pc.device.ctx;
             if(this.showCredits) {
                 this.creditsImage.draw(ctx, creditsX-this.creditsImage.width/2, creditsY-this.creditsImage.height/2);
-                console.log('drawing credits', creditsX, creditsY, this.creditsImage);
+                //console.log('drawing credits', creditsX, creditsY, this.creditsImage);
             }
             this.topDoorImage.draw(ctx, doorLeftX, doorMidPointY-this.gap-this.topDoorImage.height);
             this.bottomDoorImage.draw(ctx, doorLeftX, doorMidPointY+this.gap-(doorOverlap/2));
