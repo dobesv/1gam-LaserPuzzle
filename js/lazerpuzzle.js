@@ -223,8 +223,9 @@ MenuLayer = pc.Layer.extend('MenuLayer',
 var doorOverlap = 75;
 var doorMidPointY = 386;
 var doorLeftX = 48;
-var creditsX = 240;
-var creditsY = 140;
+// Credits center point
+var creditsX = 400;
+var creditsY = 380;
 DoorLayer = pc.Layer.extend('DoorLayer',
     {},
     {
@@ -245,7 +246,7 @@ DoorLayer = pc.Layer.extend('DoorLayer',
         draw:function() {
             var ctx = pc.device.ctx;
             if(this.showCredits) {
-                this.creditsImage.draw(ctx, creditsX, creditsY);
+                this.creditsImage.draw(ctx, creditsX-this.creditsImage.width/2, creditsY-this.creditsImage.height/2);
                 console.log('drawing credits', creditsX, creditsY, this.creditsImage);
             }
             this.topDoorImage.draw(ctx, doorLeftX, doorMidPointY-this.gap-this.topDoorImage.height);
