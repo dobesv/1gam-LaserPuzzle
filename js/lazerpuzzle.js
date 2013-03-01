@@ -223,36 +223,58 @@ MenuLayer = pc.Layer.extend('MenuLayer',
 var doorOverlap = 75;
 var doorMidPointY = 386;
 var doorLeftX = 48;
+var creditsX = 240;
+var creditsY = 140;
 DoorLayer = pc.Layer.extend('DoorLayer',
     {},
     {
         game:null,
         topDoorImage:null,
         bottomDoorImage:null,
+        creditsImage: null,
         gap:0,
+        showCredits:false,
+
         init:function(game,name,zIndex) {
             this._super(name,zIndex);
             this.game = game;
-            this.topDoorImage = pc.device.loader.get("door_top").resource;
-            this.bottomDoorImage = pc.device.loader.get("door_bottom").resource;
+            this.topDoorImage = getImage("door_top");
+            this.bottomDoorImage = getImage("door_bottom");
+            this.creditsImage = getImage("credit_text");
         },
         draw:function() {
             var ctx = pc.device.ctx;
+            if(this.showCredits) {
+                this.creditsImage.draw(ctx, creditsX, creditsY);
+                console.log('drawing credits', creditsX, creditsY, this.creditsImage);
+            }
             this.topDoorImage.draw(ctx, doorLeftX, doorMidPointY-this.gap-this.topDoorImage.height);
             this.bottomDoorImage.draw(ctx, doorLeftX, doorMidPointY+this.gap-(doorOverlap/2));
-            // Clear anything drawn outside the
+            // Clear anything drawn outside the main area
             ctx.clearRect(0, 768, pc.device.canvasWidth, pc.device.canvasHeight);
         },
         process:function() {
-            var wantToOpen = this.game.levelStarted;
+            var wantToOpen = this.game.levelStarted || (this.game.complete && this.showCredits);
             var maxGap = pc.device.canvasHeight/2;
             var elapsed = pc.device.elapsed;
 
             // Let's slide at
             if(wantToOpen) {
-                this.gap = Math.min(maxGap, this.gap + elapsed*0.5);
+                if(this.gap < maxGap) {
+                    this.gap = Math.min(maxGap, this.gap + elapsed*0.5);
+                }
             } else {
-                this.gap = Math.max(0, this.gap - elapsed*0.5);
+                if(this.gap > 0) {
+                    this.gap = Math.max(0, this.gap - elapsed*0.5);
+                    if(this.gap == 0) {
+                        this.game.onDoorsClosed();
+                        if(this.game.complete) {
+                            this.showCredits = true;
+                        } else {
+                            this.showCredits = false;
+                        }
+                    }
+                }
             }
         }
     });
@@ -306,7 +328,7 @@ LaserLayer = pc.Layer.extend('LaserLayer',
                         var x1 = Math.min(x,startX);
                         var y1 = Math.min(y,startY);
                         var x2 = Math.max(x,startX);
-                        var y2 = Math.max(y,startY)
+                        var y2 = Math.max(y,startY);
                         var height = Math.max(1,y2-y1);
                         var width = Math.max(1, x2-x1);
                         var angle = (x1==x2) ? 0 : 90;
@@ -319,7 +341,7 @@ LaserLayer = pc.Layer.extend('LaserLayer',
 
                         startX = x;
                         startY = y;
-                    }
+                    };
                     if(row == grid.bottomRow || column == grid.rightColumn ||
                         row == grid.topRow || column == grid.leftColumn) {
                         var sensor = grid.lookup(row, column);
@@ -358,7 +380,7 @@ LaserLayer = pc.Layer.extend('LaserLayer',
             var drawLaser = function(laser) {
                 var laserColor = laser.laserColor;
                 // Only process lasers with a matching color for this layer
-                if(laserColor != this.color)
+                if(laserColor != color)
                     return;
                 if(laser.column == grid.leftColumn) {
                     fireLaser.call(this, laser.row, laser.column, 'right', laserColor);
@@ -801,7 +823,6 @@ TheGame = pc.Game.extend('TheGame',
             loadImage('filter_red.png');
             loadImage('filter_mirror.png');
             loadImage('filter_clear.png');
-            loadImage('laser_off.png');
             loadImage('laser_red.png');
             loadImage('laser_green.png');
             loadImage('laser_blue.png');
@@ -825,6 +846,7 @@ TheGame = pc.Game.extend('TheGame',
                 loadImage("level_"+(n+1)+".png");
             }
             loadImage('level_complete.png');
+            loadImage('credit_text.png');
 
             loadSound('door_open_sound');
             loadSound('applause');
@@ -902,6 +924,11 @@ TheGame = pc.Game.extend('TheGame',
             }
             this.playDoorSound();
         },
+
+        onDoorsClosed:function() {
+            this.gameScene.clearGrid();
+        },
+
         process:function() {
             if(this._super()) {
                 if(this.levelStarted && this.gameScene.solved) {
