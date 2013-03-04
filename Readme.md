@@ -1,4 +1,3 @@
-
 # Lazer Puzzle
 
 This is a prototype of a mini-game concept for a bigger game that we're working on.
@@ -10,6 +9,8 @@ For development you probably want to put a full copy of [playcraft](http://playc
 has files in it, and then use dev.html instead of index.html to run the game.  That way you'll
 get some development goodies and better debugging (but slower startup time and possibly slower
 game performance).
+
+Play the game here: <http://dobesv.github.com/1gam-LaserPuzzle>
 
 ## Credits
 
