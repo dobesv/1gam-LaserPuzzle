@@ -69,6 +69,7 @@ var filterGridSize = filterOffset*2;
 var globalScale=1;
 
 var playSound = function(id, volume) {
+    if (!pc.device.soundEnabled) return;
     var sound = pc.device.loader.get(id).resource;
     sound.setVolume(volume || 1);
     sound.play(false);
@@ -808,7 +809,8 @@ TheGame = pc.Game.extend('TheGame',
             };
             var loadSound = function(id, maxPlaying) {
                 var path = 'sounds/'+id;
-                pc.device.loader.add(new pc.Sound(id, path, ['ogg','mp3'], maxPlaying || 1));
+                if (pc.device.soundEnabled)
+                    pc.device.loader.add(new pc.Sound(id, path, ['ogg','mp3'], maxPlaying || 1));
             };
             // load up resources
             loadImage('bg.jpg');
