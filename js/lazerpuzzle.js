@@ -68,11 +68,11 @@ var filterOffset=80;
 var filterGridSize = filterOffset*2;
 var globalScale=1;
 
-var playSound = function(id, volume) {
+var playSound = function(id, volume, loop) {
     if (!pc.device.soundEnabled) return;
     var sound = pc.device.loader.get(id).resource;
     sound.setVolume(volume || 1);
-    sound.play(false);
+    sound.play(loop || false);
 };
 
 var getImage = function(id) {
@@ -856,6 +856,7 @@ TheGame = pc.Game.extend('TheGame',
             loadSound('level_complete_sound');
             loadSound('beep');
             loadSound('pivot_sound', 5);
+            loadSound('music');
 
             // fire up the loader (with a callback once done)
             pc.device.loader.start(this.onLoading.bind(this), this.onLoaded.bind(this));
@@ -884,6 +885,8 @@ TheGame = pc.Game.extend('TheGame',
             // we're ready; make the magic happen
             this.gameScene = new GameScene(this);
             this.addScene(this.gameScene);
+
+            playSound('music', 0.6, true);
 
             pc.device.input.bindAction(this, 'cheat', 'F8');
 
@@ -926,6 +929,7 @@ TheGame = pc.Game.extend('TheGame',
                 playSound('applause');
             }
             this.playDoorSound();
+
         },
 
         onDoorsClosed:function() {

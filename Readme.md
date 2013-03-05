@@ -19,7 +19,9 @@ All the graphics are original artwork by my partner in crime [Glenn Martin](http
 Game mechanic by Duncan Shields (thought of the rotating pieces) with help from Dobes Vandermeer,
 Leigh Tingle, and Glenn Martin.
 
-Programming by Dobes Vandermeer.
+Programming by [Dobes Vandermeer](http://dobsev.com).
+
+Original music by [Christopher Tyler Nickel](http://www.christophernickel.com/)
 
 Sounds:
 
