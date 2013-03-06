@@ -19,7 +19,7 @@ All the graphics are original artwork by my partner in crime [Glenn Martin](http
 Game mechanic by Duncan Shields (thought of the rotating pieces) with help from Dobes Vandermeer,
 Leigh Tingle, and Glenn Martin.
 
-Programming by [Dobes Vandermeer](http://dobsev.com).
+Programming by [Dobes Vandermeer](http://dobesv.com).
 
 Original music by [Christopher Tyler Nickel](http://www.christophernickel.com/)
 
@@ -31,6 +31,16 @@ Sounds:
 - Beep from http://archive.org/details/TickSound
 - Pivot sound from http://soundcli.ps/sound/camera-shutter-3
 
+
+## Legal
+
+The game, its source code, and its audio assets are provided as-is without any warrantees as to their suitability
+for any purpose.  Use at your own risk.
+
+Graphics and audio are provided for example purposes only and may only be re-used with explicit permission from
+their creators.
+
+The javascript and HTML source code can be copied and re-used freely in other projects.  Consider it public domain.
 
 
 
