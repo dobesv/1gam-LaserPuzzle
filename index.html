@@ -7,18 +7,45 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
-    <!-- Production mode (minified and packed) -->
-    <script type="text/javascript" src="playcraftjs/dist/playcraft-0.5.6.min.js"></script>
-    <!-- <script type="text/javascript" src="playcraftjs/lib/playcraft.js"></script> -->
-
-    <script>
-
-        pc.start('pcGameCanvas', 'TheGame', 'js/', ['lazerpuzzle.js'], "playcraftjs/dist/");
-    </script>
-
 </head>
 
 <body>
+<script>
+    (function() {
+        var pcBaseUrl = 'playcraftjs/';
+        var pcVersion = '0.5.6';
+        var gameScriptBaseUrl = 'js/';
+        var gameMainClass = 'TheGame';
+        var gameEltId = 'pcGameCanvas';
+        var gameScripts = [
+            // add extra files here, e.g.
+            'utils.js',
+            'levels.js',
+            'imagelayer.js',
+            'laserlayer.js',
+            'menulayer.js',
+            'doorlayer.js',
+            'gamescene.js',
+            'lazerpuzzle.js'];
+
+        var production = (document.location.hostname != "localhost");
+        var mainScript = production ? pcBaseUrl+"dist/playcraft-"+pcVersion+".min.js" : pcBaseUrl+"lib/playcraft.js";
+        var head = document.getElementsByTagName("head")[0];
+        var scriptTag = document.createElement('script');
+        scriptTag.type = "text/javascript" ;
+        scriptTag.src = mainScript;
+        scriptTag.onload = function() {
+            pc.start(gameEltId, gameMainClass, gameScriptBaseUrl, gameScripts, pcBaseUrl+'lib/');
+        };
+        scriptTag.onreadystatechange = function() {
+            if(this.readyState == 'complete') {
+                this.onload();
+            }
+        }
+        head.appendChild(scriptTag);
+
+    })();
+</script>
 <div style='position: absolute; width: 100%; height: 100%; padding:0; margin:0; left:0; top:0'>
     <div id="center1" style='background-color: #000; height: 100%; width:100%'>
         <canvas id="pcGameCanvas"></canvas>
