@@ -21,6 +21,17 @@ var scrambleLevel = function scrambleLevel(level) {
   }
 };
 
+var stopSound = function(id) {
+  if (!pc.device.soundEnabled) return;
+  var sound = pc.device.loader.get(id).resource;
+  sound.pause();
+};
+
+var restartSound = function(id, volume, loop) {
+  stopSound(id);
+  playSound(id, volume, loop);
+};
+
 var playSound = function(id, volume, loop) {
   if (!pc.device.soundEnabled) return;
   var sound = pc.device.loader.get(id).resource;

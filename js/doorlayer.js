@@ -33,14 +33,17 @@ DoorLayer = pc.Layer.extend('DoorLayer',
         ctx.clearRect(0, 768, pc.device.canvasWidth, pc.device.canvasHeight);
       },
       process:function() {
-        var wantToOpen = this.game.levelStarted || (this.game.complete && this.showCredits);
-        var maxGap = pc.device.canvasHeight/2;
+        var wantToOpen = ! this.game.wantToCloseDoors;
+        var maxGap = 330;
         var elapsed = pc.device.elapsed;
 
         // Let's slide at
         if(wantToOpen) {
           if(this.gap < maxGap) {
             this.gap = Math.min(maxGap, this.gap + elapsed*0.5);
+            if(this.gap >= maxGap) {
+              this.game.onDoorsOpened();
+            }
           }
         } else {
           if(this.gap > 0) {

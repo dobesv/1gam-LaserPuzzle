@@ -10,6 +10,7 @@ TheGame = pc.Game.extend('TheGame',
     {
         gameScene:null,
         level:0,
+        wantToCloseDoors:true,
         levelStarted:false,
         complete:false,
 
@@ -118,12 +119,13 @@ TheGame = pc.Game.extend('TheGame',
         },
 
         playDoorSound:function() {
-            playSound('door_open_sound');
+            restartSound('door_open_sound');
         },
 
         startGame:function() {
             if(!this.levelStarted) {
                 this.levelStarted = true;
+                this.wantToCloseDoors = false;
                 this.gameScene.startLevel();
                 this.playDoorSound();
                 playSound('beep');
@@ -132,8 +134,7 @@ TheGame = pc.Game.extend('TheGame',
 
         nextLevel:function() {
             if(!this.levelStarted) {
-                this.levelStarted = true;
-                this.gameScene.startLevel();
+                this.wantToCloseDoors = true;
                 this.playDoorSound();
                 playSound('beep');
             }
@@ -147,12 +148,21 @@ TheGame = pc.Game.extend('TheGame',
                 this.complete = true;
                 playSound('applause');
             }
-            this.playDoorSound();
 
         },
 
         onDoorsClosed:function() {
             this.gameScene.clearGrid();
+            if(this.wantToCloseDoors) {
+              this.gameScene.startLevel();
+              this.wantToCloseDoors = false;
+              this.levelStarted = true;
+              this.playDoorSound();
+            }
+        },
+
+        onDoorsOpened:function() {
+
         },
 
         process:function() {
