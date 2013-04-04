@@ -39,6 +39,7 @@
         scriptTag.type = "text/javascript" ;
         scriptTag.src = mainScript;
         scriptTag.onload = function() {
+            pc.device.devMode = !production;
             pc.start(gameEltId, gameMainClass, gameScriptBaseUrl, gameScripts, pcBaseUrl+'lib/');
         };
         scriptTag.onreadystatechange = function() {
