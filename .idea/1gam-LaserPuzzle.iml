@@ -4,7 +4,7 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="playcraft" level="project" />
+    <orderEntry type="library" name="Playcraft" level="application" />
   </component>
 </module>
 

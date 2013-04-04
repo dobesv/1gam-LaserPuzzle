@@ -84,15 +84,17 @@ LaserLayer = pc.Layer.extend('LaserLayer',
             drawSegment();
 
             var filter = grid.lookup(row, column);
-            if(filter && filter.filterColor != 'clear' && filter.filterColor != color) {
-              if(filter.filterColor == 'mirror') {
+            if(filter) {
+              var c = filter.getComponent('filter');
+              if(c.isTurning()) {
+                break; // Stop here, turning filters always opaque
+              }
+              if(c.color == 'mirror') {
                 dir = filter.reflection[dir];
-              } else {
+              } else if(!c.letsThrough(color)) {
                 break;
               }
             }
-
-
           }
           lineCount++;
           ctx.stroke();

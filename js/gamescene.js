@@ -5,94 +5,8 @@ GameScene = pc.Scene.extend('GameScene',
     },
     {
       gridLayer:null,
-      grid: {
-        columns:0,
-        rows:0,
-        topRow:0,
-        topRowY:0,
-        bottomRow:0,
-        bottomRowY:0,
-        leftColumn:0,
-        leftColumnX:0,
-        rightColumn:0,
-        rightColumnX:0,
-        pivots:[],
-        lasers:[],
-        filters:[],
-        sensors:[],
-        targetWidth:0,
-        targetHeight:0,
-        fullWidth:0,
-        fullHeight:0,
-        screenBottomY:768,
-        screenRightX:1024,
-        scale:1,
-        solved:false,
-
-        lookupRowColumn:{}, // Indexed by strings "<row>,<column>" to laser or filter
-
-        // Get the Y coordinate of the given row
-        // The first row is numbered 1, in lua tradition
-        rowY: function rowY(n)
-        {
-          if(n == this.topRow) return this.topRowY;
-          if(n == this.bottomRow) return this.bottomRowY;
-          return Math.round(this.topRowY + this.padTop + (n * filterGridSize) * this.scale);
-        },
-        // Get the X coordinate of the given column
-        // Note that the left and right columns have the emitters and the
-        // middle columns have the filters.
-        // The first column is number 0, in lua tradition
-        columnX: function columnX(n) {
-          if(n == this.leftColumn) return this.leftColumnX;
-          if(n == this.rightColumn) return this.rightColumnX;
-          return Math.round(this.leftColumnX + this.padLeft + (n * filterGridSize) * this.scale);
-        },
-
-        setDimensions: function(rows,columns) {
-          this.topRow = 0;
-          this.bottomRow = rows-1;
-          this.leftColumn = 0;
-          this.rightColumn = columns-1;
-          this.topRowY = 130;
-          this.bottomRowY = 635;
-          this.leftColumnX = 75;
-          this.rightColumnX = 705;
-          this.targetWidth = this.rightColumnX - this.leftColumnX;
-          this.targetHeight = this.bottomRowY - this.topRowY;
-          this.fullWidth = (columns-1) * filterGridSize;
-          this.fullHeight = (rows-1) * filterGridSize;
-          var scale = this.scale = Math.min(this.targetWidth / this.fullWidth, this.targetHeight / this.fullHeight);
-          this.columnWidth = filterGridSize * scale;
-          this.padTop = Math.floor(this.targetHeight - this.fullHeight*scale)/2;
-          this.padLeft = Math.floor(this.targetWidth - this.fullWidth*scale)/2;
-
-        },
-
-        lookup: function (row,column) {
-          return this.lookupRowColumn[row+","+column];
-        },
-
-        update: function(row,column,ent) {
-          this.lookupRowColumn[row+","+column] = ent;
-          return ent;
-        },
-
-        clear: function() {
-          var removeIt = function(x) {x.remove();};
-          this.pivots.forEach(removeIt);
-          this.pivots = [];
-          this.lasers.forEach(removeIt);
-          this.lasers = [];
-          this.filters.forEach(removeIt);
-          this.filters = [];
-          this.sensors.forEach(removeIt);
-          this.sensors = [];
-          this.lookupRowColumn = {};
-          this.setDimensions(1,1);
-        }
-      },
-
+      grid: null,
+      pivotSystem: null,
 
       clearGrid: function() {
         this.grid.clear();
@@ -217,10 +131,23 @@ GameScene = pc.Scene.extend('GameScene',
           });
           var filter = pc.Entity.create(layer);
           filter.addComponent(pc.components.Sprite.create({ spriteSheet: filterSheet }));
+          var dir = top?(left?90:180):(left?0:270);
+          var x = grid.columnX(column) - (filterImage.width / 2);
+          var y = grid.rowY(row) - (filterImage.height / 2);
           filter.addComponent(pc.components.Spatial.create({
-            x: grid.columnX(column)-(filterImage.width/2),
-            y: grid.rowY(row)-(filterImage.height/2),
-            dir: top?(left?90:180):(left?0:270)
+            x: x,
+            y: y,
+            dir: dir
+          }));
+          filter.addComponent(FilterComponent.create({
+            color:color,
+            row:row,
+            column:column,
+            pivot:pivot,
+            dir: dir,
+            x: x,
+            y: y,
+            image:filterImage
           }));
           filter.filterColor = color;
           filter.row = row;
@@ -237,7 +164,7 @@ GameScene = pc.Scene.extend('GameScene',
           grid.update(row, column, filter);
           grid.filters.push(filter);
         };
-        var setupPivot = function(row, column, tl, tr, br, bl) {
+        var setupPivot = function(row, column, tl, tr, br, bl, turning) {
           if(!(tl && tr && br && bl))
             return; // Bad color somewhere
           var pivotImage = pc.device.loader.get('pivot').resource;
@@ -249,18 +176,34 @@ GameScene = pc.Scene.extend('GameScene',
           });
           var pivot = pc.Entity.create(layer);
           pivot.addComponent(pc.components.Sprite.create({ spriteSheet: pivotSheet }));
+          var centerX = grid.columnX(column) + grid.columnWidth / 2;
+          var centerY = grid.rowY(row) + grid.columnWidth / 2;
+          var x = centerX - pivotImage.width / 2;
+          var y = centerY - pivotImage.height / 2;
           pivot.addComponent(pc.components.Spatial.create({
-            x: grid.columnX(column) + grid.columnWidth/2 - pivotImage.width/2,
-            y: grid.rowY(row) + grid.columnWidth/2 - pivotImage.height/2,
+            x: x,
+            y: y,
             w: pivotImage.width,
             h: pivotImage.height
           }));
-          setupFilter(row,   column,   tl);
-          setupFilter(row,   column+1, tr);
-          setupFilter(row+1, column+1, br);
-          setupFilter(row+1, column,   bl);
+          pivot.addComponent(PivotComponent.create({
+            turning:turning,
+            row:row,
+            column:column,
+            centerX: centerX,
+            centerY: centerY,
+            x:x,
+            y:y,
+            image:pivotImage,
+            filterColors:[tl,tr,br,bl]
+          }));
+          setupFilter.call(this, row,   column,   tl, pivot);
+          setupFilter.call(this, row,   column+1, tr, pivot);
+          setupFilter.call(this, row+1, column+1, br, pivot);
+          setupFilter.call(this, row+1, column,   bl, pivot);
           pivot.row = row;
           pivot.column = column;
+
           pivot.handleClick = function() {
             // Remove old filters and add new ones, rotated.
             grid.filters = grid.filters.filter(function(f) {
@@ -274,9 +217,10 @@ GameScene = pc.Scene.extend('GameScene',
             grid.pivots = grid.pivots.filter(function(p) { return !(p.row == row && p.column == column); });
             pivot.remove();
             playSound('pivot_sound', 0.5);
-            setupPivot(row, column, bl, tl, tr, br);
+            setupPivot.call(scene, row, column, bl, tl, tr, br, pivot.getComponent('pivot').turning + 1);
           };
           grid.pivots.push(pivot);
+          this.pivotSystem.processAll();
         };
         var bottomRow = grid.bottomRow;
         level.forEach(function(rowSpec, row) {
@@ -295,11 +239,11 @@ GameScene = pc.Scene.extend('GameScene',
                 var tr = colorLetterToWord[rowSpec[column+1]];
                 var br = colorLetterToWord[nextRowSpec[column+1]];
                 var bl = colorLetterToWord[nextRowSpec[column]];
-                setupPivot(row, column, tl, tr, br, bl);
+                setupPivot.call(this, row, column, tl, tr, br, bl);
               }
             }
           }
-        });
+        }, this);
 
 
       },
@@ -342,12 +286,13 @@ GameScene = pc.Scene.extend('GameScene',
         this._super();
 
         this.game = game;
+        this.grid = new Grid();
         this.addLayer(new ImageLayer('bg', 'bg layer', 0));
 
         this.gridLayer = this.addLayer(new pc.EntityLayer("puzzle pieces"));
         this.gridLayer.setZIndex(5);
         this.gridLayer.addSystem(new pc.systems.Render());
-
+        this.gridLayer.addSystem(this.pivotSystem = new PivotSystem());
         this.addLayer(new LaserLayer('red', this.grid, 'Red Laser Layer', 2));
         this.addLayer(new LaserLayer('green', this.grid, 'Green Laser Layer', 2));
         this.addLayer(new LaserLayer('blue', this.grid, 'Blue Laser Layer', 2));
