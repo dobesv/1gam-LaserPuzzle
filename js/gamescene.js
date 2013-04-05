@@ -326,6 +326,6 @@ GameScene = pc.Scene.extend('GameScene',
         this.solved = (numSensorsLit > 0) && numSensorsLit == this.grid.sensors.length;
       },
       onResize:function (width, height) {
-        // ignore 
+        // ignore
       }
     });
