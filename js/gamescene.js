@@ -326,6 +326,7 @@ GameScene = pc.Scene.extend('GameScene',
         this.solved = (numSensorsLit > 0) && numSensorsLit == this.grid.sensors.length;
       },
       onResize:function (width, height) {
-        // ignore
+        // pretend its 1024,768 because of our scaling hack
+        this._super(1024,768);
       }
     });

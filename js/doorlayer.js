@@ -24,11 +24,15 @@ DoorLayer = pc.Layer.extend('DoorLayer',
       draw:function() {
         var ctx = pc.device.ctx;
         if(this.showCredits) {
-          this.creditsImage.draw(ctx, creditsX-this.creditsImage.width/2, creditsY-this.creditsImage.height/2);
+          this.creditsImage.draw(ctx,
+              creditsX - this.creditsImage.width / 2,
+              creditsY - this.creditsImage.height / 2);
           //console.log('drawing credits', creditsX, creditsY, this.creditsImage);
         }
-        this.topDoorImage.draw(ctx, doorLeftX, doorMidPointY-this.gap-this.topDoorImage.height);
-        this.bottomDoorImage.draw(ctx, doorLeftX, doorMidPointY+this.gap-(doorOverlap/2));
+        var topDoorY = doorMidPointY - this.gap - this.topDoorImage.height;
+        this.topDoorImage.draw(ctx, 0,0, doorLeftX, topDoorY, this.topDoorImage.width, Math.min(this.topDoorImage.height, pc.device.canvasHeight-topDoorY));
+        var botBoorY = doorMidPointY + this.gap - (doorOverlap / 2);
+        this.bottomDoorImage.draw(ctx, 0,0, doorLeftX, botBoorY, this.bottomDoorImage.width, Math.min(this.bottomDoorImage.height, pc.device.canvasHeight-botBoorY));
         // Clear anything drawn outside the main area
         ctx.clearRect(0, 768, pc.device.canvasWidth, pc.device.canvasHeight);
       },

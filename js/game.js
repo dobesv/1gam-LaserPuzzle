@@ -168,15 +168,21 @@ TheGame = pc.Game.extend('TheGame',
       },
 
       process:function() {
-        var scale = this.scale = Math.min(1.0, Math.min(pc.device.canvasWidth/1024, pc.device.canvasHeight/768));
+        var cw = pc.device.canvasWidth;
+        var ch = pc.device.canvasHeight;
+        var scale = this.scale = Math.min(1.0, Math.min(cw/1024, ch/768));
         var scaled = scale != 1;
         if(scaled) {
           pc.device.ctx.save();
           pc.device.ctx.setTransform(scale,0,0,scale,0,0);
+          pc.device.canvasWidth = 1024;
+          pc.device.canvasHeight = 1024;
         }
         var ok = this._super();
         if(scaled) {
           pc.device.ctx.restore();
+          pc.device.canvasWidth = cw;
+          pc.device.canvasHeight = ch;
         }
         if(ok) {
 
