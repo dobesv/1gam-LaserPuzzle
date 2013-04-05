@@ -54,7 +54,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         var toDraw = but.up;
         if(this.pressed == but) {
           toDraw = but.down;
-        } else if(onImage(but)) {
+        } else if(this.game.isMouseOverImage(but)) {
           toDraw = but.hover;
         }
         toDraw.draw(pc.device.ctx,but.x,but.y);
@@ -90,19 +90,19 @@ MenuLayer = pc.Layer.extend('MenuLayer',
             if(game.level >= levels.length) {
               // Show "you won!"
             } else if(game.level > 0) {
-              if(onImage(self.nextLevelButton)) {
+              if(game.isMouseOverImage(self.nextLevelButton)) {
                 return self.nextLevelButton;
               }
             } else {
               // Did we press on the start button?
-              if(onImage(self.startButton)) {
+              if(game.isMouseOverImage(self.startButton)) {
                 return self.startButton;
               }
 
             }
           }
           return null;
-        };
+        }.bind(this);
         if(actionName == 'press') {
           this.pressed = whatIsUnderTheMouse();
         } else if(actionName == 'release') {

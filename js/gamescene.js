@@ -218,9 +218,9 @@ GameScene = pc.Scene.extend('GameScene',
             pivot.remove();
             playSound('pivot_sound', 0.5);
             setupPivot.call(scene, row, column, bl, tl, tr, br, pivot.getComponent('pivot').turning + 1);
-          };
+            this.pivotSystem.processAll();
+          }.bind(this);
           grid.pivots.push(pivot);
-          this.pivotSystem.processAll();
         };
         var bottomRow = grid.bottomRow;
         level.forEach(function(rowSpec, row) {
@@ -254,8 +254,8 @@ GameScene = pc.Scene.extend('GameScene',
 
         var self = this;
         var whatIsUnderTheMouse = function whatIsUnderTheMouse() {
-          var x = pc.device.input.mousePos.x;
-          var y = pc.device.input.mousePos.y;
+          var x = this.game.worldMouseX();
+          var y = this.game.worldMouseY();
           var foundPivot = null;
           var grid = self.grid;
           self.grid.pivots.forEach(function(pivot) {
@@ -268,7 +268,7 @@ GameScene = pc.Scene.extend('GameScene',
             }
           });
           return foundPivot;
-        };
+        }.bind(this);
         if(actionName == 'press') {
           this.pressed = whatIsUnderTheMouse();
         } else if(actionName == 'release') {
@@ -324,5 +324,8 @@ GameScene = pc.Scene.extend('GameScene',
           }
         });
         this.solved = (numSensorsLit > 0) && numSensorsLit == this.grid.sensors.length;
+      },
+      onResize:function (width, height) {
+        // ignore 
       }
     });
