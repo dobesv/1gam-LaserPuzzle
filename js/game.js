@@ -48,6 +48,7 @@ TheGame = pc.Game.extend('TheGame',
         loadImage('filter_red.png');
         loadImage('filter_mirror.png');
         loadImage('filter_clear.png');
+        loadImage('filter_solid.png');
         loadImage('laser_red.png');
         loadImage('laser_green.png');
         loadImage('laser_blue.png');

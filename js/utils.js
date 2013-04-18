@@ -1,4 +1,7 @@
-var scrambleLevel = function scrambleLevel(level) {
+var scrambleLevel = function scrambleLevel(levelSpec) {
+  var level = levelSpec[0].slice(0);
+  var offsets = levelSpec[1];
+  var n=0;
   for(var row=1; row<level.length-1; row+=2) {
     var rowSpec1 = level[row];
     var rowSpec2 = level[row+1];
@@ -10,7 +13,8 @@ var scrambleLevel = function scrambleLevel(level) {
           rowSpec1[column+1]+
           rowSpec2[column+1]+
           rowSpec2[column];
-      var turns = Math.floor(Math.random()*4);
+      var turns = offsets[n % offsets.length];
+      n++;
       newRowSpec1 += pivotSpec[turns] + pivotSpec[(turns+1)%4];
       newRowSpec2 += pivotSpec[(turns+3)%4] + pivotSpec[(turns+2)%4];
     }
@@ -18,6 +22,7 @@ var scrambleLevel = function scrambleLevel(level) {
     newRowSpec2 += rowSpec2[rowSpec2.length-1];
     level[row] = newRowSpec1;
     level[row+1] = newRowSpec2;
+    return level;
   }
 };
 

@@ -89,7 +89,7 @@ GameScene = pc.Scene.extend('GameScene',
           grid.sensors.push(sensor);
         };
 
-        var colorLetterToWord = {r:"red", g:"green", b:"blue", m:"mirror", " ":"clear"};
+        var colorLetterToWord = {r:"red", g:"green", b:"blue", m:"mirror", " ":"clear", "x":"solid"};
         var setupTopLasers = function(rowSpec) {
           var row = grid.topRow;
           for(var column=1; column < columns-1; column++) {
@@ -311,8 +311,7 @@ GameScene = pc.Scene.extend('GameScene',
       startLevel:function() {
         this.clearGrid();
         var level = this.game.level;
-        var levelSpec = levels[level % levels.length];
-        scrambleLevel(levelSpec);
+        var levelSpec = scrambleLevel(levels[level % levels.length]);
         this.setupGrid(levelSpec);
       },
       process:function() {
