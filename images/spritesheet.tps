@@ -20,7 +20,7 @@
         <key>dpi</key>
         <uint>72</uint>
         <key>dataFormat</key>
-        <string>json</string>
+        <string>jsonp</string>
         <key>textureFileName</key>
         <filename>spritesheet.png</filename>
         <key>flipPVR</key>
@@ -111,7 +111,7 @@
             <enum type="AndEngine::MagFilter">MagLinear</enum>
         </struct>
         <key>dataFileName</key>
-        <filename>../js/spritesheet.json</filename>
+        <filename>../js/spritesheet.js</filename>
         <key>mainExtension</key>
         <string></string>
         <key>forceIdenticalLayout</key>
@@ -141,25 +141,6 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>level_1.png</filename>
-            <filename>level_2.png</filename>
-            <filename>level_3.png</filename>
-            <filename>level_4.png</filename>
-            <filename>level_5.png</filename>
-            <filename>level_6.png</filename>
-            <filename>level_7.png</filename>
-            <filename>level_8.png</filename>
-            <filename>level_9.png</filename>
-            <filename>level_10.png</filename>
-            <filename>level_11.png</filename>
-            <filename>level_12.png</filename>
-            <filename>level_13.png</filename>
-            <filename>level_14.png</filename>
-            <filename>level_15.png</filename>
-            <filename>level_16.png</filename>
-            <filename>level_17.png</filename>
-            <filename>level_18.png</filename>
-            <filename>level_19.png</filename>
             <filename>filter_blue.png</filename>
             <filename>filter_clear.png</filename>
             <filename>filter_green.png</filename>
@@ -193,7 +174,17 @@
             <filename>credit_text.png</filename>
             <filename>sensor_red.png</filename>
             <filename>sensor_red_off.png</filename>
-            <filename>level_20.png</filename>
+            <filename>level_number_0.png</filename>
+            <filename>level_number_1.png</filename>
+            <filename>level_number_2.png</filename>
+            <filename>level_number_3.png</filename>
+            <filename>level_number_4.png</filename>
+            <filename>level_number_5.png</filename>
+            <filename>level_number_6.png</filename>
+            <filename>level_number_7.png</filename>
+            <filename>level_number_8.png</filename>
+            <filename>level_number_9.png</filename>
+            <filename>level_number_display.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

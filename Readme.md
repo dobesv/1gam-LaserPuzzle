@@ -31,6 +31,15 @@ Sounds:
 - Beep from http://archive.org/details/TickSound
 - Pivot sound from http://soundcli.ps/sound/camera-shutter-3
 
+## Repacking Textures
+
+The app uses one big sprite sheet for most of the images.  Use [TexturePacker](http://www.codeandweb.com/texturepacker)
+to repack the spritesheet if you make changes.
+
+First you'll have to set the TexturePacker exporters folder to the texturepacker-exporter folder in here, or
+copy its contents to your existing TexturePacker exporter folder.
+
+Then you can open images/spritesheet.tps in TexturePacker and click Publish to build a new spritesheet.png.
 
 ## Legal
 

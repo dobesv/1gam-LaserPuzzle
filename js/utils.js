@@ -49,14 +49,13 @@ var getImage = function(id) {
 
 var getSpriteSheetImage = function(key) {
   var baseImage = getImage('spritesheet');
-  if(!pc.valid(spritesheetFrames)) throw new Error('Spritesheet not loaded');
-  if(!pc.valid(spritesheetFrames.frames)) throw new Error('Spritesheet frames missing');
-  if(!(key in spritesheetFrames.frames)) throw new Error('Spritesheet frames missing for '+key);
-  if(!pc.valid(spritesheetFrames.frames[key].frame)) throw new Error('Spritesheet frames missing for '+key);
-  return new pc.Subimage(baseImage, spritesheetFrames.frames[key].frame);
+  if(!pc.valid(TexturePacker)) throw new Error('Spritesheet not loaded');
+  if(!pc.valid(TexturePacker.frames)) throw new Error('Spritesheet frames missing');
+  if(!(key in TexturePacker.frames)) throw new Error('Spritesheet frames missing for '+key);
+  return new pc.Subimage(baseImage, TexturePacker.frames[key]);
 };
 var getSpriteSheetPng = function(key) {
-  return getSpriteSheetImage(key+'.png');
+  return getSpriteSheetImage(key);
 };
 
 var isUpperCase = function(s) {
