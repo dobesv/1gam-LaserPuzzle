@@ -38,7 +38,7 @@ TheGame = pc.Game.extend('TheGame',
         loadImage('bg.jpg');
         loadImage('frame.png');
         loadImage("spritesheet.png");
-        
+
         loadSound('door_open_sound');
         loadSound('applause');
         loadSound('level_complete_sound');
