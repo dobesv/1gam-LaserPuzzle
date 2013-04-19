@@ -65,6 +65,10 @@ TheGame = pc.Game.extend('TheGame',
 
       onLoaded:function ()
       {
+        if(this.gameScene) {
+          console.log("onLoaded called an extra time ?");
+          return;
+        }
         ['loading', 'loadingPercent'].forEach(function(id) {
           var loadingElt = document.getElementById(id);
           if(loadingElt) loadingElt.parentNode.removeChild(loadingElt);
