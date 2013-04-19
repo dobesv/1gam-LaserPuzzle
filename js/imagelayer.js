@@ -5,7 +5,7 @@ ImageLayer = pc.Layer.extend('ImageLayer',
 
       init:function(resourceName, name, zIndex) {
         this._super(name, zIndex);
-        this.image = pc.device.loader.get(resourceName).resource;
+        this.image = getImage(resourceName);
         //console.log("ImageLayer.init", resourceName, name, zIndex, this.image);
       },
 

@@ -7,7 +7,6 @@ var scrambleLevel = function scrambleLevel(levelSpec) {
     var rowSpec2 = level[row+1];
     var newRowSpec1 = ""+rowSpec1[0];
     var newRowSpec2 = ""+rowSpec2[0];
-
     for(var column=1; column<rowSpec1.length-1; column+=2) {
       var pivotSpec = rowSpec1[column]+
           rowSpec1[column+1]+
@@ -22,8 +21,8 @@ var scrambleLevel = function scrambleLevel(levelSpec) {
     newRowSpec2 += rowSpec2[rowSpec2.length-1];
     level[row] = newRowSpec1;
     level[row+1] = newRowSpec2;
-    return level;
   }
+  return level;
 };
 
 var stopSound = function(id) {
@@ -46,4 +45,28 @@ var playSound = function(id, volume, loop) {
 
 var getImage = function(id) {
   return pc.device.loader.get(id).resource;
+};
+
+var getSpriteSheetImage = function(key) {
+  var baseImage = getImage('spritesheet');
+  if(!pc.valid(spritesheetFrames)) throw new Error('Spritesheet not loaded');
+  if(!pc.valid(spritesheetFrames.frames)) throw new Error('Spritesheet frames missing');
+  if(!(key in spritesheetFrames.frames)) throw new Error('Spritesheet frames missing for '+key);
+  if(!pc.valid(spritesheetFrames.frames[key].frame)) throw new Error('Spritesheet frames missing for '+key);
+  return new pc.Subimage(baseImage, spritesheetFrames.frames[key].frame);
+};
+var getSpriteSheetPng = function(key) {
+  return getSpriteSheetImage(key+'.png');
+};
+
+var isUpperCase = function(s) {
+  return /[A-Z]/.test(s);
+};
+
+var isLowerCase = function(s) {
+  return /[a-z]/.test(s);
+};
+
+var fail = function(s) {
+  throw new Error(s);
 }

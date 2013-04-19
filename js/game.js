@@ -37,43 +37,8 @@ TheGame = pc.Game.extend('TheGame',
         // load up resources
         loadImage('bg.jpg');
         loadImage('frame.png');
-        loadImage('but_start.png');
-        loadImage('but_start_rollover.png');
-        loadImage('but_start_hit.png');
-        loadImage('but_nextlevel.png');
-        loadImage('but_nextlevel_rollover.png');
-        loadImage('but_nextlevel_hit.png');
-        loadImage('filter_blue.png');
-        loadImage('filter_green.png');
-        loadImage('filter_red.png');
-        loadImage('filter_mirror.png');
-        loadImage('filter_clear.png');
-        loadImage('filter_solid.png');
-        loadImage('laser_red.png');
-        loadImage('laser_green.png');
-        loadImage('laser_blue.png');
-        loadImage('sensor_red.png');
-        loadImage('sensor_green.png');
-        loadImage('sensor_blue.png');
-        loadImage('sensor_red_off.png');
-        loadImage('sensor_green_off.png');
-        loadImage('sensor_blue_off.png');
-        loadImage('door_top.png');
-        loadImage('door_bottom.png');
-        loadImage('pivot.png');
-        loadImage('you_win.png');
-        loadImage('beam_red_end.png');
-        loadImage('beam_red_mid.png');
-        loadImage('beam_green_end.png');
-        loadImage('beam_green_mid.png');
-        loadImage('beam_blue_end.png');
-        loadImage('beam_blue_mid.png');
-        for(var n=0; n < 6; n++) {
-          loadImage("level_"+(n+1)+".png");
-        }
-        loadImage('level_complete.png');
-        loadImage('credit_text.png');
-
+        loadImage("spritesheet.png");
+        
         loadSound('door_open_sound');
         loadSound('applause');
         loadSound('level_complete_sound');

@@ -37,7 +37,7 @@ GameScene = pc.Scene.extend('GameScene',
             scene.warn("Invalid laser color at row "+row+" column "+column);
             return;
           }
-          var laserImage = pc.device.loader.get('laser_'+laserColor).resource;
+          var laserImage = getSpriteSheetPng('laser_'+laserColor);
           var laserSheet = new pc.SpriteSheet({
             image:laserImage,
             useRotation:true,
@@ -47,13 +47,16 @@ GameScene = pc.Scene.extend('GameScene',
           var vertical = (angle%180) == 0;
           var laser = pc.Entity.create(layer);
           laser.addComponent(pc.components.Sprite.create({ spriteSheet: laserSheet }));
-          laser.addComponent(pc.components.Spatial.create({
-            x: grid.columnX(column)-(laserImage.width*(vertical?0.5:0.65)),
-            y: grid.rowY(row)-(laserImage.height*(vertical?0.65:0.5)),
+          var spatialParams;
+          laser.addComponent(pc.components.Spatial.create(spatialParams = {
+            x: grid.columnX(column)-(laserImage.width*(column==grid.rightColumn?0.35:vertical?0.5:0.65)),
+            y: grid.rowY(row)-(laserImage.height*(row==grid.bottomRow?0.35:vertical?0.65:0.5)),
             w: laserImage.width,
             h: laserImage.height,
             dir:(angle+270)%360
           }));
+          console.log('laser at', spatialParams);
+
           laser.laserColor = laserColor;
           laser.row = row;
           laser.column = column;
@@ -68,7 +71,7 @@ GameScene = pc.Scene.extend('GameScene',
             return;
           }
           var vertical = (angle%180) == 0;
-          var sensorImage = getImage('sensor_'+sensorColor+'_off');
+          var sensorImage = getSpriteSheetPng('sensor_'+sensorColor+'_off');
           var sensorSheet = new pc.SpriteSheet({
             image:sensorImage,
             useRotation:true,
@@ -77,50 +80,51 @@ GameScene = pc.Scene.extend('GameScene',
           });
           var sensor = pc.Entity.create(layer);
           sensor.addComponent(pc.components.Sprite.create({ spriteSheet: sensorSheet }));
-          sensor.addComponent(pc.components.Spatial.create({
-            x: grid.columnX(column)-(sensorImage.width*(vertical?0.5:0.35)),
-            y: grid.rowY(row)-(sensorImage.height*(vertical?0.35:0.5)),
+          var spatialParams;
+          sensor.addComponent(pc.components.Spatial.create(spatialParams = {
+            x: grid.columnX(column)-(sensorImage.width*(column==0?0.65:vertical?0.5:0.35)),
+            y: grid.rowY(row)-(sensorImage.height*(row==0?0.7:vertical?0.35:0.5)),
+            w: sensorImage.width,
+            h: sensorImage.height,
             dir:(angle+270)%360
           }));
+          console.log('sensor at', spatialParams);
           sensor.sensorColor = sensorColor;
           sensor.row = row;
           sensor.column = column;
           grid.update(row, column, sensor);
           grid.sensors.push(sensor);
         };
-
         var colorLetterToWord = {r:"red", g:"green", b:"blue", m:"mirror", " ":"clear", "x":"solid"};
-        var setupTopLasers = function(rowSpec) {
+        var setupLaserOrSensor = function(row, column, colChar) {
+          var f = isUpperCase(colChar)?setupSensor:setupLaser;
+          var color = colorLetterToWord[colChar.toLowerCase()];
+          if(color == 'clear')
+            return;
+          var angle =
+              row == grid.topRow ? 180 :
+              row == grid.bottomRow ? 0 :
+              column == grid.leftColumn ? 90 :
+              column == grid.rightColumn ? 270 :
+              0;
+          console.log('sensor ? '+isUpperCase(colChar)+"  ... "+colChar+" ... "+column+","+row);
+          f(row, column, color, angle);
+
+        }
+        var setupTopRow = function(rowSpec) {
           var row = grid.topRow;
           for(var column=1; column < columns-1; column++) {
-            var colChar = rowSpec[column];
-            if(colChar != ' ') {
-              setupLaser(row, column, colorLetterToWord[colChar], 180);
-            }
+            setupLaserOrSensor(row, column, rowSpec[column]);
           }
         };
-        var setupBottomSensors = function(rowSpec) {
+        var setupBottomRow = function(rowSpec) {
           var row = grid.bottomRow;
           for(var column=1; column < columns-1; column++) {
-            var colChar = rowSpec[column];
-            if(colChar != ' ') {
-              setupSensor(row, column, colorLetterToWord[colChar], 0);
-            }
+            setupLaserOrSensor(row, column, rowSpec[column]);
           }
         };
-        var setupLeftLaser = function(colChar, row) {
-          if(colChar == ' ')
-            return;
-          setupLaser(row, 0, colorLetterToWord[colChar], 90);
-        };
-        var setupRightSensor = function(colChar, row) {
-          if(colChar == ' ')
-            return;
-          setupSensor(row, columns-1, colorLetterToWord[colChar], 270);
-        };
-
         var setupFilter = function(row, column, color, pivot) {
-          var filterImage = pc.device.loader.get('filter_'+color).resource;
+          var filterImage = getSpriteSheetPng('filter_'+color);
           var top = (row%2) == 1;
           var left = (column%2) == 1;
           var filterSheet = new pc.SpriteSheet({
@@ -167,7 +171,7 @@ GameScene = pc.Scene.extend('GameScene',
         var setupPivot = function(row, column, tl, tr, br, bl, turning) {
           if(!(tl && tr && br && bl))
             return; // Bad color somewhere
-          var pivotImage = pc.device.loader.get('pivot').resource;
+          var pivotImage = getSpriteSheetPng('pivot');
           var pivotSheet = new pc.SpriteSheet({
             image:pivotImage,
             useRotation:true,
@@ -224,21 +228,20 @@ GameScene = pc.Scene.extend('GameScene',
         };
         var bottomRow = grid.bottomRow;
         level.forEach(function(rowSpec, row) {
-          rowSpec = rowSpec.toLowerCase();
           if(row == 0) {
-            setupTopLasers(rowSpec);
+            setupTopRow(rowSpec);
           } else if(row == bottomRow) {
-            setupBottomSensors(rowSpec);
+            setupBottomRow(rowSpec);
           } else {
-            setupLeftLaser(rowSpec[0], row);
-            setupRightSensor(rowSpec[rowSpec.length-1], row);
+            setupLaserOrSensor(row, 0, rowSpec[0]);
+            setupLaserOrSensor(row, grid.rightColumn, rowSpec[grid.rightColumn]);
             if(row < (rows-1) && (row % 2) == 1) {
               var nextRowSpec = level[row+1];
               for(var column=1; column < columns-1; column += 2) {
-                var tl = colorLetterToWord[rowSpec[column]];
-                var tr = colorLetterToWord[rowSpec[column+1]];
-                var br = colorLetterToWord[nextRowSpec[column+1]];
-                var bl = colorLetterToWord[nextRowSpec[column]];
+                var tl = colorLetterToWord[rowSpec[column].toLowerCase()];
+                var tr = colorLetterToWord[rowSpec[column+1].toLowerCase()];
+                var br = colorLetterToWord[nextRowSpec[column+1].toLowerCase()];
+                var bl = colorLetterToWord[nextRowSpec[column].toLowerCase()];
                 setupPivot.call(this, row, column, tl, tr, br, bl);
               }
             }

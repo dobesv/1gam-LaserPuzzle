@@ -8,7 +8,7 @@ LaserLayer = pc.Layer.extend('LaserLayer',
       init:function(color,grid,name,zIndex) {
         this._super(name,zIndex);
         this.color = color;
-        this.beamImage = getImage("beam_"+color+"_mid");
+        this.beamImage = getSpriteSheetPng("beam_"+color+"_mid");
         this.beamImage.alpha = 0.75;
         this.grid = grid;
       },
@@ -104,11 +104,13 @@ LaserLayer = pc.Layer.extend('LaserLayer',
           // Only process lasers with a matching color for this layer
           if(laserColor != color)
             return;
-          if(laser.column == grid.leftColumn) {
-            fireLaser.call(this, laser.row, laser.column, 'right', laserColor);
-          } else if(laser.row == grid.topRow) {
-            fireLaser.call(this, laser.row, laser.column, 'down', laserColor);
-          }
+          var dir =
+              laser.column == grid.leftColumn ? 'right' :
+              laser.column == grid.rightColumn ? 'left' :
+              laser.row == grid.topRow ? 'down' :
+              laser.row == grid.bottomRow ? 'up' :
+                fail('Unexpected laser position.');
+          fireLaser.call(this, laser.row, laser.column, dir, laserColor);
         };
         this.grid.lasers.forEach(drawLaser, this);
 
@@ -116,7 +118,7 @@ LaserLayer = pc.Layer.extend('LaserLayer',
           var sprite = sensor.getComponent('sprite');
           var img = sensor.lit ? 'sensor_'+sensor.sensorColor : 'sensor_'+sensor.sensorColor+'_off';
           if(sprite.sprite.spriteSheet.image.name != img) {
-            sprite.sprite.spriteSheet.image = pc.device.loader.get(img).resource;
+            sprite.sprite.spriteSheet.image = getSpriteSheetPng(img);
           }
         });
 

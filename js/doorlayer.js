@@ -17,9 +17,9 @@ DoorLayer = pc.Layer.extend('DoorLayer',
       init:function(game,name,zIndex) {
         this._super(name,zIndex);
         this.game = game;
-        this.topDoorImage = getImage("door_top");
-        this.bottomDoorImage = getImage("door_bottom");
-        this.creditsImage = getImage("credit_text");
+        this.topDoorImage = getSpriteSheetPng("door_top");
+        this.bottomDoorImage = getSpriteSheetPng("door_bottom");
+        this.creditsImage = getSpriteSheetPng("credit_text");
       },
       draw:function() {
         var ctx = pc.device.ctx;
