@@ -6,7 +6,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
       nextLevelButton: null,
       youWinImage: null,
       levelCompleteImage: null,
-      levelImages: [],
+      levelDigits: [],
 
       init:function(game, name, zIndex) {
         this._super(name, zIndex);
@@ -37,11 +37,12 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         this.levelCompleteImage = getSpriteSheetPng("level_complete");
         this.levelCompleteImage.x = 775;
         this.levelCompleteImage.y = 175;
-        for(var n=0; n < levels.length; n++) {
-          var levelImage = getSpriteSheetPng("level_"+(n+1));
-          levelImage.x = 800;
-          levelImage.y = 180;
-          this.levelImages.push(levelImage);
+
+        this.levelBg = getSpriteSheetPng('level_number_display');
+        this.levelBg.x = 800;
+        this.levelBg.y = 180;
+        for(var n=0; n < 10; n++) {
+          this.levelDigits.push(getSpriteSheetPng("level_number_"+n));
         }
 
         this.game = game;
@@ -62,13 +63,33 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         if(ico)
           ico.draw(pc.device.ctx,ico.x,ico.y);
       },
+      drawLevelNumber: function () {
+        this.drawIcon(this.levelBg);
+        var digits = [];
+        var n = this.game.level+1;
+        var w = 0;
+        while (n > 0) {
+          var levelDigit = this.levelDigits[n % 10];
+          w += levelDigit.width;
+          digits.push(levelDigit);
+          n = Math.floor(n / 10);
+        }
+        digits.reverse();
+        var numLeft = this.levelBg.x + (this.levelBg.width - w) / 2 | 0;
+        for (var i = 0; i < digits.length; i++) {
+          var digit = digits[i];
+          var numTop = Math.floor(this.levelBg.y + (this.levelBg.height - digit.height)*0.72);
+          digit.draw(pc.device.ctx, numLeft, numTop);
+          numLeft += digit.width;
+        }
+      },
+
       draw:function() {
         if(this.game.complete) {
           // You win!
           this.drawIcon(this.youWinImage);
         } else if(this.game.levelStarted) {
-          // No menu to draw, really - maybe a restart button?  A status indicator?
-          this.drawIcon(this.levelImages[this.game.level]);
+          this.drawLevelNumber();
         } else {
           if(this.game.level > 0) {
             // Draw "next level" button

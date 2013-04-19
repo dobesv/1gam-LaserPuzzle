@@ -15,6 +15,7 @@ TheGame = pc.Game.extend('TheGame',
       levelStarted:false,
       complete:false,
       scale:1,
+      musicPlaying:false,
 
       onReady:function ()
       {
@@ -77,15 +78,32 @@ TheGame = pc.Game.extend('TheGame',
         this.gameScene = new GameScene(this);
         this.addScene(this.gameScene);
 
-        playSound('music', 0.6, true);
 
         pc.device.input.bindAction(this, 'cheat', 'F8');
+        pc.device.input.bindAction(this, 'toggleMusic', 'M');
 
+      },
+
+      startMusic:function() {
+        playSound('music', 0.6, true);
+        this.musicPlaying = true;
+      },
+
+      stopMusic:function() {
+        stopSound('music');
+        this.musicPlaying = false;
+      },
+
+      toggleMusic:function() {
+        if(this.musicPlaying) this.stopMusic();
+        else this.startMusic();
       },
 
       onAction:function(actionName) {
         if(actionName == 'cheat') {
           this.onLevelComplete();
+        } else if(actionName == 'toggleMusic') {
+          this.toggleMusic();
         }
       },
 
