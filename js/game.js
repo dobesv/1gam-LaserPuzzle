@@ -78,6 +78,7 @@ TheGame = pc.Game.extend('TheGame',
         this.gameScene = new GameScene(this);
         this.addScene(this.gameScene);
 
+        this.startMusic();
 
         pc.device.input.bindAction(this, 'cheat', 'F8');
         pc.device.input.bindAction(this, 'toggleMusic', 'M');
