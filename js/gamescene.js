@@ -55,7 +55,6 @@ GameScene = pc.Scene.extend('GameScene',
             h: laserImage.height,
             dir:(angle+270)%360
           }));
-          console.log('laser at', spatialParams);
 
           laser.laserColor = laserColor;
           laser.row = row;
@@ -88,7 +87,6 @@ GameScene = pc.Scene.extend('GameScene',
             h: sensorImage.height,
             dir:(angle+270)%360
           }));
-          console.log('sensor at', spatialParams);
           sensor.sensorColor = sensorColor;
           sensor.row = row;
           sensor.column = column;
@@ -107,7 +105,6 @@ GameScene = pc.Scene.extend('GameScene',
               column == grid.leftColumn ? 90 :
               column == grid.rightColumn ? 270 :
               0;
-          console.log('sensor ? '+isUpperCase(colChar)+"  ... "+colChar+" ... "+column+","+row);
           f(row, column, color, angle);
 
         }

@@ -193,6 +193,7 @@
             <filename>credit_text.png</filename>
             <filename>sensor_red.png</filename>
             <filename>sensor_red_off.png</filename>
+            <filename>level_20.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
