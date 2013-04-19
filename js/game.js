@@ -52,20 +52,23 @@ TheGame = pc.Game.extend('TheGame',
 
       onLoading:function (percentageComplete)
       {
-        // display progress, such as a loading bar
-        var ctx = pc.device.ctx;
-        ctx.clearRect(0, 0, pc.device.canvasWidth, pc.device.canvasHeight);
-        ctx.font = "normal 50px Verdana";
-        ctx.fillStyle = "#8f8";
-        ctx.fillText('Lazer Puzzle', 40, (pc.device.canvasHeight / 2) - 50);
-        ctx.font = "normal 18px Verdana";
-        ctx.fillStyle = "#777";
-
-        ctx.fillText('Loading: ' + percentageComplete + '%', 40, pc.device.canvasHeight / 2);
+        var loadingPercentElt = document.getElementById('loadingPercent');
+        if(loadingPercentElt) {
+          loadingPercentElt.innerText = percentageComplete + '%';
+        }
+        var loadingBarElt = document.getElementById('loadingBar');
+        if(loadingBarElt) {
+          loadingBarElt.style.width = percentageComplete + '%';
+        }
       },
 
       onLoaded:function ()
       {
+        ['loading', 'loadingPercent'].forEach(function(id) {
+          var loadingElt = document.getElementById(id);
+          if(loadingElt) loadingElt.parentNode.removeChild(loadingElt);
+        });
+
         // Erase loading screen
         var ctx = pc.device.ctx;
         ctx.clearRect(0, 0, pc.device.canvasWidth, pc.device.canvasHeight);

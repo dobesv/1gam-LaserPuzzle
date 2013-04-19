@@ -39,6 +39,7 @@
         var scriptTag = document.createElement('script');
         scriptTag.type = "text/javascript" ;
         scriptTag.src = mainScript;
+        scriptTag.charset = 'utf-8';
         scriptTag.onload = function() {
             //pc.device.devMode = !production;
             pc.start(gameEltId, gameMainClass, gameScriptBaseUrl, gameScripts, pcBaseUrl+'lib/');
@@ -53,6 +54,10 @@
     })();
 </script>
 <div style='position: absolute; width: 100%; height: 100%; padding:0; margin:0; left:0; top:0'>
+    <h1 id="loading" style="position:absolute; width:100%; height:100px; border:solid 10px white; top:250px; left:25%; width:50%; color:white; font-family:arial,helvetica,sans-serif">
+        <div style='position:absolute;top:33%;width:100%;text-align:center'><span id='loadingPercent'>LOADING</span></div>
+        <div id='loadingBar' style='background-color:#AFA;position:absolute;top:0%;height:100%'></div>
+    </h1>
     <div id="center1" style='background-color: #000; height: 100%; width:100%'>
         <canvas id="pcGameCanvas"></canvas>
     </div>
@@ -63,16 +68,17 @@
 -->
 <script type="text/javascript">
 
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-24340079-2']);
-    _gaq.push(['_trackPageview']);
+    if(!navigator.isCocoonJS) {
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24340079-2']);
+        _gaq.push(['_trackPageview']);
 
-    (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    }
 </script>
 
 
