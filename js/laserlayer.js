@@ -18,6 +18,10 @@ LaserLayer = pc.Layer.extend('LaserLayer',
         var grid = this.grid;
         var beamImage = this.beamImage;
         var color = this.color;
+        var pulse = pc.device.game.levelStarted?
+              1:
+              1+0.2*(1+Math.sin((new Date()).getTime() * 0.0075));
+
         grid.sensors.forEach(function resetFlag(sensor) {
           if(sensor.sensorColor == color) {
             sensor.lit = false;
@@ -52,11 +56,11 @@ LaserLayer = pc.Layer.extend('LaserLayer',
               var height = Math.max(1,y2-y1);
               var width = Math.max(1, x2-x1);
               var angle = (x1==x2) ? 0 : 90;
-              beamImage.setScale(1,
+              beamImage.setScale(pulse,
                   Math.max(width,height));
               beamImage.draw(ctx, 0, 0,
-                  x1+width/2-beamImage.width/2,
-                  y1+height/2,
+                  Math.floor(x1+width/2-beamImage.width*0.5),
+                  Math.floor(y1+height/2),
                   beamImage.width, beamImage.height, angle);
 
               startX = x;
