@@ -44,18 +44,9 @@ var playSound = function(id, volume, loop) {
 };
 
 var getImage = function(id) {
+  if(pc.valid(TexturePacker) && id in TexturePacker.frames)
+    return new pc.Subimage(pc.device.loader.get('spritesheet').resource, TexturePacker.frames[id]);
   return pc.device.loader.get(id).resource;
-};
-
-var getSpriteSheetImage = function(key) {
-  var baseImage = getImage('spritesheet');
-  if(!pc.valid(TexturePacker)) throw new Error('Spritesheet not loaded');
-  if(!pc.valid(TexturePacker.frames)) throw new Error('Spritesheet frames missing');
-  if(!(key in TexturePacker.frames)) throw new Error('Spritesheet frames missing for '+key);
-  return new pc.Subimage(baseImage, TexturePacker.frames[key]);
-};
-var getSpriteSheetPng = function(key) {
-  return getSpriteSheetImage(key);
 };
 
 var isUpperCase = function(s) {

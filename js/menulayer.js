@@ -11,10 +11,10 @@ MenuLayer = pc.Layer.extend('MenuLayer',
       init:function(game, name, zIndex) {
         this._super(name, zIndex);
         function button(id, x, y) {
-          var up = getSpriteSheetPng(id)
+          var up = getImage(id)
           return { up: up,
-            down:getSpriteSheetPng(id+"_hit"),
-            hover:getSpriteSheetPng(id+"_rollover"),
+            down:getImage(id+"_hit"),
+            hover:getImage(id+"_rollover"),
             width: up.width,
             height: up.height,
             x:x,
@@ -30,19 +30,19 @@ MenuLayer = pc.Layer.extend('MenuLayer',
           game.nextLevel();
         };
 
-        this.youWinImage = getSpriteSheetPng("you_win");
+        this.youWinImage = getImage("you_win");
         this.youWinImage.x = 780;
         this.youWinImage.y = 185;
 
-        this.levelCompleteImage = getSpriteSheetPng("level_complete");
+        this.levelCompleteImage = getImage("level_complete");
         this.levelCompleteImage.x = 775;
         this.levelCompleteImage.y = 175;
 
-        this.levelBg = getSpriteSheetPng('level_number_display');
+        this.levelBg = getImage('level_number_display');
         this.levelBg.x = 800;
         this.levelBg.y = 180;
         for(var n=0; n < 10; n++) {
-          this.levelDigits.push(getSpriteSheetPng("level_number_"+n));
+          this.levelDigits.push(getImage("level_number_"+n));
         }
 
         this.game = game;

@@ -37,7 +37,7 @@ GameScene = pc.Scene.extend('GameScene',
             scene.warn("Invalid laser color at row "+row+" column "+column);
             return;
           }
-          var laserImage = getSpriteSheetPng('laser_'+laserColor);
+          var laserImage = getImage('laser_'+laserColor);
           var laserSheet = new pc.SpriteSheet({
             image:laserImage,
             useRotation:true,
@@ -70,7 +70,7 @@ GameScene = pc.Scene.extend('GameScene',
             return;
           }
           var vertical = (angle%180) == 0;
-          var sensorImage = getSpriteSheetPng('sensor_'+sensorColor+'_off');
+          var sensorImage = getImage('sensor_'+sensorColor+'_off');
           var sensorSheet = new pc.SpriteSheet({
             image:sensorImage,
             useRotation:true,
@@ -121,7 +121,7 @@ GameScene = pc.Scene.extend('GameScene',
           }
         };
         var setupFilter = function(row, column, color, pivot) {
-          var filterImage = getSpriteSheetPng('filter_'+color);
+          var filterImage = getImage('filter_'+color);
           var top = (row%2) == 1;
           var left = (column%2) == 1;
           var filterSheet = new pc.SpriteSheet({
@@ -168,7 +168,7 @@ GameScene = pc.Scene.extend('GameScene',
         var setupPivot = function(row, column, tl, tr, br, bl, turning) {
           if(!(tl && tr && br && bl))
             return; // Bad color somewhere
-          var pivotImage = getSpriteSheetPng('pivot');
+          var pivotImage = getImage('pivot');
           var pivotSheet = new pc.SpriteSheet({
             image:pivotImage,
             useRotation:true,
