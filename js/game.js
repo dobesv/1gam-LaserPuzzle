@@ -168,19 +168,29 @@ TheGame = pc.Game.extend('TheGame',
        * @returns {boolean}
        */
       isMouseOverImage: function(image) {
-        var scale = this.scale;
-        var x = pc.device.input.mousePos.x - image.x* scale;
-        var y = pc.device.input.mousePos.y - image.y*scale;
-        return (x >= 0 && x < image.width*scale &&
-            y >= 0 && y < image.height*scale);
+        return this.isPosOverImage(pc.device.input.mousePos, image);
+      },
+
+      isPosOverImage: function(pos, image) {
+        var x = this.worldX(pos.x) - image.x;
+        var y = this.worldY(pos.y) - image.y;
+        return (x >= 0 && x < image.width &&
+                y >= 0 && y < image.height);
+      },
+
+      worldX:function(x) {
+        return Math.round(x / this.scale);
+      },
+      worldY:function(y) {
+        return Math.round(y / this.scale);
       },
 
       worldMouseX:function() {
-        return pc.device.input.mousePos.x / this.scale;
+        return Math.round(pc.device.input.mousePos.x / this.scale);
       },
 
       worldMouseY:function() {
-        return pc.device.input.mousePos.y / this.scale;
+        return Math.round(pc.device.input.mousePos.y / this.scale);
       }
 
 

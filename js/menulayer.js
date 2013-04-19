@@ -47,8 +47,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         this.game = game;
         pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
         pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
-        pc.device.input.bindAction(this, 'press', 'TOUCH');
-        pc.device.input.bindAction(this, 'release', 'TOUCH_END');
+//        pc.device.input.bindAction(this, 'touch', 'TOUCH');
       },
       drawButton:function(but) {
         var toDraw = but.up;
@@ -81,7 +80,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
           }
         }
       },
-      onAction:function(actionName) {
+      onAction:function(actionName, event, pos) {
         var self = this;
         var game = this.game;
         var whatIsUnderTheMouse = function() {
@@ -91,12 +90,12 @@ MenuLayer = pc.Layer.extend('MenuLayer',
             if(game.level >= levels.length) {
               // Show "you won!"
             } else if(game.level > 0) {
-              if(game.isMouseOverImage(self.nextLevelButton)) {
+              if(game.isPosOverImage(pos, self.nextLevelButton)) {
                 return self.nextLevelButton;
               }
             } else {
               // Did we press on the start button?
-              if(game.isMouseOverImage(self.startButton)) {
+              if(game.isPosOverImage(pos, self.startButton)) {
                 return self.startButton;
               }
 
@@ -113,6 +112,9 @@ MenuLayer = pc.Layer.extend('MenuLayer',
           if(onWhat === this.pressed) {
             onWhat.handleClick();
           }
+//        } else if(actionName == 'touch') {
+//          var onWhat = whatIsUnderTheMouse();
+//          if(onWhat) onWhat.handleClick();
         }
       }
     }

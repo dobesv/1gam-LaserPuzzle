@@ -248,14 +248,14 @@ GameScene = pc.Scene.extend('GameScene',
 
       },
 
-      onAction:function(actionName) {
+      onAction:function(actionName, event, pos) {
         if(this.game.levelStarted == false)
           return;
 
         var self = this;
         var whatIsUnderTheMouse = function whatIsUnderTheMouse() {
-          var x = this.game.worldMouseX();
-          var y = this.game.worldMouseY();
+          var x = this.game.worldX(pos.x);
+          var y = this.game.worldY(pos.y);
           var foundPivot = null;
           var grid = self.grid;
           self.grid.pivots.forEach(function(pivot) {
@@ -304,8 +304,7 @@ GameScene = pc.Scene.extend('GameScene',
 
         pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
         pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
-        pc.device.input.bindAction(this, 'press', 'TOUCH');
-        pc.device.input.bindAction(this, 'release', 'TOUCH_END');
+        //pc.device.input.bindAction(this, 'touch', 'TOUCH');
       },
 
       startLevel:function() {
