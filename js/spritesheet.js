@@ -1,4 +1,4 @@
-// Created with TexturePacker (http://www.texturepacker.com)  Update key: $TexturePacker:SmartUpdate:1a3d5b0812f13af81e4b4ad38cfd0f3b$
+// Created with TexturePacker (http://www.texturepacker.com)  Update key: $TexturePacker:SmartUpdate:7c9ce44d8a8adb27679907938a389f2e$
 (function() {
   var TP = (typeof(window.TexturePacker) == 'undefined' ? window.TexturePacker = {} : window.TexturePacker);
   if(typeof TP.images == 'undefined') TexturePacker.images = [];
@@ -6,11 +6,11 @@
   TP.images.push("spritesheet.png");
   
   TP.frames["beam_blue_end"] = {x:344, y:440, w:9, h:9};
-  TP.frames["beam_blue_mid"] = {x:1, y:509, w:9, h:1};
+  TP.frames["beam_blue_mid"] = {x:2417, y:100, w:144, h:98};
   TP.frames["beam_green_end"] = {x:334, y:450, w:9, h:9};
-  TP.frames["beam_green_mid"] = {x:1, y:507, w:9, h:1};
+  TP.frames["beam_green_mid"] = {x:2562, y:1, w:144, h:98};
   TP.frames["beam_red_end"] = {x:334, y:440, w:9, h:9};
-  TP.frames["beam_red_mid"] = {x:1, y:505, w:9, h:1};
+  TP.frames["beam_red_mid"] = {x:2417, y:1, w:144, h:98};
   TP.frames["but_nextlevel"] = {x:2028, y:437, w:169, h:43};
   TP.frames["but_nextlevel_hit"] = {x:1954, y:238, w:169, h:43};
   TP.frames["but_nextlevel_rollover"] = {x:1784, y:238, w:169, h:43};
@@ -23,7 +23,7 @@
   TP.frames["filter_blue"] = {x:2316, y:1, w:100, h:100};
   TP.frames["filter_clear"] = {x:2294, y:102, w:100, h:100};
   TP.frames["filter_green"] = {x:2260, y:358, w:100, h:100};
-  TP.frames["filter_mirror"] = {x:2417, y:1, w:88, h:88};
+  TP.frames["filter_mirror"] = {x:2562, y:100, w:88, h:88};
   TP.frames["filter_red"] = {x:2260, y:257, w:100, h:100};
   TP.frames["filter_solid"] = {x:2215, y:1, w:100, h:100};
   TP.frames["laser_blue"] = {x:2002, y:282, w:257, h:154};

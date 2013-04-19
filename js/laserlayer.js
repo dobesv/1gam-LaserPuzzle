@@ -8,16 +8,22 @@ LaserLayer = pc.Layer.extend('LaserLayer',
       init:function(color,grid,name,zIndex) {
         this._super(name,zIndex);
         this.color = color;
-        this.beamImage = getImage("beam_"+color+"_mid");
+        var beamImage = this.beamImage = getImage("beam_"+color+"_mid");
         this.beamImage.alpha = 0.75;
+        var frames = this.beamFrames = [];
+        for(var frame=0; frame < 12; frame++) {
+          var frameWidth = beamImage.width/12;
+          var frameX = (frame * frameWidth) % beamImage.width;
+          frames.push(new pc.Subimage(beamImage, {x:frameX+1,y:0,w:frameWidth-2,h:beamImage.height}));
+        }
         this.grid = grid;
       },
 
       draw:function() {
         var lineCount = 0;
         var grid = this.grid;
-        var beamImage = this.beamImage;
         var color = this.color;
+        var frame = Math.abs((new Date()).getTime() * 0.01);
         var pulse = pc.device.game.levelStarted?
               1:
               1+0.2*(1+Math.sin((new Date()).getTime() * 0.0075));
@@ -32,6 +38,7 @@ LaserLayer = pc.Layer.extend('LaserLayer',
             filter.lit = false;
           }
         });
+        var segmentCount = 0;
         var fireLaser = function(startRow, startColumn, dir, color) {
           var row = startRow;
           var column = startColumn;
@@ -55,16 +62,24 @@ LaserLayer = pc.Layer.extend('LaserLayer',
               var y2 = Math.max(y,startY);
               var height = Math.max(1,y2-y1);
               var width = Math.max(1, x2-x1);
-              var angle = (x1==x2) ? 0 : 90;
+              var angle;
+              switch(dir) {
+                case 'down': angle = 180; break;
+                case 'up': angle = 0; break;
+                case 'left': angle = -90; break;
+                case 'right': angle = 90; break;
+              }
+              var beamImage = this.beamFrames[Math.round((frame + (segmentCount * 8))) % this.beamFrames.length];
               beamImage.setScale(pulse,
-                  Math.max(width,height));
+                  Math.max(width,height)/beamImage.height);
               beamImage.draw(ctx, 0, 0,
-                  Math.floor(x1+width/2-beamImage.width*0.5),
-                  Math.floor(y1+height/2),
+                  Math.floor(x1+width/2-beamImage.width/2),
+                  Math.floor(y1+height/2-beamImage.height/2),
                   beamImage.width, beamImage.height, angle);
 
               startX = x;
               startY = y;
+              segmentCount++;
             };
             if(row == grid.bottomRow || column == grid.rightColumn ||
                 row == grid.topRow || column == grid.leftColumn) {
@@ -81,11 +96,11 @@ LaserLayer = pc.Layer.extend('LaserLayer',
                 sensor.lit = true;
               }
 
-              drawSegment();
+              drawSegment.call(this);
               break;
             }
 
-            drawSegment();
+            drawSegment.call(this);
 
             var filter = grid.lookup(row, column);
             if(filter) {
