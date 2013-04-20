@@ -69,7 +69,7 @@ LaserLayer = pc.Layer.extend('LaserLayer',
                 case 'left': angle = -90; break;
                 case 'right': angle = 90; break;
               }
-              var beamImage = this.beamFrames[Math.round((frame + (segmentCount * 8))) % this.beamFrames.length];
+              var beamImage = this.beamFrames[Math.round((frame + (segmentCount * 6))) % this.beamFrames.length];
               beamImage.setScale(pulse,
                   Math.max(width,height)/beamImage.height);
               beamImage.draw(ctx, 0, 0,
@@ -100,20 +100,19 @@ LaserLayer = pc.Layer.extend('LaserLayer',
               break;
             }
 
-            drawSegment.call(this);
-
             var filter = grid.lookup(row, column);
             if(filter) {
               var c = filter.getComponent('filter');
-              if(c.isTurning()) {
+              if(c.isTurning() || !c.letsThrough(color)) {
+                drawSegment.call(this);
                 break; // Stop here, turning filters always opaque
               }
               if(c.color == 'mirror') {
+                drawSegment.call(this);
                 dir = filter.reflection[dir];
-              } else if(!c.letsThrough(color)) {
-                break;
               }
             }
+
           }
           lineCount++;
           ctx.stroke();
