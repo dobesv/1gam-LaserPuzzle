@@ -120,7 +120,7 @@ GameScene = pc.Scene.extend('GameScene',
             setupLaserOrSensor(row, column, rowSpec[column]);
           }
         };
-        var setupFilter = function(row, column, color, pivot) {
+        var setupFilter = function(row, column, color, pivot, preCtx) {
           var top = (row%2) == 1;
           var left = (column%2) == 1;
           var at45 = (top == left);
@@ -130,14 +130,14 @@ GameScene = pc.Scene.extend('GameScene',
             at45 = ! at45;
           }
           var filterImage = getImage('filter_'+color);
-          var filterSheet = new pc.SpriteSheet({
-            image:filterImage,
-            useRotation:true,
-            scaleX:grid.scale,
-            scaleY:grid.scale
-          });
+          //var filterSheet = new pc.SpriteSheet({
+          //  image:filterImage,
+          //  useRotation:true,
+          //  scaleX:grid.scale,
+          //  scaleY:grid.scale
+          //});
           var filter = pc.Entity.create(layer);
-          filter.addComponent(pc.components.Sprite.create({ spriteSheet: filterSheet }));
+          //filter.addComponent(pc.components.Sprite.create({ spriteSheet: filterSheet }));
           var dir = top?(left?90:180):(left?0:270);
           if(mirror90) dir += 90;
           var x = grid.columnX(column) - (filterImage.width / 2);
@@ -178,23 +178,20 @@ GameScene = pc.Scene.extend('GameScene',
           }
           grid.update(row, column, filter);
           grid.filters.push(filter);
+
+          var preX = left?pivotGridSize/2-filterOffset-filterImage.width/2:pivotGridSize/2+filterOffset-filterImage.width/2;
+          var preY = top?pivotGridSize/2-filterOffset-filterImage.height/2:pivotGridSize/2+filterOffset-filterImage.height/2;
+          filterImage.draw(preCtx, preX, preY);
         };
         var setupPivot = function(row, column, tl, tr, br, bl, turning) {
           if(!(tl && tr && br && bl))
             return; // Bad color somewhere
           var pivotImage = getImage('pivot');
-          var pivotSheet = new pc.SpriteSheet({
-            image:pivotImage,
-            useRotation:true,
-            scaleX:grid.scale,
-            scaleY:grid.scale
-          });
           var pivot = pc.Entity.create(layer);
-          pivot.addComponent(pc.components.Sprite.create({ spriteSheet: pivotSheet }));
           var centerX = grid.columnX(column) + grid.columnWidth / 2;
           var centerY = grid.rowY(row) + grid.columnWidth / 2;
-          var x = centerX - pivotImage.width / 2;
-          var y = centerY - pivotImage.height / 2;
+          var x = centerX - pivotGridSize / 2;
+          var y = centerY - pivotGridSize / 2;
           pivot.addComponent(pc.components.Spatial.create({
             x: x,
             y: y,
@@ -212,12 +209,25 @@ GameScene = pc.Scene.extend('GameScene',
             image:pivotImage,
             filterColors:[tl,tr,br,bl]
           }));
-          setupFilter.call(this, row,   column,   tl, pivot);
-          setupFilter.call(this, row,   column+1, tr, pivot);
-          setupFilter.call(this, row+1, column+1, br, pivot);
-          setupFilter.call(this, row+1, column,   bl, pivot);
+          var pivotPrerender = document.createElement('canvas');
+          pivotPrerender.width = pivotGridSize;
+          pivotPrerender.height = pivotGridSize;
+          var preCtx = pivotPrerender.getContext('2d');
+          pivotImage.draw(preCtx, (pivotGridSize-pivotImage.width)/2,(pivotGridSize-pivotImage.height)/2);
+          setupFilter.call(this, row,   column,   tl, pivot, preCtx);
+          setupFilter.call(this, row,   column+1, tr, pivot, preCtx);
+          setupFilter.call(this, row+1, column+1, br, pivot, preCtx);
+          setupFilter.call(this, row+1, column,   bl, pivot, preCtx);
           pivot.row = row;
           pivot.column = column;
+
+          var pivotSheet = new pc.SpriteSheet({
+            image:new pc.CanvasImage(pivotPrerender),
+            useRotation:true,
+            scaleX:grid.scale,
+            scaleY:grid.scale
+          });
+          pivot.addComponent(pc.components.Sprite.create({ spriteSheet: pivotSheet }));
 
           pivot.handleClick = function() {
             // Remove old filters and add new ones, rotated.

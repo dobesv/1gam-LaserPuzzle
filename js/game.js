@@ -2,6 +2,7 @@
 
 var filterOffset=80;
 var filterGridSize = filterOffset*2;
+var pivotGridSize = filterGridSize*2;
 var globalScale=1;
 
 
