@@ -93,7 +93,7 @@ GameScene = pc.Scene.extend('GameScene',
           grid.update(row, column, sensor);
           grid.sensors.push(sensor);
         };
-        var colorLetterToWord = {r:"red", g:"green", b:"blue", m:"mirror", " ":"clear", "x":"solid"};
+        var colorLetterToWord = {r:"red", g:"green", b:"blue", m:"mirror", M:"mirror90", " ":"clear", "x":"solid"};
         var setupLaserOrSensor = function(row, column, colChar) {
           var f = isUpperCase(colChar)?setupSensor:setupLaser;
           var color = colorLetterToWord[colChar.toLowerCase()];
@@ -121,9 +121,15 @@ GameScene = pc.Scene.extend('GameScene',
           }
         };
         var setupFilter = function(row, column, color, pivot) {
-          var filterImage = getImage('filter_'+color);
           var top = (row%2) == 1;
           var left = (column%2) == 1;
+          var at45 = (top == left);
+          var mirror90 = color == 'mirror90';
+          if(mirror90) {
+            color = 'mirror';
+            at45 = ! at45;
+          }
+          var filterImage = getImage('filter_'+color);
           var filterSheet = new pc.SpriteSheet({
             image:filterImage,
             useRotation:true,
@@ -133,6 +139,7 @@ GameScene = pc.Scene.extend('GameScene',
           var filter = pc.Entity.create(layer);
           filter.addComponent(pc.components.Sprite.create({ spriteSheet: filterSheet }));
           var dir = top?(left?90:180):(left?0:270);
+          if(mirror90) dir += 90;
           var x = grid.columnX(column) - (filterImage.width / 2);
           var y = grid.rowY(row) - (filterImage.height / 2);
           filter.addComponent(pc.components.Spatial.create({
@@ -156,10 +163,17 @@ GameScene = pc.Scene.extend('GameScene',
           filter.pivot = pivot;
           if(color == 'mirror') {
             filter.reflection = {
-              down:(top == left)?'left':'right',
-              up:(top == left)?'right':'left',
-              left:(top == left)?'down':'up',
-              right:(top == left)?'up':'down'
+              down:at45?'left':'right',
+              up:at45?'right':'left',
+              left:at45?'down':'up',
+              right:at45?'up':'down'
+            };
+          } else if(color == 'mirror90') {
+            filter.reflection = {
+              down:at45?'left':'right',
+              up:at45?'right':'left',
+              left:at45?'down':'up',
+              right:at45?'up':'down'
             };
           }
           grid.update(row, column, filter);
@@ -235,10 +249,10 @@ GameScene = pc.Scene.extend('GameScene',
             if(row < (rows-1) && (row % 2) == 1) {
               var nextRowSpec = level[row+1];
               for(var column=1; column < columns-1; column += 2) {
-                var tl = colorLetterToWord[rowSpec[column].toLowerCase()];
-                var tr = colorLetterToWord[rowSpec[column+1].toLowerCase()];
-                var br = colorLetterToWord[nextRowSpec[column+1].toLowerCase()];
-                var bl = colorLetterToWord[nextRowSpec[column].toLowerCase()];
+                var tl = colorLetterToWord[rowSpec[column]];
+                var tr = colorLetterToWord[rowSpec[column+1]];
+                var br = colorLetterToWord[nextRowSpec[column+1]];
+                var bl = colorLetterToWord[nextRowSpec[column]];
                 setupPivot.call(this, row, column, tl, tr, br, bl);
               }
             }
