@@ -329,6 +329,8 @@ GameScene = pc.Scene.extend('GameScene',
         pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
         pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
         //pc.device.input.bindAction(this, 'touch', 'TOUCH');
+
+        this.setViewPort(0, 0, 1024, 768);
       },
 
       startLevel:function() {
