@@ -107,7 +107,17 @@ TheGame = pc.Game.extend('TheGame',
 
       onAction:function(actionName) {
         if(actionName == 'cheat') {
-          this.onLevelComplete();
+          var lvl = parseInt(prompt('What level?  Currently on '+(this.level+1)+' of '+levels.length, ''+(this.level+2)));
+          if(pc.valid(lvl) && lvl > 0 && lvl < levels.length) {
+            this.level = lvl-1;
+            this.levelStarted = false;
+            this.startGame();
+          } else if(lvl == levels.length) {
+            this.complete = true;
+            this.levelStarted = false;
+          } else {
+            alert('Invalid level selection')
+          }
         } else if(actionName == 'toggleMusic') {
           this.toggleMusic();
         }
