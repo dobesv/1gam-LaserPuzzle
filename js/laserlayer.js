@@ -69,7 +69,7 @@ LaserLayer = pc.Layer.extend('LaserLayer',
                 case 'left': angle = -90; break;
                 case 'right': angle = 90; break;
               }
-              var beamImage = this.beamFrames[Math.round((frame + (segmentCount * 6))) % this.beamFrames.length];
+              var beamImage = this.beamFrames[Math.round((frame + (segmentCount * 12))) % this.beamFrames.length];
               beamImage.setScale(pulse,
                   Math.max(width,height)/beamImage.height);
               beamImage.draw(ctx, 0, 0,
