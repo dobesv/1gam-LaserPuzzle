@@ -118,6 +118,11 @@
         <false/>
         <key>outputFormat</key>
         <enum type="SettingsBase::OutputFormat">RGBA8888</enum>
+        <key>contentProtection</key>
+        <struct type="ContentProtection">
+            <key>key</key>
+            <string></string>
+        </struct>
         <key>autoAliasEnabled</key>
         <true/>
         <key>trimSpriteNames</key>
@@ -185,10 +190,22 @@
             <filename>level_number_8.png</filename>
             <filename>level_number_9.png</filename>
             <filename>level_number_display.png</filename>
+            <filename>tutorial_1.png</filename>
+            <filename>but_music.png</filename>
+            <filename>but_music_hit.png</filename>
+            <filename>but_music_rollover.png</filename>
+            <filename>but_fx.png</filename>
+            <filename>but_fx_hit.png</filename>
+            <filename>but_fx_rollover.png</filename>
+            <filename>but_info.png</filename>
+            <filename>but_info_hit.png</filename>
+            <filename>but_info_rollover.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
         <key>replaceList</key>
+        <array/>
+        <key>ignoredWarnings</key>
         <array/>
         <key>commonDivisorX</key>
         <uint>1</uint>

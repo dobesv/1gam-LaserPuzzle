@@ -7,6 +7,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
       youWinImage: null,
       levelCompleteImage: null,
       levelDigits: [],
+      helpImage: null,
 
       init:function(game, name, zIndex) {
         this._super(name, zIndex);
@@ -21,7 +22,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
             y:y };
 
         }
-        this.startButton = button("but_start", 780, 250);
+        this.startButton = button("but_start", 800, 175);
         this.startButton.handleClick = function() {
           game.startGame();
         };
@@ -40,7 +41,13 @@ MenuLayer = pc.Layer.extend('MenuLayer',
 
         this.levelBg = getImage('level_number_display');
         this.levelBg.x = 800;
-        this.levelBg.y = 180;
+        this.levelBg.y = 175;
+
+        this.helpImage = getImage('tutorial_1');
+        this.helpImage.x = 370;
+        this.helpImage.y = -2;
+        this.helpImage.timeLeft = 5000;
+
         for(var n=0; n < 10; n++) {
           this.levelDigits.push(getImage("level_number_"+n));
         }
@@ -84,12 +91,24 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         }
       },
 
+      drawHelp:function() {
+        if(this.helpImage) {
+          this.drawIcon(this.helpImage);
+          this.helpImage.setAlpha(Math.max(0, Math.min(1, this.helpImage.timeLeft/1000)));
+          this.helpImage.timeLeft -= pc.device.elapsed;
+          if(this.helpImage.timeLeft <= 0) {
+            this.helpImage = null;
+          }
+        }
+      },
+
       draw:function() {
         if(this.game.complete) {
           // You win!
           this.drawIcon(this.youWinImage);
         } else if(this.game.levelStarted) {
           this.drawLevelNumber();
+          this.drawHelp();
         } else {
           if(this.game.level > 0) {
             // Draw "next level" button
