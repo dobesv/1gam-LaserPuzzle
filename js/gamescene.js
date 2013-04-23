@@ -181,7 +181,7 @@ GameScene = pc.Scene.extend('GameScene',
 
           var preX = left?pivotGridSize/2-filterOffset-filterImage.width/2:pivotGridSize/2+filterOffset-filterImage.width/2;
           var preY = top?pivotGridSize/2-filterOffset-filterImage.height/2:pivotGridSize/2+filterOffset-filterImage.height/2;
-          filterImage.draw(preCtx, preX, preY);
+          filterImage.draw(preCtx, 0, 0, preX, preY, filterImage.width, filterImage.height, dir);
         };
         var setupPivot = function(row, column, tl, tr, br, bl, turning) {
           if(!(tl && tr && br && bl))
