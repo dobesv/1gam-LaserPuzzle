@@ -1,31 +1,31 @@
-// Created with TexturePacker (http://www.texturepacker.com)  Update key: $TexturePacker:SmartUpdate:3e68cb7d8115b75e63050ba3590bcc0c$
+// Created with TexturePacker (http://www.texturepacker.com)  Update key: $TexturePacker:SmartUpdate:bb09d8639a638efbce382ed7ea64c4a5$
 (function() {
   var TP = (typeof(window.TexturePacker) == 'undefined' ? window.TexturePacker = {} : window.TexturePacker);
   if(typeof TP.images == 'undefined') TexturePacker.images = [];
   if(typeof TP.frames == 'undefined') TexturePacker.frames = {};
   TP.images.push("spritesheet.png");
   
-  TP.frames["beam_blue_end"] = {x:344, y:440, w:9, h:9};
   TP.frames["beam_blue_mid"] = {x:1528, y:296, w:144, h:159};
-  TP.frames["beam_green_end"] = {x:334, y:450, w:9, h:9};
   TP.frames["beam_green_mid"] = {x:994, y:328, w:144, h:159};
-  TP.frames["beam_red_end"] = {x:334, y:440, w:9, h:9};
   TP.frames["beam_red_mid"] = {x:849, y:328, w:144, h:159};
-  TP.frames["but_fx"] = {x:1906, y:448, w:75, h:62};
-  TP.frames["but_fx_hit"] = {x:773, y:439, w:75, h:62};
-  TP.frames["but_fx_rollover"] = {x:697, y:439, w:75, h:62};
-  TP.frames["but_info"] = {x:313, y:461, w:155, h:50};
-  TP.frames["but_info_hit"] = {x:157, y:461, w:155, h:50};
-  TP.frames["but_info_rollover"] = {x:1, y:461, w:155, h:50};
-  TP.frames["but_music"] = {x:621, y:439, w:75, h:62};
-  TP.frames["but_music_hit"] = {x:545, y:439, w:75, h:62};
-  TP.frames["but_music_rollover"] = {x:469, y:439, w:75, h:62};
-  TP.frames["but_nextlevel"] = {x:2411, y:413, w:169, h:43};
-  TP.frames["but_nextlevel_hit"] = {x:2152, y:438, w:169, h:43};
-  TP.frames["but_nextlevel_rollover"] = {x:1982, y:448, w:169, h:43};
-  TP.frames["but_start"] = {x:720, y:328, w:128, h:110};
-  TP.frames["but_start_hit"] = {x:591, y:328, w:128, h:110};
-  TP.frames["but_start_rollover"] = {x:462, y:328, w:128, h:110};
+  TP.frames["but_fx_down"] = {x:1906, y:448, w:75, h:62};
+  TP.frames["but_fx_hover"] = {x:773, y:439, w:75, h:62};
+  TP.frames["but_fx_up"] = {x:697, y:439, w:75, h:62};
+  TP.frames["but_info_down"] = {x:313, y:461, w:155, h:50};
+  TP.frames["but_info_hover"] = {x:157, y:461, w:155, h:50};
+  TP.frames["but_info_up"] = {x:1, y:461, w:155, h:50};
+  TP.frames["but_music_down"] = {x:621, y:439, w:75, h:62};
+  TP.frames["but_music_hover"] = {x:545, y:439, w:75, h:62};
+  TP.frames["but_music_up"] = {x:469, y:439, w:75, h:62};
+  TP.frames["but_nextlevel_down"] = {x:2411, y:413, w:169, h:43};
+  TP.frames["but_nextlevel_hover"] = {x:2152, y:438, w:169, h:43};
+  TP.frames["but_nextlevel_up"] = {x:1982, y:448, w:169, h:43};
+  TP.frames["but_reset_down"] = {x:2538, y:457, w:126, h:40};
+  TP.frames["but_reset_hover"] = {x:2411, y:457, w:126, h:40};
+  TP.frames["but_reset_up"] = {x:2021, y:157, w:126, h:40};
+  TP.frames["but_start_down"] = {x:720, y:328, w:128, h:110};
+  TP.frames["but_start_hover"] = {x:591, y:328, w:128, h:110};
+  TP.frames["but_start_up"] = {x:462, y:328, w:128, h:110};
   TP.frames["credit_text"] = {x:1, y:1, w:332, h:459};
   TP.frames["door_bottom"] = {x:334, y:1, w:767, h:326};
   TP.frames["door_top"] = {x:1102, y:1, w:681, h:294};

@@ -16,11 +16,15 @@ TheGame = pc.Game.extend('TheGame',
       levelStarted:false,
       complete:false,
       scale:1,
-      musicPlaying:false,
+      musicPlaying:true,
+      muted:false,
 
       onReady:function ()
       {
         this._super(); // call the base class' onReady
+
+        this.musicPlaying = getBoolCookie('music', this.musicPlaying);
+        this.muted = getBoolCookie('muted', this.muted);
 
         // disable caching when developing
         if (pc.device.devMode)
@@ -83,7 +87,8 @@ TheGame = pc.Game.extend('TheGame',
         this.gameScene = new GameScene(this);
         this.addScene(this.gameScene);
 
-        this.startMusic();
+        if(this.musicPlaying && !this.muted)
+          this.startMusic();
 
         pc.device.input.bindAction(this, 'cheat', 'F8');
         pc.device.input.bindAction(this, 'toggleMusic', 'M');
@@ -92,17 +97,32 @@ TheGame = pc.Game.extend('TheGame',
 
       startMusic:function() {
         playSound('music', 0.6, true);
-        this.musicPlaying = true;
+        setBoolCookie('music', this.musicPlaying = true);
       },
 
       stopMusic:function() {
         stopSound('music');
-        this.musicPlaying = false;
+        setBoolCookie('music', this.musicPlaying = false);
       },
 
       toggleMusic:function() {
         if(this.musicPlaying) this.stopMusic();
         else this.startMusic();
+      },
+
+      mute:function() {
+        setBoolCookie(this.muted = true);
+        stopSound('music');
+      },
+
+      unmute:function() {
+        setBoolCookie('muted', this.muted = false);
+        if(this.musicPlaying) this.startMusic();
+      },
+
+      toggleSound:function() {
+        if(this.muted) this.unmute();
+        else this.mute();
       },
 
       onAction:function(actionName) {
@@ -229,6 +249,7 @@ TheGame = pc.Game.extend('TheGame',
       worldMouseY:function() {
         return Math.round(pc.device.input.mousePos.y / this.scale);
       }
+
 
 
     });

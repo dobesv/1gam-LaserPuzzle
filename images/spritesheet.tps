@@ -159,22 +159,13 @@
             <filename>sensor_blue_off.png</filename>
             <filename>sensor_green.png</filename>
             <filename>sensor_green_off.png</filename>
-            <filename>but_nextlevel.png</filename>
-            <filename>but_nextlevel_hit.png</filename>
-            <filename>but_nextlevel_rollover.png</filename>
-            <filename>but_start.png</filename>
-            <filename>but_start_hit.png</filename>
-            <filename>but_start_rollover.png</filename>
             <filename>pivot.png</filename>
             <filename>level_complete.png</filename>
             <filename>you_win.png</filename>
             <filename>door_top.png</filename>
             <filename>door_bottom.png</filename>
-            <filename>beam_blue_end.png</filename>
             <filename>beam_blue_mid.png</filename>
-            <filename>beam_green_end.png</filename>
             <filename>beam_green_mid.png</filename>
-            <filename>beam_red_end.png</filename>
             <filename>beam_red_mid.png</filename>
             <filename>credit_text.png</filename>
             <filename>sensor_red.png</filename>
@@ -191,15 +182,24 @@
             <filename>level_number_9.png</filename>
             <filename>level_number_display.png</filename>
             <filename>tutorial_1.png</filename>
-            <filename>but_music.png</filename>
-            <filename>but_music_hit.png</filename>
-            <filename>but_music_rollover.png</filename>
-            <filename>but_fx.png</filename>
-            <filename>but_fx_hit.png</filename>
-            <filename>but_fx_rollover.png</filename>
-            <filename>but_info.png</filename>
-            <filename>but_info_hit.png</filename>
-            <filename>but_info_rollover.png</filename>
+            <filename>but_fx_down.png</filename>
+            <filename>but_fx_hover.png</filename>
+            <filename>but_fx_up.png</filename>
+            <filename>but_info_down.png</filename>
+            <filename>but_info_hover.png</filename>
+            <filename>but_info_up.png</filename>
+            <filename>but_music_down.png</filename>
+            <filename>but_music_hover.png</filename>
+            <filename>but_music_up.png</filename>
+            <filename>but_nextlevel_down.png</filename>
+            <filename>but_nextlevel_hover.png</filename>
+            <filename>but_nextlevel_up.png</filename>
+            <filename>but_reset_down.png</filename>
+            <filename>but_reset_hover.png</filename>
+            <filename>but_reset_up.png</filename>
+            <filename>but_start_down.png</filename>
+            <filename>but_start_hover.png</filename>
+            <filename>but_start_up.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

@@ -37,7 +37,7 @@ var restartSound = function(id, volume, loop) {
 };
 
 var playSound = function(id, volume, loop) {
-  if (!pc.device.soundEnabled) return;
+  if (!pc.device.soundEnabled || pc.device.game.muted) return;
   var sound = pc.device.loader.get(id).resource;
   sound.setVolume(volume || 1);
   sound.play(loop || false);
@@ -59,4 +59,37 @@ var isLowerCase = function(s) {
 
 var fail = function(s) {
   throw new Error(s);
+}
+
+function createCookie(name,value,days) {
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime()+(days*24*60*60*1000));
+    var expires = "; expires="+date.toGMTString();
+  }
+  else var expires = "";
+  document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name, defaultValue) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0;i < ca.length;i++) {
+    var c = ca[i];
+    while (c.charAt(0)==' ') c = c.substring(1,c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+  }
+  return arguments.length == 1 ? null : defaultValue;
+}
+
+function eraseCookie(name) {
+  createCookie(name,"",-1);
+}
+
+function setBoolCookie(name, v) {
+  createCookie(name,""+pc.checked(v, true),365);
+}
+
+function getBoolCookie(name, defaultValue) {
+  return readCookie(name, defaultValue) == 'true';
 }

@@ -8,14 +8,16 @@ MenuLayer = pc.Layer.extend('MenuLayer',
       levelCompleteImage: null,
       levelDigits: [],
       helpImage: null,
+      sfxButton: null,
+      musicButton: null,
 
       init:function(game, name, zIndex) {
         this._super(name, zIndex);
         function button(id, x, y) {
-          var up = getImage(id)
+          var up = getImage(id+"_up");
           return { up: up,
-            down:getImage(id+"_hit"),
-            hover:getImage(id+"_rollover"),
+            down:getImage(id+"_down"),
+            hover:getImage(id+"_hover"),
             width: up.width,
             height: up.height,
             x:x,
@@ -48,6 +50,9 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         this.helpImage.y = -2;
         this.helpImage.timeLeft = 5000;
 
+        this.sfxButton = button('but_fx', 850, 475);
+        this.musicButton = button('but_music', this.sfxButton.x, this.sfxButton.y + this.sfxButton.height + 5);
+
         for(var n=0; n < 10; n++) {
           this.levelDigits.push(getImage("level_number_"+n));
         }
@@ -57,9 +62,9 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
 //        pc.device.input.bindAction(this, 'touch', 'TOUCH');
       },
-      drawButton:function(but) {
+      drawButton:function(but, down) {
         var toDraw = but.up;
-        if(this.pressed == but) {
+        if(pc.checked(down, this.pressed == but)) {
           toDraw = but.down;
         } else if(this.game.isMouseOverImage(but)) {
           toDraw = but.hover;
@@ -103,6 +108,11 @@ MenuLayer = pc.Layer.extend('MenuLayer',
       },
 
       draw:function() {
+        if(pc.device.soundEnabled) {
+          this.drawButton(this.sfxButton, !this.game.muted);
+          this.drawButton(this.musicButton, this.game.musicPlaying);
+        }
+
         if(this.game.complete) {
           // You win!
           this.drawIcon(this.youWinImage);
@@ -124,6 +134,14 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         var self = this;
         var game = this.game;
         var whatIsUnderTheMouse = function() {
+          if(pc.device.soundEnabled) {
+            if(game.isPosOverImage(pos, self.sfxButton)) {
+              this.game.toggleSound();
+            }
+            if(game.isPosOverImage(pos, self.musicButton)) {
+              this.game.toggleMusic();
+            }
+          }
           if(game.levelStarted) {
 
           } else {
