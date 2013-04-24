@@ -10,6 +10,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
       helpImage: null,
       sfxButton: null,
       musicButton: null,
+      soundState: { muted:null, all:null, noMusic:null },
 
       init:function(game, name, zIndex) {
         this._super(name, zIndex);
@@ -50,8 +51,12 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         this.helpImage.y = -2;
         this.helpImage.timeLeft = 5000;
 
-        this.sfxButton = button('but_fx', 850, 475);
-        this.musicButton = button('but_music', this.sfxButton.x, this.sfxButton.y + this.sfxButton.height + 5);
+        [this.soundState.all = getImage('but_sound_all'),
+        this.soundState.noMusic = getImage('but_sound_fx'),
+        this.soundState.muted = getImage('but_sound_mute')].forEach(function(s) {
+              s.x = 850;
+              s.y = 410;
+        });
 
         for(var n=0; n < 10; n++) {
           this.levelDigits.push(getImage("level_number_"+n));
@@ -109,8 +114,9 @@ MenuLayer = pc.Layer.extend('MenuLayer',
 
       draw:function() {
         if(pc.device.soundEnabled) {
-          this.drawButton(this.sfxButton, !this.game.muted);
-          this.drawButton(this.musicButton, this.game.musicPlaying);
+          this.drawIcon(this.game.muted?this.soundState.muted :
+                        this.game.musicPlaying?this.soundState.all :
+                        this.soundState.noMusic);
         }
 
         if(this.game.complete) {
@@ -135,11 +141,8 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         var game = this.game;
         var whatIsUnderTheMouse = function() {
           if(pc.device.soundEnabled) {
-            if(game.isPosOverImage(pos, self.sfxButton)) {
-              this.game.toggleSound();
-            }
-            if(game.isPosOverImage(pos, self.musicButton)) {
-              this.game.toggleMusic();
+            if(game.isPosOverImage(pos, self.soundState.all)) {
+              this.game.cycleSoundMode();
             }
           }
           if(game.levelStarted) {

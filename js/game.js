@@ -125,6 +125,17 @@ TheGame = pc.Game.extend('TheGame',
         else this.mute();
       },
 
+      cycleSoundMode:function() {
+        if(this.muted) {
+          this.unmute();
+          this.startMusic();
+        } else if(this.musicPlaying) {
+          this.stopMusic();
+        } else {
+          this.mute();
+        }
+      },
+
       onAction:function(actionName) {
         if(actionName == 'cheat') {
           var lvl = parseInt(prompt('What level?  Currently on '+(this.level+1)+' of '+levels.length, ''+(this.level+2)));
