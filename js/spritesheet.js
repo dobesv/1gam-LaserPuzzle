@@ -1,4 +1,4 @@
-// Created with TexturePacker (http://www.texturepacker.com)  Update key: $TexturePacker:SmartUpdate:ceac80a3d7ffc040d4ce2930002c1d58$
+// Created with TexturePacker (http://www.texturepacker.com)  Update key: $TexturePacker:SmartUpdate:f27a77d697406b1aa4211a76f0700daf$
 (function() {
   var TP = (typeof(window.TexturePacker) == 'undefined' ? window.TexturePacker = {} : window.TexturePacker);
   if(typeof TP.images == 'undefined') TexturePacker.images = [];
@@ -17,6 +17,9 @@
   TP.frames["but_reset_down"] = {x:2210, y:438, w:126, h:40};
   TP.frames["but_reset_hover"] = {x:2083, y:438, w:126, h:40};
   TP.frames["but_reset_up"] = {x:1956, y:438, w:126, h:40};
+  TP.frames["but_sound_all"] = {x:2642, y:413, w:106, h:98};
+  TP.frames["but_sound_fx"] = {x:2535, y:413, w:106, h:98};
+  TP.frames["but_sound_mute"] = {x:2428, y:413, w:106, h:98};
   TP.frames["but_start_down"] = {x:720, y:328, w:128, h:110};
   TP.frames["but_start_hover"] = {x:591, y:328, w:128, h:110};
   TP.frames["but_start_up"] = {x:462, y:328, w:128, h:110};
@@ -29,7 +32,7 @@
   TP.frames["filter_mirror"] = {x:2337, y:414, w:88, h:88};
   TP.frames["filter_red"] = {x:2225, y:157, w:100, h:100};
   TP.frames["filter_solid"] = {x:2124, y:157, w:100, h:100};
-  TP.frames["laser_blue"] = {x:2686, y:156, w:257, h:154};
+  TP.frames["laser_blue"] = {x:2749, y:156, w:257, h:154};
   TP.frames["laser_green"] = {x:2606, y:1, w:257, h:154};
   TP.frames["laser_red"] = {x:2428, y:258, w:257, h:154};
   TP.frames["level_complete"] = {x:1616, y:456, w:169, h:43};
