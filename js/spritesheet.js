@@ -1,4 +1,4 @@
-// Created with TexturePacker (http://www.texturepacker.com)  Update key: $TexturePacker:SmartUpdate:d1d474edc88c66a2252920aabc4d5033$
+// Created with TexturePacker (http://www.texturepacker.com)  Update key: $TexturePacker:SmartUpdate:266cdcdccd147bee6fb088c1b437ee90$
 (function() {
   var TP = (typeof(window.TexturePacker) == 'undefined' ? window.TexturePacker = {} : window.TexturePacker);
   if(typeof TP.images == 'undefined') TexturePacker.images = [];
@@ -14,27 +14,27 @@
   TP.frames["but_nextlevel_down"] = {x:1954, y:238, w:169, h:43};
   TP.frames["but_nextlevel_hover"] = {x:1784, y:238, w:169, h:43};
   TP.frames["but_nextlevel_up"] = {x:1786, y:456, w:169, h:43};
-  TP.frames["but_reset_down"] = {x:2210, y:438, w:126, h:40};
-  TP.frames["but_reset_hover"] = {x:2083, y:438, w:126, h:40};
+  TP.frames["but_reset_down"] = {x:2083, y:438, w:126, h:40};
+  TP.frames["but_reset_hover"] = {x:2124, y:238, w:126, h:40};
   TP.frames["but_reset_up"] = {x:1956, y:438, w:126, h:40};
-  TP.frames["but_sound_all"] = {x:2642, y:413, w:106, h:98};
-  TP.frames["but_sound_fx"] = {x:2535, y:413, w:106, h:98};
-  TP.frames["but_sound_mute"] = {x:2428, y:413, w:106, h:98};
+  TP.frames["but_sound_all"] = {x:2960, y:358, w:106, h:98};
+  TP.frames["but_sound_fx"] = {x:2853, y:413, w:106, h:98};
+  TP.frames["but_sound_mute"] = {x:2746, y:413, w:106, h:98};
   TP.frames["but_start_down"] = {x:720, y:328, w:128, h:110};
   TP.frames["but_start_hover"] = {x:591, y:328, w:128, h:110};
   TP.frames["but_start_up"] = {x:462, y:328, w:128, h:110};
   TP.frames["credit_text"] = {x:1, y:1, w:332, h:459};
   TP.frames["door_bottom"] = {x:334, y:1, w:767, h:326};
   TP.frames["door_top"] = {x:1102, y:1, w:681, h:294};
-  TP.frames["filter_blue"] = {x:2528, y:157, w:100, h:100};
-  TP.frames["filter_clear"] = {x:2427, y:157, w:100, h:100};
-  TP.frames["filter_green"] = {x:2326, y:157, w:100, h:100};
-  TP.frames["filter_mirror"] = {x:2337, y:414, w:88, h:88};
-  TP.frames["filter_red"] = {x:2225, y:157, w:100, h:100};
-  TP.frames["filter_solid"] = {x:2124, y:157, w:100, h:100};
-  TP.frames["laser_blue"] = {x:2749, y:156, w:257, h:154};
-  TP.frames["laser_green"] = {x:2606, y:1, w:257, h:154};
-  TP.frames["laser_red"] = {x:2428, y:258, w:257, h:154};
+  TP.frames["filter_blue"] = {x:3042, y:156, w:100, h:100};
+  TP.frames["filter_clear"] = {x:2948, y:257, w:100, h:100};
+  TP.frames["filter_green"] = {x:2941, y:156, w:100, h:100};
+  TP.frames["filter_mirror"] = {x:3049, y:257, w:88, h:88};
+  TP.frames["filter_red"] = {x:2847, y:312, w:100, h:100};
+  TP.frames["filter_solid"] = {x:2746, y:312, w:100, h:100};
+  TP.frames["laser_blue"] = {x:2843, y:1, w:257, h:154};
+  TP.frames["laser_green"] = {x:2683, y:157, w:257, h:154};
+  TP.frames["laser_red"] = {x:2488, y:313, w:257, h:154};
   TP.frames["level_complete"] = {x:1616, y:456, w:169, h:43};
   TP.frames["level_number_0"] = {x:1553, y:456, w:62, h:53};
   TP.frames["level_number_1"] = {x:973, y:429, w:27, h:53};
@@ -47,11 +47,13 @@
   TP.frames["level_number_8"] = {x:532, y:439, w:62, h:53};
   TP.frames["level_number_9"] = {x:469, y:439, w:62, h:53};
   TP.frames["level_number_display"] = {x:334, y:328, w:127, h:111};
-  TP.frames["pivot"] = {x:1784, y:1, w:236, h:236};
-  TP.frames["sensor_blue"] = {x:2411, y:1, w:194, h:155};
-  TP.frames["sensor_blue_off"] = {x:2233, y:258, w:194, h:155};
-  TP.frames["sensor_green"] = {x:2216, y:1, w:194, h:155};
-  TP.frames["sensor_green_off"] = {x:2021, y:1, w:194, h:155};
+  TP.frames["pivot"] = {x:2251, y:238, w:236, h:236};
+  TP.frames["pivot_back"] = {x:2021, y:1, w:236, h:236};
+  TP.frames["pivot_front"] = {x:1784, y:1, w:236, h:236};
+  TP.frames["sensor_blue"] = {x:2648, y:1, w:194, h:155};
+  TP.frames["sensor_blue_off"] = {x:2488, y:157, w:194, h:155};
+  TP.frames["sensor_green"] = {x:2453, y:1, w:194, h:155};
+  TP.frames["sensor_green_off"] = {x:2258, y:1, w:194, h:155};
   TP.frames["sensor_red"] = {x:2038, y:282, w:194, h:155};
   TP.frames["sensor_red_off"] = {x:1843, y:282, w:194, h:155};
   TP.frames["tutorial_1"] = {x:1164, y:296, w:388, h:205};
