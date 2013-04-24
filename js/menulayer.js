@@ -31,7 +31,6 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         };
         this.nextLevelButton = button("but_nextlevel", 780, 250);
         this.nextLevelButton.handleClick = function() {
-          this.helpImage = null;
           game.nextLevel();
         };
 
