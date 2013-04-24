@@ -31,6 +31,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         };
         this.nextLevelButton = button("but_nextlevel", 780, 250);
         this.nextLevelButton.handleClick = function() {
+          this.helpImage = null;
           game.nextLevel();
         };
 
@@ -49,7 +50,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         this.helpImage = getImage('tutorial_1');
         this.helpImage.x = 370;
         this.helpImage.y = -2;
-        this.helpImage.timeLeft = 5000;
+        this.helpImage.timeLeft = 3000;
 
         [this.soundState.all = getImage('but_sound_all'),
         this.soundState.noMusic = getImage('but_sound_fx'),
@@ -102,13 +103,10 @@ MenuLayer = pc.Layer.extend('MenuLayer',
       },
 
       drawHelp:function() {
-        if(this.helpImage) {
+        if(this.game.level == 0 && this.helpImage.timeLeft > 0) {
           this.drawIcon(this.helpImage);
           this.helpImage.setAlpha(Math.max(0, Math.min(1, this.helpImage.timeLeft/1000)));
           this.helpImage.timeLeft -= pc.device.elapsed;
-          if(this.helpImage.timeLeft <= 0) {
-            this.helpImage = null;
-          }
         }
       },
 
