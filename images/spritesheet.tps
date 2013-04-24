@@ -194,6 +194,9 @@
             <filename>but_start_down.png</filename>
             <filename>but_start_hover.png</filename>
             <filename>but_start_up.png</filename>
+            <filename>but_sound_all.png</filename>
+            <filename>but_sound_fx.png</filename>
+            <filename>but_sound_mute.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
