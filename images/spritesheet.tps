@@ -182,15 +182,9 @@
             <filename>level_number_9.png</filename>
             <filename>level_number_display.png</filename>
             <filename>tutorial_1.png</filename>
-            <filename>but_fx_down.png</filename>
-            <filename>but_fx_hover.png</filename>
-            <filename>but_fx_up.png</filename>
             <filename>but_info_down.png</filename>
             <filename>but_info_hover.png</filename>
             <filename>but_info_up.png</filename>
-            <filename>but_music_down.png</filename>
-            <filename>but_music_hover.png</filename>
-            <filename>but_music_up.png</filename>
             <filename>but_nextlevel_down.png</filename>
             <filename>but_nextlevel_hover.png</filename>
             <filename>but_nextlevel_up.png</filename>
