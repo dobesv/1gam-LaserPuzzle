@@ -195,8 +195,8 @@ GameScene = pc.Scene.extend('GameScene',
           pivot.addComponent(pc.components.Spatial.create({
             x: x,
             y: y,
-            w: pivotImage.width,
-            h: pivotImage.height
+            w: pivotGridSize,
+            h: pivotGridSize
           }));
           pivot.addComponent(PivotComponent.create({
             turning:turning,
