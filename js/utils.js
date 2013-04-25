@@ -62,6 +62,9 @@ var fail = function(s) {
 }
 
 function createCookie(name,value,days) {
+  // TODO Use localStorage if available ...
+  if(!document.cookie)
+    return null;
   if (days) {
     var date = new Date();
     date.setTime(date.getTime()+(days*24*60*60*1000));
@@ -72,6 +75,9 @@ function createCookie(name,value,days) {
 }
 
 function readCookie(name, defaultValue) {
+  // TODO Use localStorage if available ...
+  if(!document.cookie)
+    return null;
   var nameEQ = name + "=";
   var ca = document.cookie.split(';');
   for(var i=0;i < ca.length;i++) {
