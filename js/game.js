@@ -252,7 +252,7 @@ TheGame = pc.Game.extend('TheGame',
       },
 
       getScreenRect:function() {
-        return pc.Rect.create(this.offsetX, this.offsetY, pc.device.canvasWidth*this.scale, pc.device.canvasHeight*this.scale);
+        return pc.Rect.create(this.offsetX, this.offsetY, pc.device.canvasWidth, pc.device.canvasHeight);
       }
 
 
