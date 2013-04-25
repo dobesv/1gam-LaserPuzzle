@@ -276,6 +276,7 @@ GameScene = pc.Scene.extend('GameScene',
         if(this.game.levelStarted == false)
           return;
 
+        //console.log(actionName + ' for scene at '+pos.x+","+pos.y);
         var self = this;
         var whatIsUnderTheMouse = function whatIsUnderTheMouse() {
           var x = this.game.worldX(pos.x);
@@ -301,6 +302,7 @@ GameScene = pc.Scene.extend('GameScene',
           var onWhat = whatIsUnderTheMouse();
           if(onWhat === this.pressed) {
             onWhat.handleClick();
+            event.preventDefault();
           }
         }
       },
@@ -326,12 +328,9 @@ GameScene = pc.Scene.extend('GameScene',
 
         this.addLayer(new DoorLayer(game, 'Door Layer', 9));
         this.addLayer(new ImageLayer('frame', 'frame layer', 10));
-        if(pc.device.isTouch) {
-          pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
-          pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
-        } else {
-          pc.device.input.bindAction(this, 'touch', 'TOUCH');
-        }
+        pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
+        pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
+        pc.device.input.bindAction(this, 'touch', 'TOUCH');
         this.setViewPort(0, 0, 1024, 768);
       },
 

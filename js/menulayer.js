@@ -76,12 +76,9 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         }
 
         this.game = game;
-        if(!pc.device.isTouch) {
-          pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
-          pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
-        } else {
-          pc.device.input.bindAction(this, 'touch', 'TOUCH');
-        }
+        pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
+        pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
+        pc.device.input.bindAction(this, 'touch', 'TOUCH');
       },
       drawButton:function(but, down) {
         var toDraw = but.up;
@@ -189,7 +186,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
           }
           return null;
         }.bind(this);
-        //console.log(actionName+" at "+this.game.worldX(pos.x)+","+this.game.worldY(pos.y));
+        console.log(actionName+" for menulayer at "+this.game.worldX(pos.x)+","+this.game.worldY(pos.y));
         if(actionName == 'press') {
           this.pressed = whatIsUnderTheMouse();
         } else if(actionName == 'release') {
@@ -202,7 +199,10 @@ MenuLayer = pc.Layer.extend('MenuLayer',
           this.pressed = null;
         } else if(actionName == 'touch') {
           var onWhat = whatIsUnderTheMouse();
-          if(onWhat) onWhat.handleClick();
+          if(onWhat) {
+            onWhat.handleClick();
+            event.preventDefault();
+          }
         }
       }
     }
