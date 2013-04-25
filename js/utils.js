@@ -76,14 +76,14 @@ function createCookie(name,value,days) {
 
 function readCookie(name, defaultValue) {
   // TODO Use localStorage if available ...
-  if(!document.cookie)
-    return null;
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(';');
-  for(var i=0;i < ca.length;i++) {
-    var c = ca[i];
-    while (c.charAt(0)==' ') c = c.substring(1,c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+  if(document.cookie) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') c = c.substring(1,c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
   }
   return arguments.length == 1 ? null : defaultValue;
 }
@@ -97,5 +97,5 @@ function setBoolCookie(name, v) {
 }
 
 function getBoolCookie(name, defaultValue) {
-  return readCookie(name, defaultValue) == 'true';
+  return readCookie(name, String(defaultValue)) == 'true';
 }
