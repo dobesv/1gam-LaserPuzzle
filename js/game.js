@@ -212,11 +212,16 @@ TheGame = pc.Game.extend('TheGame',
         ctx.save();
         var dx = this.offsetX = Math.round(Math.max(0, (cw - pc.device.canvasWidth*scale) / 2));
         var dy = this.offsetY = Math.round(Math.max(0, (ch - pc.device.canvasHeight*scale) / 2));
-        ctx.setTransform(scale,0,0,scale,dx,dy);
+        ctx.setTransform(1,0,0,1,0,0)
+        if(pc.device.isCocoonJS) {
+          ctx.scale(1,-1);
+          ctx.translate(0, -ch);
+        }
+        ctx.translate(dx,dy);
+        ctx.scale(scale,scale);
 
         var ok = this._super();
         if(ok) {
-
           if(this.levelStarted && this.gameScene.solved) {
             this.onLevelComplete();
           }
