@@ -186,7 +186,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
           }
           return null;
         }.bind(this);
-        console.log(actionName+" for menulayer at "+this.game.worldX(pos.x)+","+this.game.worldY(pos.y));
+        //console.log(actionName+" for menulayer at "+this.game.worldX(pos.x)+","+this.game.worldY(pos.y));
         if(actionName == 'press') {
           this.pressed = whatIsUnderTheMouse();
         } else if(actionName == 'release') {
