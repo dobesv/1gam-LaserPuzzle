@@ -27,6 +27,7 @@ TheGame = pc.Game.extend('TheGame',
         this.muted = getBoolCookie('muted', this.muted);
 
         // disable caching when developing
+        pc.device.devMode = ! window.production;
         if (pc.device.devMode)
           pc.device.loader.setDisableCache();
 
@@ -204,7 +205,7 @@ TheGame = pc.Game.extend('TheGame',
       process:function() {
         var cw = pc.device.canvasWidth;
         var ch = pc.device.canvasHeight;
-        var scale = this.scale = Math.min(1.0, Math.min(cw/1024, ch/768));
+        var scale = this.scale = Math.min(cw/1024, ch/768);
         pc.device.canvasWidth = 1024;
         pc.device.canvasHeight = 768;
         var ctx = pc.device.ctx;
