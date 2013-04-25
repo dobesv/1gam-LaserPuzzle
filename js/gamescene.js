@@ -326,10 +326,12 @@ GameScene = pc.Scene.extend('GameScene',
 
         this.addLayer(new DoorLayer(game, 'Door Layer', 9));
         this.addLayer(new ImageLayer('frame', 'frame layer', 10));
-        pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
-        pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
-        //pc.device.input.bindAction(this, 'touch', 'TOUCH');
-
+        if(pc.device.isTouch) {
+          pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
+          pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
+        } else {
+          pc.device.input.bindAction(this, 'touch', 'TOUCH');
+        }
         this.setViewPort(0, 0, 1024, 768);
       },
 
