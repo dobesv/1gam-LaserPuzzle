@@ -159,7 +159,6 @@
             <filename>sensor_blue_off.png</filename>
             <filename>sensor_green.png</filename>
             <filename>sensor_green_off.png</filename>
-            <filename>pivot.png</filename>
             <filename>level_complete.png</filename>
             <filename>you_win.png</filename>
             <filename>door_top.png</filename>
