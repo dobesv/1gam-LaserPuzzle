@@ -186,7 +186,7 @@ GameScene = pc.Scene.extend('GameScene',
         var setupPivot = function(row, column, tl, tr, br, bl, turning) {
           if(!(tl && tr && br && bl))
             return; // Bad color somewhere
-          var pivotImage = getImage('pivot');
+          var pivotImage = getImage('pivot_front');
           var pivot = pc.Entity.create(layer);
           var centerX = grid.columnX(column) + grid.columnWidth / 2;
           var centerY = grid.rowY(row) + grid.columnWidth / 2;
@@ -317,6 +317,7 @@ GameScene = pc.Scene.extend('GameScene',
         this.gridLayer.setZIndex(5);
         this.gridLayer.addSystem(new pc.systems.Render());
         this.gridLayer.addSystem(this.pivotSystem = new PivotSystem());
+        this.addLayer(new PivotBackLayer(this.grid, 'pivot back', 1));
         this.addLayer(new LaserLayer('red', this.grid, 'Red Laser Layer', 2));
         this.addLayer(new LaserLayer('green', this.grid, 'Green Laser Layer', 2));
         this.addLayer(new LaserLayer('blue', this.grid, 'Blue Laser Layer', 2));
@@ -325,7 +326,6 @@ GameScene = pc.Scene.extend('GameScene',
 
         this.addLayer(new DoorLayer(game, 'Door Layer', 9));
         this.addLayer(new ImageLayer('frame', 'frame layer', 10));
-
         pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
         pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
         //pc.device.input.bindAction(this, 'touch', 'TOUCH');
