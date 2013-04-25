@@ -352,5 +352,9 @@ GameScene = pc.Scene.extend('GameScene',
       onResize:function (width, height) {
         // pretend its 1024,768 because of our scaling hack
         this._super(1024,768);
+      },
+      getScreenRect:function() {
+        return this.game.getScreenRect();
       }
+
     });

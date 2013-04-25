@@ -11,6 +11,9 @@ MenuLayer = pc.Layer.extend('MenuLayer',
       sfxButton: null,
       musicButton: null,
       soundState: { muted:null, all:null, noMusic:null },
+      infoButton:null,
+      showInfo:false,
+      infoImage:null,
 
       init:function(game, name, zIndex) {
         this._super(name, zIndex);
@@ -33,6 +36,14 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         this.nextLevelButton.handleClick = function() {
           game.nextLevel();
         };
+        this.infoButton = button("but_info", 832, 633);
+        this.infoButton.handleClick = function() {
+          this.showInfo = !this.showInfo;
+        }.bind(this);
+
+        this.infoImage = getImage("credit_text");
+        this.infoImage.x = (1024-this.infoImage.width) / 2;
+        this.infoImage.y = (768-this.infoImage.height) / 2;
 
         this.youWinImage = getImage("you_win");
         this.youWinImage.x = 780;
@@ -57,7 +68,9 @@ MenuLayer = pc.Layer.extend('MenuLayer',
               s.x = 850;
               s.y = 410;
         });
-
+        this.soundState.handleClick = function() {
+          game.cycleSoundMode();
+        };
         for(var n=0; n < 10; n++) {
           this.levelDigits.push(getImage("level_number_"+n));
         }
@@ -71,7 +84,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         var toDraw = but.up;
         if(pc.checked(down, this.pressed == but)) {
           toDraw = but.down;
-        } else if(this.game.isMouseOverImage(but)) {
+        } else if(this.game.isPosOverImage(pc.device.input.mousePos, but)) {
           toDraw = but.hover;
         }
         toDraw.draw(pc.device.ctx,but.x,but.y);
@@ -132,14 +145,23 @@ MenuLayer = pc.Layer.extend('MenuLayer',
             this.drawButton(this.startButton);
           }
         }
+
+        this.drawButton(this.infoButton);
+
+        if(this.showInfo) {
+          this.drawIcon(this.infoImage);
+        }
       },
       onAction:function(actionName, event, pos) {
         var self = this;
         var game = this.game;
         var whatIsUnderTheMouse = function() {
+          if(self.showInfo || game.isPosOverImage(pos, self.infoButton)) {
+            return self.infoButton;
+          }
           if(pc.device.soundEnabled) {
             if(game.isPosOverImage(pos, self.soundState.all)) {
-              this.game.cycleSoundMode();
+              return self.soundState;
             }
           }
           if(game.levelStarted) {
@@ -156,11 +178,11 @@ MenuLayer = pc.Layer.extend('MenuLayer',
               if(game.isPosOverImage(pos, self.startButton)) {
                 return self.startButton;
               }
-
             }
           }
           return null;
         }.bind(this);
+        //console.log(actionName+" at "+this.game.worldX(pos.x)+","+this.game.worldY(pos.y));
         if(actionName == 'press') {
           this.pressed = whatIsUnderTheMouse();
         } else if(actionName == 'release') {
@@ -170,6 +192,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
           if(onWhat === this.pressed) {
             onWhat.handleClick();
           }
+          this.pressed = null;
 //        } else if(actionName == 'touch') {
 //          var onWhat = whatIsUnderTheMouse();
 //          if(onWhat) onWhat.handleClick();

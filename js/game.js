@@ -205,38 +205,28 @@ TheGame = pc.Game.extend('TheGame',
         var cw = pc.device.canvasWidth;
         var ch = pc.device.canvasHeight;
         var scale = this.scale = Math.min(1.0, Math.min(cw/1024, ch/768));
-        var scaled = scale != 1;
-        if(scaled) {
-          pc.device.ctx.save();
-          pc.device.ctx.setTransform(scale,0,0,scale,0,0);
-          pc.device.canvasWidth = 1024;
-          pc.device.canvasHeight = 1024;
-        }
+        pc.device.canvasWidth = 1024;
+        pc.device.canvasHeight = 768;
+        var ctx = pc.device.ctx;
+        ctx.save();
+        var dx = this.offsetX = Math.max(0, (cw - pc.device.canvasWidth*scale) / 2);
+        var dy = this.offsetY = Math.max(0, (ch - pc.device.canvasHeight*scale) / 2);
+        ctx.setTransform(scale,0,0,scale,dx,dy);
+        ctx.rect(0,0,pc.device.canvasWidth,pc.device.canvasHeight);
+        ctx.stroke();
+        ctx.clip();
+
         var ok = this._super();
-        if(scaled) {
-          pc.device.ctx.restore();
-          pc.device.canvasWidth = cw;
-          pc.device.canvasHeight = ch;
-        }
         if(ok) {
 
           if(this.levelStarted && this.gameScene.solved) {
             this.onLevelComplete();
           }
         }
+        ctx.restore();
+        pc.device.canvasWidth = cw;
+        pc.device.canvasHeight = ch;
         return ok;
-      },
-
-      /**
-       * Check if the mouse is currently over the given image.  Assumes the
-       * image is not scaled and that the image has had screen x and y coordinates
-       * added to it.
-       *
-       * @param image
-       * @returns {boolean}
-       */
-      isMouseOverImage: function(image) {
-        return this.isPosOverImage(pc.device.input.mousePos, image);
       },
 
       isPosOverImage: function(pos, image) {
@@ -247,18 +237,22 @@ TheGame = pc.Game.extend('TheGame',
       },
 
       worldX:function(x) {
-        return Math.round(x / this.scale);
+        return Math.round((x - this.offsetX) / this.scale);
       },
       worldY:function(y) {
-        return Math.round(y / this.scale);
+        return Math.round((y - this.offsetY) / this.scale);
       },
 
       worldMouseX:function() {
-        return Math.round(pc.device.input.mousePos.x / this.scale);
+        return this.worldX(pc.device.input.mousePos.x);
       },
 
       worldMouseY:function() {
-        return Math.round(pc.device.input.mousePos.y / this.scale);
+        return this.worldY(pc.device.input.mousePos.y);
+      },
+
+      getScreenRect:function() {
+        return pc.Rect.create(this.offsetX, this.offsetY, pc.device.canvasWidth*this.scale, pc.device.canvasHeight*this.scale);
       }
 
 
