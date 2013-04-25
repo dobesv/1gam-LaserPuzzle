@@ -276,11 +276,11 @@ GameScene = pc.Scene.extend('GameScene',
         if(this.game.levelStarted == false)
           return;
 
-        //console.log(actionName + ' for scene at '+pos.x+","+pos.y);
         var self = this;
         var whatIsUnderTheMouse = function whatIsUnderTheMouse() {
           var x = this.game.worldX(pos.x);
           var y = this.game.worldY(pos.y);
+          //console.log(actionName + ' for scene at '+x+","+y);
           var foundPivot = null;
           var grid = self.grid;
           self.grid.pivots.forEach(function(pivot) {
@@ -301,6 +301,12 @@ GameScene = pc.Scene.extend('GameScene',
             return;
           var onWhat = whatIsUnderTheMouse();
           if(onWhat === this.pressed) {
+            onWhat.handleClick();
+            event.preventDefault();
+          }
+        } else if(actionName == 'touch') {
+          var onWhat = whatIsUnderTheMouse();
+          if(onWhat) {
             onWhat.handleClick();
             event.preventDefault();
           }

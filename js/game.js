@@ -28,7 +28,7 @@ TheGame = pc.Game.extend('TheGame',
 
         // disable caching when developing
         pc.device.devMode = ! window.production;
-        if (pc.device.devMode)
+        if (pc.device.devMode && !pc.device.isCocoonJS)
           pc.device.loader.setDisableCache();
 
         var loadImage = function(name) {
