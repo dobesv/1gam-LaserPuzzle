@@ -209,12 +209,9 @@ TheGame = pc.Game.extend('TheGame',
         pc.device.canvasHeight = 768;
         var ctx = pc.device.ctx;
         ctx.save();
-        var dx = this.offsetX = Math.max(0, (cw - pc.device.canvasWidth*scale) / 2);
-        var dy = this.offsetY = Math.max(0, (ch - pc.device.canvasHeight*scale) / 2);
+        var dx = this.offsetX = Math.round(Math.max(0, (cw - pc.device.canvasWidth*scale) / 2));
+        var dy = this.offsetY = Math.round(Math.max(0, (ch - pc.device.canvasHeight*scale) / 2));
         ctx.setTransform(scale,0,0,scale,dx,dy);
-        ctx.rect(0,0,pc.device.canvasWidth,pc.device.canvasHeight);
-        ctx.stroke();
-        ctx.clip();
 
         var ok = this._super();
         if(ok) {
@@ -223,7 +220,18 @@ TheGame = pc.Game.extend('TheGame',
             this.onLevelComplete();
           }
         }
+
         ctx.restore();
+        if(dx > 0) {
+          ctx.clearRect(0,0,dx,ch);
+          var right = pc.device.canvasWidth+dx;
+          ctx.clearRect(right,0,cw-right,ch);
+        }
+        if(dy > 0) {
+          ctx.clearRect(0,0,cw,dy);
+          var bottom = pc.device.canvasWidth+dy;
+          ctx.clearRect(0,bottom,cw,ch-bottom);
+        }
         pc.device.canvasWidth = cw;
         pc.device.canvasHeight = ch;
         return ok;
