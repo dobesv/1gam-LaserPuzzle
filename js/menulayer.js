@@ -151,10 +151,10 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         this.drawButton(this.infoButton);
 
         if(this.showInfo) {
-          this.drawIcon(this.infoImage);
-          pc.device.ctx.fillStyle = 'rgba(0,0,0,0.3)';
+          pc.device.ctx.fillStyle = 'rgba(0,0,0,0.7)';
           pc.device.ctx.fillRect(0,0,pc.device.canvasWidth,pc.device.canvasHeight);
           pc.device.ctx.stroke();
+          this.drawIcon(this.infoImage);
 
         }
       },
