@@ -62,21 +62,34 @@ var fail = function(s) {
 }
 
 function createCookie(name,value,days) {
-  // TODO Use localStorage if available ...
-  if(!document.cookie)
-    return null;
-  if (days) {
-    var date = new Date();
-    date.setTime(date.getTime()+(days*24*60*60*1000));
-    var expires = "; expires="+date.toGMTString();
+  if(typeof(Storage)!=="undefined")
+  {
+    if(days < 0)
+      delete localStorage[name];
+    else
+      localStorage[name] = value;
   }
-  else var expires = "";
-  document.cookie = name+"="+value+expires+"; path=/";
+  else if(typeof(document.cookie) !== 'undefined')
+  {
+    // Sorry! No web storage support..
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime()+(days*24*60*60*1000));
+      var expires = "; expires="+date.toGMTString();
+    }
+    else var expires = "";
+    document.cookie = name+"="+value+expires+"; path=/";
+  }
 }
 
 function readCookie(name, defaultValue) {
-  // TODO Use localStorage if available ...
-  if(document.cookie) {
+  if(typeof(Storage)!=="undefined")
+  {
+    if(name in localStorage)
+      return localStorage[name];
+  }
+  else if(typeof(document.cookie) !== 'undefined')
+  {
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
     for(var i=0;i < ca.length;i++) {
