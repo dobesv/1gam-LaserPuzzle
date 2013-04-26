@@ -1,4 +1,4 @@
-// Created with TexturePacker (http://www.texturepacker.com)  Update key: $TexturePacker:SmartUpdate:31a950685ac598cf8653040f72faf3bb$
+// Created with TexturePacker (http://www.texturepacker.com)  Update key: $TexturePacker:SmartUpdate:6fd202d6a0be260b74ced0ce56873590$
 (function() {
   var TP = (typeof(window.TexturePacker) == 'undefined' ? window.TexturePacker = {} : window.TexturePacker);
   if(typeof TP.images == 'undefined') TexturePacker.images = [];
@@ -8,18 +8,20 @@
   TP.frames["beam_blue_mid"] = {x:680, y:814, w:144, h:159};
   TP.frames["beam_green_mid"] = {x:535, y:814, w:144, h:159};
   TP.frames["beam_red_mid"] = {x:390, y:814, w:144, h:159};
-  TP.frames["but_info_down"] = {x:1552, y:334, w:106, h:98};
-  TP.frames["but_info_hover"] = {x:1357, y:861, w:106, h:98};
-  TP.frames["but_info_up"] = {x:1316, y:762, w:106, h:98};
+  TP.frames["but_info_down"] = {x:1659, y:334, w:106, h:98};
+  TP.frames["but_info_hover"] = {x:1445, y:395, w:106, h:98};
+  TP.frames["but_info_up"] = {x:1552, y:334, w:106, h:98};
   TP.frames["but_nextlevel_down"] = {x:769, y:131, w:171, h:64};
   TP.frames["but_nextlevel_hover"] = {x:769, y:66, w:171, h:64};
   TP.frames["but_nextlevel_up"] = {x:769, y:1, w:171, h:64};
   TP.frames["but_reset_down"] = {x:814, y:974, w:126, h:40};
   TP.frames["but_reset_hover"] = {x:687, y:974, w:126, h:40};
   TP.frames["but_reset_up"] = {x:560, y:974, w:126, h:40};
-  TP.frames["but_sound_all"] = {x:1445, y:296, w:106, h:98};
-  TP.frames["but_sound_fx"] = {x:659, y:100, w:106, h:98};
-  TP.frames["but_sound_mute"] = {x:659, y:1, w:106, h:98};
+  TP.frames["but_sound_all"] = {x:1357, y:861, w:106, h:98};
+  TP.frames["but_sound_fx"] = {x:1316, y:762, w:106, h:98};
+  TP.frames["but_sound_hover"] = {x:1445, y:296, w:106, h:98};
+  TP.frames["but_sound_mute"] = {x:659, y:100, w:106, h:98};
+  TP.frames["but_sound_up"] = {x:659, y:1, w:106, h:98};
   TP.frames["but_start_down"] = {x:1623, y:223, w:128, h:110};
   TP.frames["but_start_hover"] = {x:1623, y:112, w:128, h:110};
   TP.frames["but_start_up"] = {x:1623, y:1, w:128, h:110};
