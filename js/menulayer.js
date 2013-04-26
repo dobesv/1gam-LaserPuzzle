@@ -10,7 +10,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
       helpImage: null,
       sfxButton: null,
       musicButton: null,
-      soundState: { muted:null, all:null, noMusic:null },
+      soundState: { muted:null, all:null, noMusic:null, up:null, hover:null },
       infoButton:null,
       showInfo:false,
       infoImage:null,
@@ -63,11 +63,18 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         this.helpImage.timeLeft = 3000;
 
         [this.soundState.all = getImage('but_sound_all'),
-        this.soundState.noMusic = getImage('but_sound_fx'),
-        this.soundState.muted = getImage('but_sound_mute')].forEach(function(s) {
+          this.soundState.noMusic = getImage('but_sound_fx'),
+          this.soundState.muted = getImage('but_sound_mute'),
+          this.soundState.up = getImage('but_sound_up'),
+          this.soundState.hover = getImage('but_sound_hover')].forEach(function(s) {
               s.x = 853;
               s.y = 407;
         });
+        this.soundState.x = this.soundState.up.x;
+        this.soundState.y = this.soundState.up.y;
+        this.soundState.width = this.soundState.up.width;
+        this.soundState.height = this.soundState.up.height;
+
         this.soundState.handleClick = function() {
           game.cycleSoundMode();
         };
@@ -126,6 +133,7 @@ MenuLayer = pc.Layer.extend('MenuLayer',
 
       draw:function() {
         if(pc.device.soundEnabled) {
+          this.drawButton(this.soundState, false);
           this.drawIcon(this.game.muted?this.soundState.muted :
                         this.game.musicPlaying?this.soundState.all :
                         this.soundState.noMusic);
