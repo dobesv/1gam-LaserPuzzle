@@ -36,14 +36,14 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         this.nextLevelButton.handleClick = function() {
           game.nextLevel();
         };
-        this.infoButton = button("but_info", 832, 633);
+        this.infoButton = button("but_info", 853, 515);
         this.infoButton.handleClick = function() {
           this.showInfo = !this.showInfo;
         }.bind(this);
 
         this.infoImage = getImage("credit_text");
-        this.infoImage.x = (1024-this.infoImage.width) / 2;
-        this.infoImage.y = (768-this.infoImage.height) / 2;
+        this.infoImage.x = 185;
+        this.infoImage.y = 146;
 
         this.youWinImage = getImage("you_win");
         this.youWinImage.x = 780;
@@ -65,8 +65,8 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         [this.soundState.all = getImage('but_sound_all'),
         this.soundState.noMusic = getImage('but_sound_fx'),
         this.soundState.muted = getImage('but_sound_mute')].forEach(function(s) {
-              s.x = 850;
-              s.y = 410;
+              s.x = 853;
+              s.y = 407;
         });
         this.soundState.handleClick = function() {
           game.cycleSoundMode();
