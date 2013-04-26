@@ -76,8 +76,10 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         }
 
         this.game = game;
-        pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
-        pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
+        if(!(pc.device.isiPad || pc.device.isiOS)) {
+          pc.device.input.bindAction(this, 'press', 'MOUSE_BUTTON_LEFT_DOWN');
+          pc.device.input.bindAction(this, 'release', 'MOUSE_BUTTON_LEFT_UP');
+        }
         pc.device.input.bindAction(this, 'touch', 'TOUCH');
       },
       drawButton:function(but, down) {
