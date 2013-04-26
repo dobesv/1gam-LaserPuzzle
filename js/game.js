@@ -191,10 +191,12 @@ TheGame = pc.Game.extend('TheGame',
       onDoorsClosed:function() {
         this.gameScene.clearGrid();
         if(this.wantToCloseDoors) {
-          this.gameScene.startLevel();
-          this.wantToCloseDoors = false;
-          this.levelStarted = true;
-          this.playDoorSound();
+          setTimeout(function() {
+            this.gameScene.startLevel();
+            this.wantToCloseDoors = false;
+            this.levelStarted = true;
+            this.playDoorSound();
+          }.bind(this), 250);
         }
       },
 
