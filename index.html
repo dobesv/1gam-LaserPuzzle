@@ -61,7 +61,7 @@
             'spritesheet.js',
             'game.js'];
 
-        var production = window.production = (document.location.hostname != "localhost" && !navigator.isCocoonJS);
+        var production = window.production = (document.location.hostname != "localhost" || navigator.isCocoonJS);
         var mainScript = production ? pcBaseUrl+"dist/playcraft-"+pcVersion+".min.js" : pcBaseUrl+"lib/playcraft.js";
         var head = document.getElementsByTagName("head")[0];
         var scriptTag = document.createElement('script');
