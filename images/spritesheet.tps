@@ -198,6 +198,8 @@
             <filename>but_sound_mute.png</filename>
             <filename>pivot_back.png</filename>
             <filename>pivot_front.png</filename>
+            <filename>but_sound_hover.png</filename>
+            <filename>but_sound_up.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
