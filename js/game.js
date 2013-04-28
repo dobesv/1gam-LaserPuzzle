@@ -57,16 +57,34 @@ TheGame = pc.Game.extend('TheGame',
         pc.device.loader.start(this.onLoading.bind(this), this.onLoaded.bind(this));
       },
 
-      onLoading:function (percentageComplete)
-      {
-        var loadingPercentElt = document.getElementById('loadingPercent');
-        if(loadingPercentElt) {
-          loadingPercentElt.innerText = percentageComplete + '%';
-        }
-        var loadingBarElt = document.getElementById('loadingBar');
-        if(loadingBarElt) {
-          loadingBarElt.style.width = percentageComplete + '%';
-        }
+      onLoading:function (percentageComplete) {
+        var cw = pc.device.canvasWidth;
+        var ch = pc.device.canvasHeight;
+        var barHeight = Math.round(ch/10);
+        var barMaxWidth = cw/2;
+        var barLeft = Math.round(cw/4);
+        var barTop = Math.round(ch/2);
+        var barWidth = Math.round(barMaxWidth * percentageComplete / 100);
+        var barEmpty = barMaxWidth - barWidth;
+        var ctx = pc.device.ctx;
+
+        var border = Math.ceil(barHeight/5);
+        ctx.clearRect(0, 0, cw, ch);
+        ctx.fillStyle = "#DDD";
+        ctx.fillRect(barLeft - border, barTop - border, barMaxWidth+border*2, barHeight+border*2);
+        ctx.fillStyle = "#888";
+        ctx.fillRect(barLeft, barTop, barWidth, barHeight);
+        ctx.fillStyle = "#000";
+        ctx.fillRect(barLeft+barWidth, barTop, barEmpty, barHeight);
+
+        ctx.font = "normal "+Math.round(barHeight/2)+"px Verdana";
+        ctx.fillStyle = "#555";
+        ctx.textAlign = 'center';
+        var tw = ctx.measureText(percentageComplete + '%').width;
+        ctx.fillText(percentageComplete + '%',
+            Math.round(barLeft + (barMaxWidth - tw)/2),
+            Math.round(barTop + barHeight*0.66));
+
       },
 
       onLoaded:function ()
@@ -75,10 +93,6 @@ TheGame = pc.Game.extend('TheGame',
           console.log("onLoaded called an extra time ?");
           return;
         }
-        ['loading', 'loadingPercent'].forEach(function(id) {
-          var loadingElt = document.getElementById(id);
-          if(loadingElt) loadingElt.parentNode.removeChild(loadingElt);
-        });
 
         // Erase loading screen
         var ctx = pc.device.ctx;
