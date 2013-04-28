@@ -31,7 +31,7 @@ Sounds:
 - Beep from http://archive.org/details/TickSound
 - Pivot sound from http://soundcli.ps/sound/camera-shutter-3
 
-## Repacking Textures
+## Repacking The Spritesheet
 
 The app uses one big sprite sheet for most of the images.  Use [TexturePacker](http://www.codeandweb.com/texturepacker)
 to repack the spritesheet if you make changes.
@@ -40,6 +40,16 @@ First you'll have to set the TexturePacker exporters folder to the texturepacker
 copy its contents to your existing TexturePacker exporter folder.
 
 Then you can open images/spritesheet.tps in TexturePacker and click Publish to build a new spritesheet.png.
+
+## Building for CocoonJS
+
+To make a CocoonJS compatible ZIP file, add these to a zip file, preserving their relative path from this folder:
+
+* images
+* js
+* playcraftjs
+* sounds/*.mp3
+* index.html
 
 ## Legal
 
