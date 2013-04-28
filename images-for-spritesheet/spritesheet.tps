@@ -22,7 +22,7 @@
         <key>dataFormat</key>
         <string>jsonp</string>
         <key>textureFileName</key>
-        <filename>spritesheet.png</filename>
+        <filename>../images/spritesheet.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
