@@ -62,12 +62,12 @@ var fail = function(s) {
 }
 
 function createCookie(name,value,days) {
-  if(typeof(Storage)!=="undefined")
+  if(typeof(localStorage)!=="undefined")
   {
     if(days < 0)
-      delete localStorage[name];
+      localStorage.removeItem(name);
     else
-      localStorage[name] = value;
+      localStorage.setItem(name, value);
   }
   else if(typeof(document.cookie) !== 'undefined')
   {
@@ -83,10 +83,12 @@ function createCookie(name,value,days) {
 }
 
 function readCookie(name, defaultValue) {
-  if(typeof(Storage)!=="undefined")
+  if(typeof(localStorage)!=="undefined")
   {
-    if(name in localStorage)
-      return localStorage[name];
+    var value = localStorage.getItem(name);
+    console.log('reading '+name+' from localStorage gives '+value);
+    if(value !== null)
+      return value;
   }
   else if(typeof(document.cookie) !== 'undefined')
   {
