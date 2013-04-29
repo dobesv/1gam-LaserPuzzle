@@ -37,7 +37,7 @@ PivotSystem = pc.systems.EntitySystem.extend('PivotSystem',
           return;
 
         if(c.turning) {
-          c.turning -= (pc.device.elapsed / 150) * Math.max(0.25, c.turning * c.turning);
+          c.turning -= Math.min(0.1 * Math.ceil(c.turning), (pc.device.elapsed / 150) * Math.max(0.25, c.turning * c.turning));
           if(c.turning < 0.1) c.turning = 0;
           ent.getComponent('spatial').dir = c.turning * -90;
         }
