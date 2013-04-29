@@ -51,6 +51,31 @@ To make a CocoonJS compatible ZIP file, add these to a zip file, preserving thei
 * sounds/*.mp3
 * index.html
 
+## Deploying CocoonJS Build to Android
+
+Here are the commands needed to sign, align, and deploy the release build from CocoonJS:
+
+    jarsigner -verbose -sigalg MD5withRSA -digestalg SHA1 Laser_Puzzle_*_release_unsigned.apk apk
+    jarsigner -verify Laser_Puzzle_*_release_unsigned.apk
+    zipalign -v 4 Laser_Puzzle_*_release_unsigned.apk LaserPuzzle.apk
+    adb install -r LaserPuzzle.apk
+
+Note the "install -r" means reinstall.  Remove -r on the last one if it's not already installed.
+
+## Deploying CocoonJS Build to iOS
+
+Here are the steps needed to package the app for iOS and create a signed IPA for Ad-Hoc distribution.
+
+1. Get yourself on a Mac with Xcode  (sadly, no windows steps currently)
+2. Open up the xcode project from the zip file
+3. From the menu, choose Product > Archive
+4. Select the newly created archive in the "Organizer" that pops up, and click Distribute...
+5. Choose "Save for Enterprise or Ad-Hoc Deployment"
+6. Choose the code signing identity that has the right devices associated.
+
+Full instructions are here: http://wiki.ludei.com/cocoonjs:xcodeproject
+
+
 ## Legal
 
 The game, its source code, and its audio assets are provided as-is without any warrantees as to their suitability
