@@ -221,14 +221,16 @@ TheGame = pc.Game.extend('TheGame',
       process:function() {
         var cw = pc.device.canvasWidth;
         var ch = pc.device.canvasHeight;
-        var scale = this.scale = Math.min(cw/1024, ch/768);
-        pc.device.canvasWidth = 1024;
-        pc.device.canvasHeight = 768;
+        var virtualCanvasWidth = 1024;
+        var virtualCanvasHeight = 768;
+        var scale = this.scale = Math.min(cw/ virtualCanvasWidth, ch/ virtualCanvasHeight);
+        pc.device.canvasWidth = virtualCanvasWidth;
+        pc.device.canvasHeight = virtualCanvasHeight;
         var ctx = pc.device.ctx;
+        ctx.setTransform(1,0,0,1,0,0);
         ctx.save();
         var dx = this.offsetX = Math.round(Math.max(0, (cw - pc.device.canvasWidth*scale) / 2));
         var dy = this.offsetY = Math.round(Math.max(0, (ch - pc.device.canvasHeight*scale) / 2));
-        ctx.setTransform(1,0,0,1,0,0)
         if(pc.device.isCocoonJS) {
           ctx.scale(1,-1);
           ctx.translate(0, -ch);
@@ -245,14 +247,14 @@ TheGame = pc.Game.extend('TheGame',
 
         ctx.restore();
         if(dx > 0) {
-          ctx.clearRect(0,0,dx,ch);
-          var right = pc.device.canvasWidth+dx;
-          ctx.clearRect(right,0,cw-right,ch);
+          ctx.clearRect(0,0,dx,ch); // left side
+          var right = virtualCanvasWidth*scale+dx;
+          ctx.clearRect(right,0,cw-right,ch); // right side
         }
         if(dy > 0) {
-          ctx.clearRect(0,0,cw,dy);
-          var bottom = pc.device.canvasWidth+dy;
-          ctx.clearRect(0,bottom,cw,ch-bottom);
+          ctx.clearRect(0,0,cw,dy); // top
+          var bottom = virtualCanvasHeight*scale+dy;
+          ctx.clearRect(0,bottom,cw,ch-bottom); // bottom
         }
         pc.device.canvasWidth = cw;
         pc.device.canvasHeight = ch;
