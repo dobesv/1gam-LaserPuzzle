@@ -28,15 +28,15 @@ MenuLayer = pc.Layer.extend('MenuLayer',
             y:y };
 
         }
-        this.startButton = button("but_start", 800, 175);
+        this.startButton = button("but_start", 382, 671);
         this.startButton.handleClick = function() {
           game.startGame();
         };
-        this.nextLevelButton = button("but_nextlevel", 780, 250);
+        this.nextLevelButton = button("but_nextlevel", 382, 671);
         this.nextLevelButton.handleClick = function() {
           game.nextLevel();
         };
-        this.infoButton = button("but_info", 853, 515);
+        this.infoButton = button("but_info", 0, 0);
         this.infoButton.handleClick = function() {
           this.showInfo = !this.showInfo;
         }.bind(this);
@@ -50,12 +50,12 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         this.youWinImage.y = 185;
 
         this.levelCompleteImage = getImage("level_complete");
-        this.levelCompleteImage.x = 775;
-        this.levelCompleteImage.y = 175;
+        this.levelCompleteImage.x = 265;
+        this.levelCompleteImage.y = 671;
 
         this.levelBg = getImage('level_number_display');
-        this.levelBg.x = 800;
-        this.levelBg.y = 175;
+        this.levelBg.x = 265;
+        this.levelBg.y = 671;
 
         this.helpImage = getImage('tutorial_1');
         this.helpImage.x = 370;
@@ -67,8 +67,8 @@ MenuLayer = pc.Layer.extend('MenuLayer',
           this.soundState.muted = getImage('but_sound_mute'),
           this.soundState.up = getImage('but_sound_up'),
           this.soundState.hover = getImage('but_sound_hover')].forEach(function(s) {
-              s.x = 853;
-              s.y = 407;
+              s.x = 100;
+              s.y = 0;
         });
         this.soundState.x = this.soundState.up.x;
         this.soundState.y = this.soundState.up.y;
