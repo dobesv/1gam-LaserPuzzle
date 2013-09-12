@@ -108,6 +108,13 @@ TheGame = pc.Game.extend('TheGame',
         pc.device.input.bindAction(this, 'cheat', 'F8');
         pc.device.input.bindAction(this, 'toggleMusic', 'M');
 
+        var jumpToLevel = HashState.get('level');
+        if(pc.valid(jumpToLevel)) {
+          console.log('Jump to level: '+jumpToLevel)
+          this.level = (parseInt(jumpToLevel) || 1) - 1;
+          this.startGame();
+        }
+
       },
 
       startMusic:function() {
