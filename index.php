@@ -11,6 +11,29 @@
 
 <body>
 <script>
+    if (!Function.prototype.bind) {
+        Function.prototype.bind = function (oThis) {
+            if (typeof this !== "function") {
+                // closest thing possible to the ECMAScript 5 internal IsCallable function
+                throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+            }
+
+            var aArgs = Array.prototype.slice.call(arguments, 1),
+                fToBind = this,
+                fNOP = function () {},
+                fBound = function () {
+                    return fToBind.apply(this instanceof fNOP && oThis
+                        ? this
+                        : oThis,
+                        aArgs.concat(Array.prototype.slice.call(arguments)));
+                };
+
+            fNOP.prototype = this.prototype;
+            fBound.prototype = new fNOP();
+
+            return fBound;
+        };
+    }
     (function() {
         var pcBaseUrl = 'playcraftjs/';
         var pcVersion = '0.5.6';
@@ -26,18 +49,21 @@
             'laserlayer.js',
             'menulayer.js',
             'doorlayer.js',
+            'pivotbacklayer.js',
             'components/pivot.js',
             'components/filter.js',
             'systems/pivots.js',
             'gamescene.js',
+            'spritesheet.js',
             'game.js'];
 
-        var production = (document.location.hostname != "localhost");
+        var production = window.production = (document.location.hostname != "localhost" || navigator.isCocoonJS);
         var mainScript = production ? pcBaseUrl+"dist/playcraft-"+pcVersion+".min.js" : pcBaseUrl+"lib/playcraft.js";
         var head = document.getElementsByTagName("head")[0];
         var scriptTag = document.createElement('script');
         scriptTag.type = "text/javascript" ;
         scriptTag.src = mainScript;
+        scriptTag.charset = 'utf-8';
         scriptTag.onload = function() {
             //pc.device.devMode = !production;
             pc.start(gameEltId, gameMainClass, gameScriptBaseUrl, gameScripts, pcBaseUrl+'lib/');
