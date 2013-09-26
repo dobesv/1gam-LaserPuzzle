@@ -28,15 +28,15 @@ MenuLayer = pc.Layer.extend('MenuLayer',
             y:y };
 
         }
-        this.startButton = button("but_start", 382, 671);
+        this.startButton = button("but_start", 251, 665);
         this.startButton.handleClick = function() {
           game.startGame();
         };
-        this.nextLevelButton = button("but_nextlevel", 382, 671);
+        this.nextLevelButton = button("but_nextlevel", 251, 665);
         this.nextLevelButton.handleClick = function() {
           game.nextLevel();
         };
-        this.infoButton = button("but_info", 0, 0);
+        this.infoButton = button("but_info", 762, 714);
         this.infoButton.handleClick = function() {
           this.showInfo = !this.showInfo;
         }.bind(this);
@@ -50,12 +50,12 @@ MenuLayer = pc.Layer.extend('MenuLayer',
         this.youWinImage.y = 185;
 
         this.levelCompleteImage = getImage("level_complete");
-        this.levelCompleteImage.x = 265;
-        this.levelCompleteImage.y = 671;
+        this.levelCompleteImage.x = 752;
+        this.levelCompleteImage.y = 9
 
         this.levelBg = getImage('level_number_display');
-        this.levelBg.x = 265;
-        this.levelBg.y = 671;
+        this.levelBg.x = 251;
+        this.levelBg.y = 665;
 
         this.helpImage = getImage('tutorial_1');
         this.helpImage.x = 370;
@@ -67,8 +67,8 @@ MenuLayer = pc.Layer.extend('MenuLayer',
           this.soundState.muted = getImage('but_sound_mute'),
           this.soundState.up = getImage('but_sound_up'),
           this.soundState.hover = getImage('but_sound_hover')].forEach(function(s) {
-              s.x = 100;
-              s.y = 0;
+              s.x = 967;
+              s.y = 714;
         });
         this.soundState.x = this.soundState.up.x;
         this.soundState.y = this.soundState.up.y;
@@ -114,10 +114,10 @@ MenuLayer = pc.Layer.extend('MenuLayer',
           n = Math.floor(n / 10);
         }
         digits.reverse();
-        var numLeft = this.levelBg.x + (this.levelBg.width - w) / 2 | 0;
+        var numLeft = this.levelBg.x + (this.levelBg.width - w) / 1.3 | 0;
         for (var i = 0; i < digits.length; i++) {
           var digit = digits[i];
-          var numTop = Math.floor(this.levelBg.y + (this.levelBg.height - digit.height)*0.72);
+          var numTop = Math.floor(this.levelBg.y + (this.levelBg.height - digit.height)*0.5);
           digit.draw(pc.device.ctx, numLeft, numTop);
           numLeft += digit.width;
         }
