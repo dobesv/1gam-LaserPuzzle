@@ -95,6 +95,10 @@ GameScene = pc.Scene.extend('GameScene',
         };
         var colorLetterToWord = {r:"red", g:"green", b:"blue", m:"mirror", M:"mirror90", " ":"clear", "x":"solid"};
         var setupLaserOrSensor = function(row, column, colChar) {
+          if(typeof(colChar) === 'undefined') {
+            console.log('Missing character for laser or sensor at row '+row+' column '+column);
+            return;
+          }
           var f = isUpperCase(colChar)?setupSensor:setupLaser;
           var color = colorLetterToWord[colChar.toLowerCase()];
           if(color == 'clear')
