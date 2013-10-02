@@ -200,6 +200,23 @@
             <filename>pivot_front.png</filename>
             <filename>but_sound_hover.png</filename>
             <filename>but_sound_up.png</filename>
+            <filename>filter_cyan.png</filename>
+            <filename>filter_magenta.png</filename>
+            <filename>filter_yellow.png</filename>
+            <filename>beam_cyan_mid.png</filename>
+            <filename>beam_magenta_mid.png</filename>
+            <filename>beam_yellow_mid.png</filename>
+            <filename>teleport_rx.png</filename>
+            <filename>teleport_tx.png</filename>
+            <filename>laser_cyan.png</filename>
+            <filename>laser_magenta.png</filename>
+            <filename>laser_yellow.png</filename>
+            <filename>sensor_cyan_off.png</filename>
+            <filename>sensor_cyan.png</filename>
+            <filename>sensor_magenta_off.png</filename>
+            <filename>sensor_magenta.png</filename>
+            <filename>sensor_yellow_off.png</filename>
+            <filename>sensor_yellow.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
